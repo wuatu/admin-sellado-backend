@@ -5,12 +5,17 @@ class LineaController {
     public async list(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const lineas = await pool.query('SELECT * FROM linea where fk_selladora = ?',[id]);
+            let lineas;
+            if (id!=null) {
+                lineas = await pool.query('SELECT * FROM linea where fk_selladora = ?', [id]);
+            } else{
+                lineas = await pool.query('SELECT * FROM linea');
+            }
             if (lineas.length > 0) {
                 return res.status(200).json(lineas);
-            } else{
+            } else {
                 res.status(404).json({ text: 'Sin registros' });
-            }            
+            }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lineas' });
         }
@@ -30,7 +35,7 @@ class LineaController {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        try {     
+        try {
             await pool.query('INSERT INTO linea set ?', [req.body]);
             res.status(200).json({ message: 'linea creada' });
         } catch{

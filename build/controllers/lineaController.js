@@ -19,7 +19,13 @@ class LineaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const lineas = yield database_1.default.query('SELECT * FROM linea where fk_selladora = ?', [id]);
+                let lineas;
+                if (id != null) {
+                    lineas = yield database_1.default.query('SELECT * FROM linea where fk_selladora = ?', [id]);
+                }
+                else {
+                    lineas = yield database_1.default.query('SELECT * FROM linea');
+                }
                 if (lineas.length > 0) {
                     return res.status(200).json(lineas);
                 }

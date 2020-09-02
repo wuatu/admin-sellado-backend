@@ -8,6 +8,7 @@ class LineaRoutes {
         this.config();
     }
     config() {
+        this.router.get('/lineas', lineaController_1.lineaController.list);
         this.router.get('/lineas/:id', lineaController_1.lineaController.list);
         this.router.post('/linea/', lineaController_1.lineaController.create);
         this.router.get('/linea/:id', lineaController_1.lineaController.getOne);

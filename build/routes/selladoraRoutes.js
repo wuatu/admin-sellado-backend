@@ -8,11 +8,11 @@ class SelladoraRoutes {
         this.config();
     }
     config() {
-        this.router.get('/', selladoraController_1.selladoraController.list);
-        this.router.post('/', selladoraController_1.selladoraController.create);
-        this.router.get('/:id', selladoraController_1.selladoraController.getOne);
-        this.router.put('/:id', selladoraController_1.selladoraController.update);
-        this.router.delete('/:id', selladoraController_1.selladoraController.delete);
+        this.router.get('/selladoras', selladoraController_1.selladoraController.list);
+        this.router.post('/selladora', selladoraController_1.selladoraController.create);
+        this.router.get('/selladora/:id', selladoraController_1.selladoraController.getOne);
+        this.router.put('/selladora/:id', selladoraController_1.selladoraController.update);
+        this.router.delete('/selladora/:id', selladoraController_1.selladoraController.delete);
     }
 }
 const selladoraRoutes = new SelladoraRoutes();

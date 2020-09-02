@@ -1,12 +1,12 @@
 import express, {Application} from 'express';
-import indexRoutes from './routes/indexRoutes'
-import loginRoutes from './routes/loginRoutes'
-import lineaRoutes from './routes/lineaRoutes'
-import selladoraRoutes from './routes/selladoraRoutes'
 import morgan from 'morgan';
 import cors from 'cors'
 import authRoutes from './auth/auth.routes'
-
+import indexRoutes from './routes/indexRoutes'
+import lineaRoutes from './routes/lineaRoutes'
+import selladoraRoutes from './routes/selladoraRoutes'
+import lectorRoutes from './routes/lectorRoutes'
+import rfidRoutes from './routes/rfidRoutes'
 
 //
 class Server{
@@ -27,10 +27,11 @@ class Server{
 
     routes():void{
         this.app.use(indexRoutes);
-        //this.app.use('/api/login',loginRoutes);
         this.app.use(authRoutes);
         this.app.use('/api',lineaRoutes);
-        this.app.use('/api/selladora',selladoraRoutes);
+        this.app.use('/api',lectorRoutes);
+        this.app.use('/api',selladoraRoutes);
+        this.app.use('/api',rfidRoutes);
     }
 
     start():void{

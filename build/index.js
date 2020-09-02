@@ -4,12 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
-const lineaRoutes_1 = __importDefault(require("./routes/lineaRoutes"));
-const selladoraRoutes_1 = __importDefault(require("./routes/selladoraRoutes"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const auth_routes_1 = __importDefault(require("./auth/auth.routes"));
+const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
+const lineaRoutes_1 = __importDefault(require("./routes/lineaRoutes"));
+const selladoraRoutes_1 = __importDefault(require("./routes/selladoraRoutes"));
+const lectorRoutes_1 = __importDefault(require("./routes/lectorRoutes"));
+const rfidRoutes_1 = __importDefault(require("./routes/rfidRoutes"));
 //
 class Server {
     constructor() {
@@ -26,10 +28,11 @@ class Server {
     }
     routes() {
         this.app.use(indexRoutes_1.default);
-        //this.app.use('/api/login',loginRoutes);
         this.app.use(auth_routes_1.default);
         this.app.use('/api', lineaRoutes_1.default);
-        this.app.use('/api/selladora', selladoraRoutes_1.default);
+        this.app.use('/api', lectorRoutes_1.default);
+        this.app.use('/api', selladoraRoutes_1.default);
+        this.app.use('/api', rfidRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
