@@ -20,11 +20,9 @@ class LectorController {
             try {
                 const { id_selladora, id_linea } = req.params;
                 let lectors;
-                if (id_selladora != "0" && id_linea == "0") {
-                    lectors = yield database_1.default.query('SELECT DISTINCT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id = ? ', [id_selladora]);
-                }
-                else if (id_selladora != "0" && id_linea != "0") {
-                    lectors = yield database_1.default.query('SELECT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id= ? AND linea.id= ?', [id_selladora, id_linea]);
+                if (id_selladora != "0" && id_linea != "0") {
+                    console.log(id_selladora, id_linea);
+                    lectors = yield database_1.default.query('SELECT DISTINCT lector.id,lector.nombre,lector.puerto,lector.fk_linea FROM lector,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id= ? AND lector.fk_linea= ?', [id_selladora, id_linea]);
                 }
                 if (lectors.length > 0) {
                     return res.status(200).json(lectors);
