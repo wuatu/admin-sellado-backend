@@ -4,12 +4,12 @@ class LectorController {
 
     public async list(req: Request, res: Response) {
         try {
-            const { id_selladora, id_linea } = req.params;
+            const { id_calibrador, id_linea } = req.params;
             let lectors: any;
-            if (id_selladora != "0" && id_linea == "0") {
-                lectors = await pool.query('SELECT DISTINCT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id = ? ', [id_selladora]);
-            } else if (id_selladora != "0" && id_linea != "0") {
-                lectors = await pool.query('SELECT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id= ? AND linea.id= ?', [id_selladora, id_linea]);
+            if (id_calibrador != "0" && id_linea == "0") {
+                lectors = await pool.query('SELECT DISTINCT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id = ? ', [id_calibrador]);
+            } else if (id_calibrador != "0" && id_linea != "0") {
+                lectors = await pool.query('SELECT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND linea.id= ?', [id_calibrador, id_linea]);
             }
             if (lectors.length > 0) {
                 return res.status(200).json(lectors);

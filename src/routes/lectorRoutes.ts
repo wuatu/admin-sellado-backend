@@ -7,7 +7,7 @@ class LectorController{
         this.config();
     }
     config(){
-        this.router.get('/lectores/:id_selladora/:id_linea',lectorController.list);
+        this.router.get('/lectores/:id_calibrador/:id_linea',lectorController.list);
         this.router.post('/lector',lectorController.create);
         this.router.get('/lector/:id',lectorController.getOne);
         this.router.put('/lector/:id',lectorController.update);

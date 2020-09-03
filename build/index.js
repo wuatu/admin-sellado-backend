@@ -9,7 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const auth_routes_1 = __importDefault(require("./auth/auth.routes"));
 const indexRoutes_1 = __importDefault(require("./routes/indexRoutes"));
 const lineaRoutes_1 = __importDefault(require("./routes/lineaRoutes"));
-const selladoraRoutes_1 = __importDefault(require("./routes/selladoraRoutes"));
+const calibradorRoutes_1 = __importDefault(require("./routes/calibradorRoutes"));
 const lectorRoutes_1 = __importDefault(require("./routes/lectorRoutes"));
 const rfidRoutes_1 = __importDefault(require("./routes/rfidRoutes"));
 //
@@ -31,7 +31,7 @@ class Server {
         this.app.use(auth_routes_1.default);
         this.app.use('/api', lineaRoutes_1.default);
         this.app.use('/api', lectorRoutes_1.default);
-        this.app.use('/api', selladoraRoutes_1.default);
+        this.app.use('/api', calibradorRoutes_1.default);
         this.app.use('/api', rfidRoutes_1.default);
     }
     start() {

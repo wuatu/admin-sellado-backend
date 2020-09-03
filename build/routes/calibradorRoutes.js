@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const calibradorController_1 = require("../controllers/calibradorController");
-class SelladoraRoutes {
+class CalibradorRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
@@ -15,5 +15,5 @@ class SelladoraRoutes {
         this.router.delete('/calibrador/:id', calibradorController_1.calibradorController.delete);
     }
 }
-const calibradorRoutes = new SelladoraRoutes();
+const calibradorRoutes = new CalibradorRoutes();
 exports.default = calibradorRoutes.router;
