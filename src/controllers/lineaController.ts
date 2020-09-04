@@ -7,7 +7,7 @@ class LineaController {
             const { id } = req.params;
             let lineas;
             if (id!=null) {
-                lineas = await pool.query('SELECT * FROM linea where fk_selladora = ?', [id]);
+                lineas = await pool.query('SELECT * FROM linea where fk_calibrador = ?', [id]);
             } else{
                 lineas = await pool.query('SELECT * FROM linea');
             }

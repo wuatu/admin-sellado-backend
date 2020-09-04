@@ -12,29 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lineaController = void 0;
+exports.calibradorController = void 0;
 const database_1 = __importDefault(require("../database"));
-class LineaController {
+class CalibradorController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id } = req.params;
-                let lineas;
-                if (id != null) {
-                    lineas = yield database_1.default.query('SELECT * FROM linea where fk_calibrador = ?', [id]);
-                }
-                else {
-                    lineas = yield database_1.default.query('SELECT * FROM linea');
-                }
-                if (lineas.length > 0) {
-                    return res.status(200).json(lineas);
+                const calibradores = yield database_1.default.query('SELECT * FROM calibrador');
+                if (calibradores.length > 0) {
+                    console.log(calibradores);
+                    return res.status(200).json(calibradores);
                 }
                 else {
                     res.status(404).json({ text: 'Sin registros' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener lineas' });
+                res.status(404).json({ text: 'No se pudo obtener calibradores' });
             }
         });
     }
@@ -42,25 +36,25 @@ class LineaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                const linea = yield database_1.default.query('SELECT * FROM linea WHERE id = ?', [id]);
-                if (linea.length > 0) {
-                    return res.status(200).json(linea[0]);
+                const calibrador = yield database_1.default.query('SELECT * FROM calibrador WHERE id = ?', [id]);
+                if (calibrador.length > 0) {
+                    return res.status(200).json(calibrador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener linea' });
+                res.status(404).json({ text: 'No se pudo obtener calibrador' });
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener linea' });
+                res.status(404).json({ text: 'No se pudo obtener calibrador' });
             }
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                yield database_1.default.query('INSERT INTO linea set ?', [req.body]);
-                res.status(200).json({ message: 'linea creada' });
+                yield database_1.default.query('INSERT INTO calibrador set ?', [req.body]);
+                res.status(200).json({ message: 'calibrador creada' });
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo crear linea' });
+                res.status(404).json({ text: 'No se pudo crear calibrador' });
             }
         });
     }
@@ -68,11 +62,11 @@ class LineaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                yield database_1.default.query('UPDATE linea set ? WHERE id = ?', [req.body, id]);
-                res.status(200).json({ message: 'linea actualizada' });
+                yield database_1.default.query('UPDATE calibrador set ? WHERE id = ?', [req.body, id]);
+                res.status(200).json({ message: 'calibrador actualizada' });
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo actualizar linea' });
+                res.status(404).json({ text: 'No se pudo actualizar calibrador' });
             }
         });
     }
@@ -80,13 +74,13 @@ class LineaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
-                yield database_1.default.query('DELETE FROM linea WHERE id = ?', [id]);
-                res.status(200).json({ message: 'linea eliminada' });
+                yield database_1.default.query('DELETE FROM calibrador WHERE id = ?', [id]);
+                res.status(200).json({ message: 'calibrador eliminada' });
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo eliminar linea' });
+                res.status(404).json({ text: 'No se pudo eliminar calibrador' });
             }
         });
     }
 }
-exports.lineaController = new LineaController();
+exports.calibradorController = new CalibradorController();

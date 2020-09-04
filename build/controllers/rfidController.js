@@ -18,10 +18,10 @@ class RfidController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_selladora, id_linea } = req.params;
+                const { id_calibrador, id_linea } = req.params;
                 let rfids;
-                if (id_selladora != "0" && id_linea != "0") {
-                    rfids = yield database_1.default.query('SELECT DISTINCT rfid.id,rfid.nombre,rfid.ip,rfid.fk_linea FROM rfid,selladora INNER JOIN linea ON selladora.id=linea.fk_selladora WHERE selladora.id= ? AND rfid.fk_linea= ?', [id_selladora, id_linea]);
+                if (id_calibrador != "0" && id_linea != "0") {
+                    rfids = yield database_1.default.query('SELECT DISTINCT rfid.id,rfid.nombre,rfid.ip,rfid.fk_linea FROM rfid,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND rfid.fk_linea= ?', [id_calibrador, id_linea]);
                 }
                 if (rfids.length > 0) {
                     return res.status(200).json(rfids);

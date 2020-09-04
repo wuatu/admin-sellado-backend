@@ -4,9 +4,11 @@ import cors from 'cors'
 import authRoutes from './auth/auth.routes'
 import indexRoutes from './routes/indexRoutes'
 import lineaRoutes from './routes/lineaRoutes'
-import selladoraRoutes from './routes/selladoraRoutes'
+import calibradorRoutes from './routes/calibradorRoutes'
 import lectorRoutes from './routes/lectorRoutes'
 import rfidRoutes from './routes/rfidRoutes'
+import administradorRoutes from './routes/administradorRoutes'
+import usuarioRoutes from './routes/usuarioRoutes'
 
 //
 class Server{
@@ -30,8 +32,10 @@ class Server{
         this.app.use(authRoutes);
         this.app.use('/api',lineaRoutes);
         this.app.use('/api',lectorRoutes);
-        this.app.use('/api',selladoraRoutes);
+        this.app.use('/api',calibradorRoutes);
         this.app.use('/api',rfidRoutes);
+        this.app.use('/api',administradorRoutes);
+        this.app.use('/api',usuarioRoutes);
     }
 
     start():void{

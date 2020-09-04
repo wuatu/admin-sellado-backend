@@ -8,7 +8,7 @@ class LectorController {
         this.config();
     }
     config() {
-        this.router.get('/rfids/:id_selladora/:id_linea', rfidController_1.rfidController.list);
+        this.router.get('/rfids/:id_calibrador/:id_linea', rfidController_1.rfidController.list);
         this.router.post('/rfid', rfidController_1.rfidController.create);
         this.router.get('/rfid/:id', rfidController_1.rfidController.getOne);
         this.router.put('/rfid/:id', rfidController_1.rfidController.update);

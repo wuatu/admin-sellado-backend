@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 01-09-2020 a las 10:50:41
+-- Servidor: localhost:3306
+-- Tiempo de generación: 03-09-2020 a las 20:25:22
 -- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.2.33
+-- Versión de PHP: 7.3.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -34,15 +35,20 @@ CREATE TABLE `administrador` (
   `rut` varchar(10) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `apellido` varchar(20) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `superadmin` tinyint(4) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `administrador`
 --
 
-INSERT INTO `administrador` (`id`, `rut`, `nombre`, `apellido`, `password`) VALUES
-(18, '18253490', 'mauro', 'asda', '$2a$10$cvqyohvBGT5V45447s5oQuUmZC/k5Oj4a.FwhYGmq24XB31RJstUG');
+INSERT INTO `administrador` (`id`, `rut`, `nombre`, `apellido`, `password`, `superadmin`) VALUES
+(18, '18253490', 'cristian', 'farias', '$2a$10$cvqyohvBGT5V45447s5oQuUmZC/k5Oj4a.FwhYGmq24XB31RJstUG', 1),
+(19, '175054545', 'ignacio', 'correa', '$2a$10$JiXwpkkYYXNQ4D2GmA/n6u.tAFWZNAVhI2ulANFYTeWrFRwOrF7Le', 1),
+(20, '123456', 'admin2', 'correa', '$2a$10$7JvvIG1VuTjAwxXiZc03N.tE7HrpAq/Mr9SY3glBUfcC/BeUwIcy6', 0),
+(21, '161587664', 'rodolfo', 'henzi', '$2a$10$QJ9lG/AnTeSeQ8xfkrlBoOe/9tR2sQK6mRTPsihDFQWDX14Sbf03a', 1),
+(22, '123', 'admin2', 'correa', '$2a$10$JcAhkfknfGUonvQ/88yKdOODx4BF5L2YouWe6eE74XFQdiMszIdiS', 0);
 
 -- --------------------------------------------------------
 
@@ -65,15 +71,42 @@ CREATE TABLE `apertura_cierre_de_turno` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `calibrador`
+--
+
+CREATE TABLE `calibrador` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `calibrador`
+--
+
+INSERT INTO `calibrador` (`id`, `nombre`) VALUES
+(1, 'calibrador1'),
+(2, 'calibrador2');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `lector`
 --
 
 CREATE TABLE `lector` (
   `id` int(11) NOT NULL,
   `nombre` varchar(20) NOT NULL,
-  `puerto` varchar(20) NOT NULL,
+  `ip` varchar(20) NOT NULL,
   `fk_linea` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `lector`
+--
+
+INSERT INTO `lector` (`id`, `nombre`, `ip`, `fk_linea`) VALUES
+(3, 'ignacio', '123.456.789', 22),
+(5, 'lector1', '123.456.789', 22);
 
 -- --------------------------------------------------------
 
@@ -84,7 +117,7 @@ CREATE TABLE `lector` (
 CREATE TABLE `linea` (
   `id` int(11) NOT NULL,
   `nombre` varchar(20) NOT NULL,
-  `fk_selladora` int(11) NOT NULL,
+  `fk_calibrador` int(11) NOT NULL,
   `nombre_selladora` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -92,7 +125,7 @@ CREATE TABLE `linea` (
 -- Volcado de datos para la tabla `linea`
 --
 
-INSERT INTO `linea` (`id`, `nombre`, `fk_selladora`, `nombre_selladora`) VALUES
+INSERT INTO `linea` (`id`, `nombre`, `fk_calibrador`, `nombre_selladora`) VALUES
 (22, 'linea2', 1, 'selladora1'),
 (23, 'linea1', 2, 'selladora2'),
 (24, 'linea3', 1, 'selladora1');
@@ -160,21 +193,23 @@ CREATE TABLE `registro_diario_usuario_en_linea` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `selladora`
+-- Estructura de tabla para la tabla `rfid`
 --
 
-CREATE TABLE `selladora` (
+CREATE TABLE `rfid` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(20) NOT NULL
+  `nombre` varchar(20) NOT NULL,
+  `ip` varchar(20) NOT NULL,
+  `fk_linea` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `selladora`
+-- Volcado de datos para la tabla `rfid`
 --
 
-INSERT INTO `selladora` (`id`, `nombre`) VALUES
-(1, 'selladora1'),
-(2, 'selladora2');
+INSERT INTO `rfid` (`id`, `nombre`, `ip`, `fk_linea`) VALUES
+(1, 'rfid1', '192.168.1.1', 22),
+(2, 'selladora1rfid2', '', 22);
 
 -- --------------------------------------------------------
 
@@ -208,6 +243,12 @@ ALTER TABLE `apertura_cierre_de_turno`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `calibrador`
+--
+ALTER TABLE `calibrador`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `lector`
 --
 ALTER TABLE `lector`
@@ -220,7 +261,7 @@ ALTER TABLE `lector`
 ALTER TABLE `linea`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nombre` (`nombre`),
-  ADD KEY `linea_fk_selladora` (`fk_selladora`);
+  ADD KEY `linea_fk_calibrador` (`fk_calibrador`);
 
 --
 -- Indices de la tabla `registro`
@@ -241,11 +282,10 @@ ALTER TABLE `registro_diario_usuario_en_linea`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `selladora`
+-- Indices de la tabla `rfid`
 --
-ALTER TABLE `selladora`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `nombre` (`nombre`);
+ALTER TABLE `rfid`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `usuario`
@@ -261,7 +301,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `administrador`
 --
 ALTER TABLE `administrador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `apertura_cierre_de_turno`
@@ -270,10 +310,16 @@ ALTER TABLE `apertura_cierre_de_turno`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `calibrador`
+--
+ALTER TABLE `calibrador`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `lector`
 --
 ALTER TABLE `lector`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `linea`
@@ -300,9 +346,9 @@ ALTER TABLE `registro_diario_usuario_en_linea`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `selladora`
+-- AUTO_INCREMENT de la tabla `rfid`
 --
-ALTER TABLE `selladora`
+ALTER TABLE `rfid`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -315,7 +361,6 @@ ALTER TABLE `usuario`
 -- Restricciones para tablas volcadas
 --
 
-
 --
 -- Filtros para la tabla `lector`
 --
@@ -326,7 +371,7 @@ ALTER TABLE `lector`
 -- Filtros para la tabla `linea`
 --
 ALTER TABLE `linea`
-  ADD CONSTRAINT `linea_fk_selladora` FOREIGN KEY (`fk_selladora`) REFERENCES `selladora` (`id`);
+  ADD CONSTRAINT `linea_fk_calibrador` FOREIGN KEY (`fk_calibrador`) REFERENCES `calibrador` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

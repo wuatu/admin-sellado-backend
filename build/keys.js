@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     database: {
-        host: 'localhost',
+        host: '190.114.253.138',
         user: 'root',
-        password: '',
+        password: '123456',
         database: 'zeltasto_sellado'
     }
 };
