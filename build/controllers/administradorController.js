@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.administradorController = void 0;
 const database_1 = __importDefault(require("../database"));
+const bcrypt = require('bcryptjs');
 class AdministradorController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -51,7 +52,13 @@ class AdministradorController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const administrador = yield database_1.default.query('INSERT INTO administrador set ?', [req.body]);
+                const newUser = {
+                    nombre: req.body.nombre,
+                    apellido: req.body.apellido,
+                    rut: req.body.rut,
+                    password: bcrypt.hashSync(req.body.password)
+                };
+                const administrador = yield database_1.default.query('INSERT INTO administrador set ?', newUser);
                 if (administrador != null) {
                     console.log(administrador);
                     if (administrador != null) {

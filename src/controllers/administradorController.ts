@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import pool from '../database';
+const bcrypt = require('bcryptjs');
 class AdministradorController {
 
     public async list(req: Request, res: Response) {
@@ -34,7 +35,13 @@ class AdministradorController {
 
     public async create(req: Request, res: Response): Promise<void> {
         try {
-            const administrador = await pool.query('INSERT INTO administrador set ?', [req.body]);
+            const newUser = {
+                nombre: req.body.nombre,
+                apellido: req.body.apellido,
+                rut: req.body.rut,
+                password: bcrypt.hashSync(req.body.password)
+            }
+            const administrador = await pool.query('INSERT INTO administrador set ?', newUser);
             if (administrador != null) {
                 console.log(administrador);
                 if (administrador != null) {

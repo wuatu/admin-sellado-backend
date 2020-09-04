@@ -33,6 +33,7 @@ class AuthController {
                 const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, {
                     expiresIn: expiresIn
                 });
+                console.log(accessToken);
                 const userData = {
                     nombre: req.body.nombre,
                     apellido: req.body.apellido,
