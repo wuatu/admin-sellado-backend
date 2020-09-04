@@ -1,8 +1,8 @@
 export default{
     database:{
-        host:'localhost',
+        host:'190.114.253.138',
         user:'root',
-        password:'',
+        password:'123456',
         database:'zeltasto_sellado'
     }
 }
