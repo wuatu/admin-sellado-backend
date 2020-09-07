@@ -52,7 +52,7 @@ class TurnoController {
     getOneSinId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const turno = yield database_1.default.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT=1");
+                const turno = yield database_1.default.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT 1");
                 if (turno.length > 0) {
                     return res.status(200).json(turno[0]);
                 }

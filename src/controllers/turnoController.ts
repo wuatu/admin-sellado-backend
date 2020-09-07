@@ -36,7 +36,7 @@ class TurnoController {
 
     public async getOneSinId(req: Request, res: Response) {
         try {        
-            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT=1");            
+            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT 1");            
             if (turno.length > 0) {
                 return res.status(200).json(turno[0]);
             }
