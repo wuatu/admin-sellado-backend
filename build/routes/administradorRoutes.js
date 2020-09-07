@@ -13,6 +13,7 @@ class AdministradorRoutes {
         this.router.get('/administrador/:id', administradorController_1.administradorController.getOne);
         this.router.put('/administrador/:id', administradorController_1.administradorController.update);
         this.router.delete('/administrador/:id', administradorController_1.administradorController.delete);
+        this.router.get('/administrador/login/:rut/:password', administradorController_1.administradorController.login);
     }
 }
 const administradorRoutes = new AdministradorRoutes();

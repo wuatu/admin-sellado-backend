@@ -79,8 +79,14 @@ class AdministradorController {
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const newUser = {
+                    nombre: req.body.nombre,
+                    apellido: req.body.apellido,
+                    rut: req.body.rut,
+                    password: bcrypt.hashSync(req.body.password)
+                };
                 const { id } = req.params;
-                const administrador = yield database_1.default.query('UPDATE administrador SET ? WHERE id = ?', [req.body, id]);
+                const administrador = yield database_1.default.query('UPDATE administrador SET ? WHERE id = ?', [newUser, id]);
                 if (administrador != null) {
                     if (administrador.affectedRows > 0) {
                         res.status(200).json({ message: 'administrador actualizado' });
@@ -112,6 +118,34 @@ class AdministradorController {
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo eliminar administrador' });
             }
+        });
+    }
+    login(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { rut, password } = req.params;
+            console.log(rut);
+            let user;
+            try {
+                user = yield database_1.default.query("SELECT * FROM administrador WHERE rut = ? ", [rut]);
+            }
+            catch (err) {
+                return res.status(404).json({ text: "Usuario no registrado" });
+            }
+            if (user.length > 0) {
+                const resultPassword = bcrypt.compareSync(password, user[0].password);
+                if (resultPassword) {
+                    const dataAdmin = {
+                        rut: user[0].rut,
+                        nombre: user[0].nombre,
+                        apellido: user[0].apellido,
+                    };
+                    return res.send({ dataAdmin });
+                }
+                else {
+                    return res.status(404).json({ text: "Rut o contraseña invalidos" });
+                }
+            }
+            return res.status(404).json({ text: "Rut o contraseña invalidos" });
         });
     }
 }

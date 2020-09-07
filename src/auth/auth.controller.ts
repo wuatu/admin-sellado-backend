@@ -53,13 +53,15 @@ class AuthController {
                 const expiresIn = 24 * 60 * 60;
                 const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: expiresIn });
                 const dataUser = {
+                    id:user[0].id,
                     rut: user[0].rut,
                     nombre: user[0].nombre,
                     apellido: user[0].apellido,                    
+                    superAdmin:user[0].superadmin,
                     accessToken: accessToken,                    
                     expiresIn: expiresIn,
                 }
-                res.send({dataUser});
+                return res.send({dataUser});
             }
         }
         return res.status(404).json({ text: "Usuario o contraseña invalidos" })
