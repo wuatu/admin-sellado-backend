@@ -15,6 +15,7 @@ const rfidRoutes_1 = __importDefault(require("./routes/rfidRoutes"));
 const administradorRoutes_1 = __importDefault(require("./routes/administradorRoutes"));
 const usuarioRoutes_1 = __importDefault(require("./routes/usuarioRoutes"));
 const turnoRouter_1 = __importDefault(require("./routes/turnoRouter"));
+const usuarioEnLineaRoute_1 = __importDefault(require("./routes/usuarioEnLineaRoute"));
 //
 class Server {
     constructor() {
@@ -39,6 +40,7 @@ class Server {
         this.app.use('/api', administradorRoutes_1.default);
         this.app.use('/api', usuarioRoutes_1.default);
         this.app.use('/api', turnoRouter_1.default);
+        this.app.use('/api', usuarioEnLineaRoute_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

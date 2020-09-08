@@ -4,5 +4,6 @@ export default{
         user:'root',
         password:'123456',
         database:'zeltasto_sellado'
+                        
     }
 }
