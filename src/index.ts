@@ -10,7 +10,7 @@ import rfidRoutes from './routes/rfidRoutes'
 import administradorRoutes from './routes/administradorRoutes'
 import usuarioRoutes from './routes/usuarioRoutes'
 import turnoRouter from './routes/turnoRouter'
-import usuarioEnLineaRoutes from './routes/usuarioEnLineaRoutes'
+import usuarioEnLineaRoutes from './routes/usuarioenlineaRoutes';
 
 
 //
@@ -41,7 +41,6 @@ class Server{
         this.app.use('/api',usuarioRoutes);
         this.app.use('/api',turnoRouter);
         this.app.use('/api',usuarioEnLineaRoutes);
-
     }
 
     start():void{
