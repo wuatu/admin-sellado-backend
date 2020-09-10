@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { usuarioEnLineaController } from '../controllers/usuarioenlineaControllersi';
+import { usuarioEnLineaController } from '../controllers/usuarioenlineaController';
 
 
 
