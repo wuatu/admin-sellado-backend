@@ -56,5 +56,27 @@ class UsuarioEnLineaController {
             }
         });
     }
+    search(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { rutSearch, fromDateSearch } = req.params;
+                console.log(rutSearch);
+                console.log(fromDateSearch);
+                let userInLineSearch;
+                if (rutSearch && fromDateSearch) {
+                    userInLineSearch = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE  usuario_rut = ? AND fecha_inicio like ?', [rutSearch, "%" + fromDateSearch]);
+                }
+                if (userInLineSearch.length > 0) {
+                    return res.status(200).json(userInLineSearch);
+                }
+                else {
+                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+            }
+        });
+    }
 }
 exports.usuarioEnLineaController = new UsuarioEnLineaController();

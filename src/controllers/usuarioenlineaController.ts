@@ -37,6 +37,26 @@ class UsuarioEnLineaController {
             res.status(404).json({ text: 'No se pudo crear usuario' });
         }
     }
+
+    public async search(req: Request, res: Response) {
+        try {
+            const { rutSearch, fromDateSearch } = req.params;
+             console.log(rutSearch);
+             console.log(fromDateSearch);
+            let userInLineSearch: any;
+            if (rutSearch && fromDateSearch ) {
+                userInLineSearch = await pool.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE  usuario_rut = ? AND fecha_inicio like ?', [rutSearch, "%"+fromDateSearch]);
+            }
+            
+            if (userInLineSearch.length > 0) {
+                return res.status(200).json(userInLineSearch);
+            } else {
+                res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+        }
+    }
 }
 
 export const usuarioEnLineaController = new UsuarioEnLineaController();
