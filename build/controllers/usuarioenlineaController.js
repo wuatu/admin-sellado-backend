@@ -18,63 +18,92 @@ class UsuarioEnLineaController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_linea, id_calibrador } = req.params;
-                let usuariosEnLinea;
-                if (id_calibrador != "0" && id_linea != "0") {
-                    usuariosEnLinea = yield database_1.default.query('SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? and id_calibrador = ?', [id_linea, id_calibrador]);
-                }
-                if (usuariosEnLinea.length > 0) {
-                    return res.status(200).json(usuariosEnLinea);
+                let registro_diario_usuario_en_lineas;
+                registro_diario_usuario_en_lineas = yield database_1.default.query('SELECT * FROM registro_diario_usuario_en_linea');
+                if (registro_diario_usuario_en_lineas.length > 0) {
+                    return res.status(200).json(registro_diario_usuario_en_lineas);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                    res.status(404).json({ text: 'Sin registros' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+                res.status(404).json({ text: 'No se pudo obtener registro_diario_usuario_en_lineas' });
+            }
+        });
+    }
+    getOne(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const registro_diario_usuario_en_linea = yield database_1.default.query('SELECT * FROM registro_diario_usuario_en_linea WHERE id = ?', [id]);
+                if (registro_diario_usuario_en_linea.length > 0) {
+                    return res.status(200).json(registro_diario_usuario_en_linea[0]);
+                }
+                res.status(404).json({ text: 'No se pudo obtener registro_diario_usuario_en_linea' });
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener registro_diario_usuario_en_linea' });
             }
         });
     }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuarioEnLinea = yield database_1.default.query('INSERT INTO registro_diario_usuario_en_linea set ?', [req.body]);
-                if (usuarioEnLinea != null) {
-                    console.log(usuarioEnLinea);
-                    if (usuarioEnLinea != null) {
-                        if (usuarioEnLinea.affectedRows > 0) {
-                            res.status(200).json({ message: 'usuario en línea creado' });
+                console.log(req.body);
+                const registro_diario_usuario_en_linea = yield database_1.default.query('INSERT INTO registro_diario_usuario_en_linea set ?', [req.body]);
+                if (registro_diario_usuario_en_linea != null) {
+                    console.log(registro_diario_usuario_en_linea);
+                    if (registro_diario_usuario_en_linea != null) {
+                        if (registro_diario_usuario_en_linea.affectedRows > 0) {
+                            res.status(200).json({ message: 'registro_diario_usuario_en_linea creado' });
                         }
                     }
                     else {
-                        res.status(404).json({ text: 'No se pudo crear usuario en línea' });
+                        res.status(404).json({ text: 'No se pudo crear registro_diario_usuario_en_linea' });
                     }
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo crear usuario' });
+                res.status(404).json({ text: 'No se pudo crear registro_diario_usuario_en_linea' });
             }
         });
     }
-    search(req, res) {
+    update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { rutSearch, fromDateSearch } = req.params;
-                console.log(rutSearch);
-                console.log(fromDateSearch);
-                let userInLineSearch;
-                if (rutSearch && fromDateSearch) {
-                    userInLineSearch = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE  usuario_rut = ? AND fecha_inicio like ?', [rutSearch, "%" + fromDateSearch]);
-                }
-                if (userInLineSearch.length > 0) {
-                    return res.status(200).json(userInLineSearch);
-                }
-                else {
-                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                const { id } = req.params;
+                const registro_diario_usuario_en_linea = yield database_1.default.query('UPDATE registro_diario_usuario_en_linea SET ? WHERE id = ?', [req.body, id]);
+                if (registro_diario_usuario_en_linea != null) {
+                    if (registro_diario_usuario_en_linea.affectedRows > 0) {
+                        res.status(200).json({ message: 'registro_diario_usuario_en_linea actualizado' });
+                    }
+                    else {
+                        res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+                    }
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+                res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+            }
+        });
+    }
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const registro_diario_usuario_en_linea = yield database_1.default.query('DELETE FROM registro_diario_usuario_en_linea WHERE id = ?', [id]);
+                if (registro_diario_usuario_en_linea != null) {
+                    if (registro_diario_usuario_en_linea.affectedRows > 0) {
+                        res.status(200).json({ message: 'registro_diario_usuario_en_linea eliminado' });
+                    }
+                    else {
+                        res.status(404).json({ text: 'No se pudo eliminar registro_diario_usuario_en_linea' });
+                    }
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo eliminar registro_diario_usuario_en_linea' });
             }
         });
     }
