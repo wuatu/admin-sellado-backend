@@ -12,29 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usuarioEnLineaController = void 0;
+exports.cajaSelladaController = void 0;
 const database_1 = __importDefault(require("../database"));
-class UsuarioEnLineaController {
+class CajaSelladaController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_linea, id_calibrador, rutSearch, fromDateSearch, toDateSearch } = req.params;
+                const { id_linea, id_calibrador } = req.params;
                 let usuariosEnLinea;
-                if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch && toDateSearch == "null") {
-                    console.log("hola1");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_inicio like ?', [id_linea, id_calibrador, fromDateSearch + "%"]);
-                }
-                else if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch && toDateSearch) {
-                    console.log("hola2");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, fromDateSearch + "%", toDateSearch + "%"]);
-                }
-                else if (id_calibrador != "null" && id_linea != "null" && rutSearch && fromDateSearch && toDateSearch == "null") {
-                    console.log("hola3");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND fecha_inicio like ?', [id_linea, id_calibrador, rutSearch, fromDateSearch + "%"]);
-                }
-                else if (id_calibrador != "null" && id_linea != "null" && rutSearch != "null" && fromDateSearch != "null" && toDateSearch != "null") {
-                    console.log("hola4");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, rutSearch, fromDateSearch + "%", toDateSearch + "%"]);
+                if (id_calibrador != "0" && id_linea != "0") {
+                    usuariosEnLinea = yield database_1.default.query('SELECT * FROM registro_diario_caja_sellada WHERE id_linea = ? and id_calibrador = ?', [id_linea, id_calibrador]);
                 }
                 if (usuariosEnLinea.length > 0) {
                     return res.status(200).json(usuariosEnLinea);
@@ -51,7 +38,8 @@ class UsuarioEnLineaController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuarioEnLinea = yield database_1.default.query('INSERT INTO registro_diario_usuario_en_linea set ?', [req.body]);
+                console.log(req.body);
+                const usuarioEnLinea = yield database_1.default.query('INSERT INTO registro_diario_caja_sellada set ?', [req.body]);
                 if (usuarioEnLinea != null) {
                     console.log(usuarioEnLinea);
                     if (usuarioEnLinea != null) {
@@ -69,5 +57,32 @@ class UsuarioEnLineaController {
             }
         });
     }
+    search(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { rutSearch, fromDateSearch, toDateSearch } = req.params;
+                console.log(rutSearch);
+                console.log(fromDateSearch);
+                console.log(toDateSearch);
+                let userInLineSearch;
+                if (rutSearch && fromDateSearch && !toDateSearch) {
+                    userInLineSearch = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND fecha_sellado like ?', [rutSearch, "%" + fromDateSearch]);
+                }
+                else if (rutSearch && fromDateSearch && toDateSearch) {
+                    console.log("hola");
+                    userInLineSearch = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?)', [rutSearch, fromDateSearch + "%", toDateSearch + "%"]);
+                }
+                if (userInLineSearch.length > 0) {
+                    return res.status(200).json(userInLineSearch);
+                }
+                else {
+                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+            }
+        });
+    }
 }
-exports.usuarioEnLineaController = new UsuarioEnLineaController();
+exports.cajaSelladaController = new CajaSelladaController();
