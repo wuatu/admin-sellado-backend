@@ -188,25 +188,33 @@ LOCK TABLES `registro` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `registro_diario_codigo_de_barra`
+-- Table structure for table `registro_diario_caja_sellada`
 --
 
-DROP TABLE IF EXISTS `registro_diario_codigo_de_barra`;
+DROP TABLE IF EXISTS `registro_diario_caja_sellada`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registro_diario_codigo_de_barra` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `codigo_de_barra` varchar(40) NOT NULL,
+CREATE TABLE `registro_diario_caja_sellada` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,  
+  `id_calibrador` int(11) NOT NULL,
+  `nombre_calibrador` varchar(40) NOT NULL,
   `id_linea` int(11) NOT NULL,
   `nombre_linea` varchar(40) NOT NULL,
+  `id_rfid` int(11) NOT NULL,
+  `nombre_rfid` varchar(40) NOT NULL,
+  `ip_rfid` varchar(40) NOT NULL,
   `id_lector` int(11) NOT NULL,
   `nombre_lector` varchar(40) NOT NULL,
-  `puerto_lector` varchar(40) NOT NULL,
-  `fk_lector_lector` int(11) NOT NULL,
+  `ip_lector` varchar(40) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `rut_usuario` varchar(10) NOT NULL,
   `nombre_usuario` varchar(40) NOT NULL,
   `apellido_usuario` varchar(40) NOT NULL,
-  `fecha` date NOT NULL,
+  `codigo_de_barra` varchar(40) NOT NULL,
+  `id_caja` int(11) NOT NULL,
+  `envase_caja` varchar(40) NOT NULL,
+  `fecha_sellado` varchar(40) NOT NULL,
+  `fecha_validacion` varchar(40) NOT NULL,
   `is_verificado` tinyint(4) NOT NULL DEFAULT '0',
   `is_before_time` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -214,12 +222,12 @@ CREATE TABLE `registro_diario_codigo_de_barra` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registro_diario_codigo_de_barra`
+-- Dumping data for table `registro_diario_caja_sellada`
 --
 
-LOCK TABLES `registro_diario_codigo_de_barra` WRITE;
-/*!40000 ALTER TABLE `registro_diario_codigo_de_barra` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registro_diario_codigo_de_barra` ENABLE KEYS */;
+LOCK TABLES `registro_diario_caja_sellada` WRITE;
+/*!40000 ALTER TABLE `registro_diario_caja_sellada` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registro_diario_caja_sellada` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
