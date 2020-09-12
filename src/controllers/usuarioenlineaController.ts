@@ -52,6 +52,25 @@ class UsuarioEnLineaController {
             res.status(404).json({ text: 'No se pudo crear usuario' });
         }
     }
+
+    
+    public async update(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const usuarioEnLinea = await pool.query('UPDATE registro_diario_usuario_en_linea SET ? WHERE id = ?', [req.body, id]);
+            if (usuarioEnLinea != null) {
+                if (usuarioEnLinea.affectedRows > 0) {
+                    res.status(200).json({ message: 'registro_diario_usuario_en_linea actualizado' });
+                } else {
+                    res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+                }
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+        }
+    }
+
+
 }
 
 export const usuarioEnLineaController = new UsuarioEnLineaController();
