@@ -8,7 +8,7 @@ class TurnoRoutes {
         this.config();
     }
     config() {
-        this.router.get('/turnos', turnoController_1.turnoController.list);
+        this.router.get('/turnos/:fromDate/:toDate', turnoController_1.turnoController.list);
         this.router.post('/turno', turnoController_1.turnoController.create);
         this.router.get('/turno/:id', turnoController_1.turnoController.getOne);
         this.router.get('/turno', turnoController_1.turnoController.getOneSinId);

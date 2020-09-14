@@ -19,9 +19,14 @@ class TurnoController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const {} = req.params;
+                const { fromDate, toDate } = req.params;
                 let turnos;
-                turnos = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno');
+                if (toDate == null) {
+                    turnos = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate + "%"]);
+                }
+                else {
+                    turnos = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)', [fromDate + "%", toDate + "%"]);
+                }
                 if (turnos.length > 0) {
                     return res.status(200).json(turnos);
                 }
@@ -30,7 +35,7 @@ class TurnoController {
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener turno(es)' });
+                res.status(404).json({ text: 'No se pudo obtener turno(s)' });
             }
         });
     }

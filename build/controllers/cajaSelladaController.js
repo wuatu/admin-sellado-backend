@@ -27,11 +27,11 @@ class CajaSelladaController {
                     return res.status(200).json(usuariosEnLinea);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                    res.status(404).json({ text: 'Sin registros de seguimiento de cajas' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+                res.status(404).json({ text: 'No se pudo obtener registro de seguimiento de cajas' });
             }
         });
     }
@@ -39,21 +39,21 @@ class CajaSelladaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log(req.body);
-                const usuarioEnLinea = yield database_1.default.query('INSERT INTO registro_diario_caja_sellada set ?', [req.body]);
-                if (usuarioEnLinea != null) {
-                    console.log(usuarioEnLinea);
-                    if (usuarioEnLinea != null) {
-                        if (usuarioEnLinea.affectedRows > 0) {
-                            res.status(200).json({ message: 'usuario en línea creado' });
+                const registroSegimientoCaja = yield database_1.default.query('INSERT INTO registro_diario_caja_sellada set ?', [req.body]);
+                if (registroSegimientoCaja != null) {
+                    console.log(registroSegimientoCaja);
+                    if (registroSegimientoCaja != null) {
+                        if (registroSegimientoCaja.affectedRows > 0) {
+                            res.status(200).json({ message: 'registro de seguimiento de cajas creado' });
                         }
                     }
                     else {
-                        res.status(404).json({ text: 'No se pudo crear usuario en línea' });
+                        res.status(404).json({ text: 'No se pudo crear el registro de seguimiento de cajasssssss' });
                     }
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo crear usuario' });
+                res.status(404).json({ text: 'No se pudo crear el registro de seguimiento de cajas' });
             }
         });
     }
@@ -66,7 +66,7 @@ class CajaSelladaController {
                 console.log(toDateSearch);
                 let userInLineSearch;
                 if (rutSearch && fromDateSearch && !toDateSearch) {
-                    userInLineSearch = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND fecha_sellado like ?', [rutSearch, "%" + fromDateSearch]);
+                    userInLineSearch = yield database_1.default.query(' SELECT DISTINCT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND fecha_sellado like ?', [rutSearch, "%" + fromDateSearch]);
                 }
                 else if (rutSearch && fromDateSearch && toDateSearch) {
                     console.log("hola");
@@ -76,11 +76,11 @@ class CajaSelladaController {
                     return res.status(200).json(userInLineSearch);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                    res.status(404).json({ text: 'Sin registros de seguimiento de cajas' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+                res.status(404).json({ text: 'No se pudo obtener el seguimiento de cajas' });
             }
         });
     }

@@ -8,7 +8,7 @@ class UsuarioEnLineaRoutes{
     }
     config(){
         this.router.get('/cajas_selladas/:id_linea/:id_calibrador',cajaSelladaController.list);
-        this.router.post('/caja_sellada',cajaSelladaController.create);
+        this.router.post('/caja_sellada_search',cajaSelladaController.create);
         this.router.get('/caja_sellada/:rutSearch/:fromDateSearch/:toDateSearch',cajaSelladaController.search);
         //this.router.get('/usuario_en_linea/:id',usuarioEnLineaController.getOne);
         //this.router.put('/usuario_en_linea/:id',usuarioEnLineaController.update);

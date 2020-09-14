@@ -6,10 +6,14 @@ class TurnoController {
 
     public async list(req: Request, res: Response) {
         try {
-            const { } = req.params;
+            const { fromDate,toDate } = req.params;
             let turnos: any;
+            if(toDate==null){
+                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate+"%"]);
+            } else {
+                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)',[fromDate+"%",toDate+"%"]);
 
-            turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno');
+            }
 
             if (turnos.length > 0) {
                 return res.status(200).json(turnos);
@@ -17,7 +21,7 @@ class TurnoController {
                 res.status(404).json({ text: 'Sin registros' });
             }
         } catch{
-            res.status(404).json({ text: 'No se pudo obtener turno(es)' });
+            res.status(404).json({ text: 'No se pudo obtener turno(s)' });
         }
     }
 

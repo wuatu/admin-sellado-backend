@@ -69,5 +69,24 @@ class UsuarioEnLineaController {
             }
         });
     }
+    update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const usuarioEnLinea = yield database_1.default.query('UPDATE registro_diario_usuario_en_linea SET ? WHERE id = ?', [req.body, id]);
+                if (usuarioEnLinea != null) {
+                    if (usuarioEnLinea.affectedRows > 0) {
+                        res.status(200).json({ message: 'registro_diario_usuario_en_linea actualizado' });
+                    }
+                    else {
+                        res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+                    }
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo actualizar registro_diario_usuario_en_linea' });
+            }
+        });
+    }
 }
 exports.usuarioEnLineaController = new UsuarioEnLineaController();
