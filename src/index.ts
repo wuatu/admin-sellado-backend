@@ -13,6 +13,7 @@ import turnoRouter from './routes/turnoRouter'
 import usuarioEnLineaRoutes from './routes/usuarioenlineaRoutes';
 import registroRoutes from './routes/registroRoutes';
 import cajaSelladaRoutes from './routes/cajaSelladaRoutes';
+import produccionColaboradorRoute from './routes/produccionColaboradorRoutes';
 
 
 //
@@ -45,6 +46,7 @@ class Server{
         this.app.use('/api',usuarioEnLineaRoutes);
         this.app.use('/api',cajaSelladaRoutes);
         this.app.use('/api',registroRoutes);
+        this.app.use('/api',produccionColaboradorRoute);
     }
 
     start():void{

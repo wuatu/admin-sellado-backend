@@ -18,6 +18,7 @@ const turnoRouter_1 = __importDefault(require("./routes/turnoRouter"));
 const usuarioenlineaRoutes_1 = __importDefault(require("./routes/usuarioenlineaRoutes"));
 const registroRoutes_1 = __importDefault(require("./routes/registroRoutes"));
 const cajaSelladaRoutes_1 = __importDefault(require("./routes/cajaSelladaRoutes"));
+const produccionColaboradorRoutes_1 = __importDefault(require("./routes/produccionColaboradorRoutes"));
 //
 class Server {
     constructor() {
@@ -45,6 +46,7 @@ class Server {
         this.app.use('/api', usuarioenlineaRoutes_1.default);
         this.app.use('/api', cajaSelladaRoutes_1.default);
         this.app.use('/api', registroRoutes_1.default);
+        this.app.use('/api', produccionColaboradorRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
