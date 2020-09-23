@@ -52,6 +52,7 @@ class UsuarioController {
     public async update(req: Request, res: Response) {
         try {
             const { id } = req.params;
+            
             const usuario = await pool.query('UPDATE usuario SET ? WHERE id = ?', [req.body, id]);
             if (usuario != null) {
                 if (usuario.affectedRows > 0) {
