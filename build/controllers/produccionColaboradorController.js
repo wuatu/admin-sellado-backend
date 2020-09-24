@@ -52,7 +52,7 @@ class ProduccionColaboradorController {
                 console.log(toDateSearch);
                 let producctionSearch;
                 if (rutSearch && fromDateSearch && toDateSearch) {
-                    producctionSearch = yield database_1.default.query('SELECT fecha_sellado, COUNT(fecha_sellado) as numero FROM registro_diario_caja_sellada  WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) GROUP BY fecha_sellado;', [rutSearch, fromDateSearch, toDateSearch]);
+                    producctionSearch = yield database_1.default.query('SELECT fecha_sellado, COUNT(fecha_sellado) as numero FROM registro_diario_caja_sellada  WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) GROUP BY fecha_sellado', [rutSearch, fromDateSearch, toDateSearch]);
                     console.log(producctionSearch);
                 }
                 else {
