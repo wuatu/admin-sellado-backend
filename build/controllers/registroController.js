@@ -35,8 +35,8 @@ class RegistroController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log(req.body);
                 const registro = yield database_1.default.query('INSERT INTO registro set ?', [req.body]);
-                console.log(registro);
                 if (registro != null) {
                     if (registro.affectedRows > 0) {
                         res.status(200).json({ message: 'registro creado' });
