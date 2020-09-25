@@ -72,6 +72,7 @@ class CajaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id } = req.params;
+                console.log(req.body);
                 const caja = yield database_1.default.query('UPDATE caja SET ? WHERE id = ?', [req.body, id]);
                 if (caja != null) {
                     if (caja.affectedRows > 0) {

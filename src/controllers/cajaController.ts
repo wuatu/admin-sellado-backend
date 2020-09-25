@@ -52,6 +52,7 @@ class CajaController {
     public async update(req: Request, res: Response) {
         try {
             const { id } = req.params;
+            console.log(req.body);
             const caja = await pool.query('UPDATE caja SET ? WHERE id = ?', [req.body, id]);
             if (caja != null) {
                 if (caja.affectedRows > 0) {

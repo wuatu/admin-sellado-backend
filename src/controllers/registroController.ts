@@ -18,8 +18,8 @@ class RegistroController {
 
     public async create(req: Request, res: Response): Promise<void> {
         try {
-            const registro = await pool.query('INSERT INTO registro set ?', [req.body]);
-            console.log(registro);
+            console.log(req.body);
+            const registro = await pool.query('INSERT INTO registro set ?', [req.body]);            
             if (registro != null) {
                 if (registro.affectedRows > 0) {
                     res.status(200).json({ message: 'registro creado' });
