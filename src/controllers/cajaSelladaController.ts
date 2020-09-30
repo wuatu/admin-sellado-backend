@@ -7,7 +7,7 @@ class CajaSelladaController {
             const { id_linea, id_calibrador } = req.params;
             let usuariosEnLinea: any;
             if (id_calibrador != "0" && id_linea != "0") {
-                usuariosEnLinea = await pool.query('SELECT * FROM registro_diario_caja_sellada WHERE id_linea = ? and id_calibrador = ?', [id_linea, id_calibrador]);
+                usuariosEnLinea = await pool.query('SELECT * FROM registro_diario_caja_sellada WHERE id_linea = ? and id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [id_linea, id_calibrador]);
             }
             
             if (usuariosEnLinea.length > 0) {
@@ -51,19 +51,19 @@ class CajaSelladaController {
             
             if (criterionSearch == "codCalibre" && fromDateSearch && toDateSearch && toSearch) {
                 console.log("codCalibre");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?)', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
             
             } else if(criterionSearch == "codCategoria" && fromDateSearch && toDateSearch && toSearch){
                 console.log("codCategoria");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?)', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
             
             } else if (criterionSearch == "codVariedad" && fromDateSearch && toDateSearch && toSearch) {
                 console.log("codVariedad");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?)', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
             
             } else if(criterionSearch == "codEnvase" && fromDateSearch && toDateSearch && toSearch){
                 console.log("codEnvase");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?)', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%"]);
             }
             
             if (registerByCriterion.length > 0) {
@@ -92,19 +92,19 @@ class CajaSelladaController {
             
             if (criterionSearch == "codCalibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("codCalibre");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
             
             } else if(criterionSearch == "codCategoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper){
                 console.log("codCategoria");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
             
             } else if (criterionSearch == "codVariedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("codVariedad");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
             
             } else if(criterionSearch == "codEnvase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper){
                 console.log("codEnvase");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch+"%", toDateSearch+"%", idLine, idCaliper]);
             }
             
             if (registerByCriterion.length > 0) {

@@ -8,7 +8,9 @@ class ProduccionPorCalibradorRoutes {
         this.config();
     }
     config() {
-        this.router.get('/registros_lineas_calibrador/:id_caliper/:fromDateSearch/:toDateSearch', produccionPorCalibradorController_1.produccionPorCalibradorController.countBoxByCaliper);
+        this.router.get('/numero_cajas_calibrador/:id_caliper/:fromDateSearch/:toDateSearch', produccionPorCalibradorController_1.produccionPorCalibradorController.countBoxInCaliper);
+        this.router.get('/registros_cajas_calibrador/:id_caliper/:fromDateSearch/:toDateSearch', produccionPorCalibradorController_1.produccionPorCalibradorController.searchRegisterCaliper);
+        this.router.put('/registro_produccion_calibrador_update/:id', produccionPorCalibradorController_1.produccionPorCalibradorController.update);
     }
 }
 const produccionPorCalibradorRoute = new ProduccionPorCalibradorRoutes();
