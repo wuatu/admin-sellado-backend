@@ -15,6 +15,8 @@ import registroRoutes from './routes/registroRoutes';
 import cajaSelladaRoutes from './routes/cajaSelladaRoutes';
 import cajaRoutes from './routes/cajaRoutes';
 import produccionColaboradorRoute from './routes/produccionColaboradorRoutes';
+import produccionPorCalibradorRoute from './routes/produccionPorCalibradorRoutes';
+import produccionPorLineaRoute from './routes/produccionPorLineaRoutes';
 
 
 //
@@ -49,6 +51,8 @@ class Server{
         this.app.use('/api',registroRoutes);
         this.app.use('/api',cajaRoutes);
         this.app.use('/api',produccionColaboradorRoute);
+        this.app.use('/api',produccionPorCalibradorRoute);
+        this.app.use('/api',produccionPorLineaRoute);
     }
 
     start():void{

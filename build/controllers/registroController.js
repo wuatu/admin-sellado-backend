@@ -19,7 +19,7 @@ class RegistroController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let registros;
-                registros = yield database_1.default.query('SELECT * FROM registro');
+                registros = yield database_1.default.query('SELECT * FROM registro ORDER BY fecha, hora ASC');
                 if (registros.length > 0) {
                     return res.status(200).json(registros);
                 }
@@ -35,7 +35,7 @@ class RegistroController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log(req.body);
+                //console.log(req.body);
                 const registro = yield database_1.default.query('INSERT INTO registro set ?', [req.body]);
                 if (registro != null) {
                     if (registro.affectedRows > 0) {

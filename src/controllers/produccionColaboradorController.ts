@@ -12,7 +12,9 @@ class ProduccionColaboradorController {
              let producctionSearch: any;
             
             if (rutSearch && fromDateSearch && toDateSearch ) {
-                producctionSearch = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado ASC', [rutSearch, fromDateSearch, toDateSearch]);
+                producctionSearch = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) ORDER BY fecha_sellado, hora_sellado ASC', [rutSearch, fromDateSearch, toDateSearch]);
+                //producctionSearch = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  rut_usuario = ? AND fecha_sellado >= ? AND fecha_sellado <= ? ORDER BY fecha_sellado ASC', [rutSearch, fromDateSearch, toDateSearch]);
+                
                 //console.log(producctionSearch);
             }else{
                 res.status(404).json({ text: 'error en datos de busqueda' });
@@ -34,6 +36,30 @@ class ProduccionColaboradorController {
     public async searchCount(req: Request, res: Response) {
         try {
             const { rutSearch, fromDateSearch, toDateSearch } = req.params;            
+             let producctionSearch: any;
+            if (rutSearch && fromDateSearch && toDateSearch ) {
+                producctionSearch = await pool.query('SELECT fecha_sellado, Count(fecha_sellado) as numero FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado', [rutSearch, fromDateSearch, toDateSearch]);
+                console.log(producctionSearch);
+            }else{
+                res.status(404).json({ text: 'error en datos de busqueda' });
+            }
+            
+            if(producctionSearch.length > 0) {
+                return res.status(200).json(producctionSearch);
+            
+            } else {
+                console.log("Sin registros para esta busqueda");
+                res.status(404).json({ text: 'Sin registros para esta busqueda' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la busqueda' });
+        }
+
+    }
+
+    public async searchBoxByType(req: Request, res: Response) {
+        try {
+            const { rutSearch, fromDateSearch, toDateSearch } = req.params;            
              console.log(rutSearch);
              console.log(fromDateSearch);
              console.log(toDateSearch);
@@ -42,7 +68,7 @@ class ProduccionColaboradorController {
             
             if (rutSearch && fromDateSearch && toDateSearch ) {
                 
-                producctionSearch = await pool.query('SELECT fecha_sellado, COUNT(fecha_sellado) as numero FROM registro_diario_caja_sellada  WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) GROUP BY fecha_sellado;', [rutSearch, fromDateSearch, toDateSearch]);
+                producctionSearch = await pool.query('SELECT envase_caja AS ENVASE, Count(envase_caja) as CANTIDAD FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) group by envase', [rutSearch, fromDateSearch, toDateSearch]);
                 console.log(producctionSearch);
             }else{
                 res.status(404).json({ text: 'error en datos de busqueda' });
@@ -63,14 +89,14 @@ class ProduccionColaboradorController {
 
     public async update(req: Request, res: Response) {
         try {
-            console.log("HOLA MUNDO");
+            
             const { id } = req.params;
             
             console.log(req.body);
         
             let registerUser: any ;
             if(id){
-                registerUser = await pool.query('UPDATE registro_diario_caja_sellada SET ? WHERE id = ?', [req.body, id]);
+                registerUser = await pool.query('UPDATE registro_diario_caja_sellada SET is_verificado = ?, is_before_time = ? WHERE id_calibrador = ? AND id_linea = ? AND codigo_de_barra = ? AND fecha_sellado = ? AND hora_sellado = ?', [req.body.is_verificado, req.body.is_before_time, req.body.id_calibrador, req.body.id_linea, req.body.codigo_de_barra, req.body.fecha_sellado, req.body.hora_sellado]);
             }else{
                 res.status(404).json({ text: 'id invalido' });
             }
@@ -82,10 +108,11 @@ class ProduccionColaboradorController {
                 }
             }
         } catch{
-            console.log("HOLA MUNDO CTM !!!!!");
             res.status(404).json({ text: 'No se pudo actualizar el registro' });
         }
     }
+
+    
 
     
 }
