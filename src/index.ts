@@ -17,6 +17,7 @@ import cajaRoutes from './routes/cajaRoutes';
 import produccionColaboradorRoute from './routes/produccionColaboradorRoutes';
 import produccionPorCalibradorRoute from './routes/produccionPorCalibradorRoutes';
 import produccionPorLineaRoute from './routes/produccionPorLineaRoutes';
+import configuracionRoutes from './routes/configuracionRoutes';
 
 
 //
@@ -53,6 +54,7 @@ class Server{
         this.app.use('/api',produccionColaboradorRoute);
         this.app.use('/api',produccionPorCalibradorRoute);
         this.app.use('/api',produccionPorLineaRoute);
+        this.app.use('/api',configuracionRoutes);
     }
 
     start():void{

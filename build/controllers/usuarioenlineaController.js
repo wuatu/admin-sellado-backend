@@ -20,21 +20,23 @@ class UsuarioEnLineaController {
             try {
                 const { id_linea, id_calibrador, rutSearch, fromDateSearch, toDateSearch } = req.params;
                 let usuariosEnLinea;
-                if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch && toDateSearch == "null") {
-                    console.log("hola1");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_inicio like ?', [id_linea, id_calibrador, fromDateSearch + "%"]);
+                if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch == "null" && toDateSearch == "null") {
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ?', [id_linea, id_calibrador]);
                 }
-                else if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch && toDateSearch) {
-                    console.log("hola2");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, fromDateSearch + "%", toDateSearch + "%"]);
+                else if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch != "null" && toDateSearch == "null") {
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_inicio like ?', [id_linea, id_calibrador, fromDateSearch]);
                 }
-                else if (id_calibrador != "null" && id_linea != "null" && rutSearch && fromDateSearch && toDateSearch == "null") {
-                    console.log("hola3");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND fecha_inicio like ?', [id_linea, id_calibrador, rutSearch, fromDateSearch + "%"]);
+                else if (id_calibrador != "null" && id_linea != "null" && rutSearch != "null" && fromDateSearch == "null" && toDateSearch == "null") {
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ?', [id_linea, id_calibrador, rutSearch]);
+                }
+                else if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch != "null" && toDateSearch != "null") {
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, fromDateSearch, toDateSearch]);
+                }
+                else if (id_calibrador != "null" && id_linea != "null" && rutSearch != "null" && fromDateSearch != "null" && toDateSearch == "null") {
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND fecha_inicio like ?', [id_linea, id_calibrador, rutSearch, fromDateSearch]);
                 }
                 else if (id_calibrador != "null" && id_linea != "null" && rutSearch != "null" && fromDateSearch != "null" && toDateSearch != "null") {
-                    console.log("hola4");
-                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, rutSearch, fromDateSearch + "%", toDateSearch + "%"]);
+                    usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND usuario_rut = ? AND (fecha_inicio BETWEEN ? AND ?)', [id_linea, id_calibrador, rutSearch, fromDateSearch, toDateSearch]);
                 }
                 if (usuariosEnLinea.length > 0) {
                     return res.status(200).json(usuariosEnLinea);
