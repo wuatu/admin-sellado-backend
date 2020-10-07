@@ -12,29 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.administradorController = void 0;
+exports.userAdminController = void 0;
 const database_1 = __importDefault(require("../database"));
 const bcrypt = require('bcryptjs');
-class AdministradorController {
+class UserAdminController {
     list(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const {} = req.params;
-                let administradores;
-                administradores = yield database_1.default.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=0');
-                if (administradores.length > 0) {
-                    return res.status(200).json(administradores);
-                }
-                else {
-                    res.status(404).json({ text: 'Sin registros' });
-                }
-            }
-            catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener administrador(es)' });
-            }
-        });
-    }
-    listUA(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const {} = req.params;
@@ -54,9 +36,10 @@ class AdministradorController {
     }
     getOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("entre getOne");
             try {
                 const { id } = req.params;
-                console.log("id:" + id);
+                console.log("id: " + id);
                 const administrador = yield database_1.default.query('SELECT * FROM administrador WHERE id = ?', [id]);
                 if (administrador.length > 0) {
                     return res.status(200).json(administrador[0]);
@@ -86,6 +69,7 @@ class AdministradorController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("entre a la wea !!!");
                 const newUser = {
                     nombre: req.body.nombre,
                     apellido: req.body.apellido,
@@ -118,7 +102,8 @@ class AdministradorController {
                     nombre: req.body.nombre,
                     apellido: req.body.apellido,
                     rut: req.body.rut,
-                    password: bcrypt.hashSync(req.body.password)
+                    password: bcrypt.hashSync(req.body.password),
+                    rol: req.body.rol
                 };
                 const { id } = req.params;
                 const administrador = yield database_1.default.query('UPDATE administrador SET ? WHERE id = ?', [newUser, id]);
@@ -155,37 +140,5 @@ class AdministradorController {
             }
         });
     }
-    login(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { rut, password } = req.params;
-            console.log("login" + rut);
-            let user;
-            try {
-                user = yield database_1.default.query("SELECT * FROM administrador WHERE rut = ? ", [rut]);
-                console.log("administrador: " + user);
-            }
-            catch (err) {
-                return res.status(404).json({ text: "Usuario no registrado" });
-            }
-            if (user.length > 0) {
-                console.log("entre al puto if ");
-                const resultPassword = bcrypt.compareSync(password, user[0].password);
-                if (resultPassword) {
-                    console.log(user[0]);
-                    const dataAdmin = {
-                        rut: user[0].rut,
-                        nombre: user[0].nombre,
-                        apellido: user[0].apellido,
-                        rol: user[0].rol,
-                    };
-                    return res.send({ dataAdmin });
-                }
-                else {
-                    return res.status(404).json({ text: "Rut o contraseña invalidos" });
-                }
-            }
-            return res.status(404).json({ text: "Rut o contraseña invalidos" });
-        });
-    }
 }
-exports.administradorController = new AdministradorController();
+exports.userAdminController = new UserAdminController();

@@ -71,7 +71,7 @@ class AuthController {
                         rut: user[0].rut,
                         nombre: user[0].nombre,
                         apellido: user[0].apellido,
-                        superAdmin: user[0].superadmin,
+                        rol: user[0].rol,
                         accessToken: accessToken,
                         expiresIn: expiresIn,
                     };

@@ -23,6 +23,7 @@ const produccionColaboradorRoutes_1 = __importDefault(require("./routes/producci
 const produccionPorCalibradorRoutes_1 = __importDefault(require("./routes/produccionPorCalibradorRoutes"));
 const produccionPorLineaRoutes_1 = __importDefault(require("./routes/produccionPorLineaRoutes"));
 const configuracionRoutes_1 = __importDefault(require("./routes/configuracionRoutes"));
+const userAdmin_Routes_1 = __importDefault(require("./routes/userAdmin.Routes"));
 //
 class Server {
     constructor() {
@@ -55,6 +56,7 @@ class Server {
         this.app.use('/api', produccionPorCalibradorRoutes_1.default);
         this.app.use('/api', produccionPorLineaRoutes_1.default);
         this.app.use('/api', configuracionRoutes_1.default);
+        this.app.use('/api', userAdmin_Routes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
