@@ -19,6 +19,8 @@ import produccionPorCalibradorRoute from './routes/produccionPorCalibradorRoutes
 import produccionPorLineaRoute from './routes/produccionPorLineaRoutes';
 import configuracionRoutes from './routes/configuracionRoutes';
 import userAdminRoutes from './routes/userAdmin.Routes';
+import monitoreoRoutes from './routes/monitoreoRoutes';
+
 
 
 //
@@ -57,6 +59,7 @@ class Server{
         this.app.use('/api',produccionPorLineaRoute);
         this.app.use('/api',configuracionRoutes);
         this.app.use('/api',userAdminRoutes);
+        this.app.use('/api',monitoreoRoutes);
     }
 
     start():void{
