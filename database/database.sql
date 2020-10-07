@@ -222,6 +222,7 @@ CREATE TABLE `registro_diario_caja_sellada` (
   `fecha_validacion` varchar(40) NOT NULL,
   `is_verificado` tinyint(4) NOT NULL DEFAULT '0',
   `is_before_time` tinyint(4) NOT NULL DEFAULT '0',
+  `id_apertura_cierre_de_turno` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
