@@ -9,9 +9,9 @@ class TurnoController {
             const { fromDate,toDate } = req.params;
             let turnos: any;
             if(toDate==null){
-                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate+"%"]);
+                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate]);
             } else {
-                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)',[fromDate+"%",toDate+"%"]);
+                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)',[fromDate,toDate]);
 
             }
 
@@ -55,6 +55,7 @@ class TurnoController {
         try {
             const newUser = {
                 fecha_apertura: req.body.fecha_apertura,
+                hora_apertura: req.body.hora_apertura,
                 id_administrador_apertura: req.body.id_administrador_apertura,
                 nombre_administrador_apertura: req.body.nombre_administrador_apertura,
                 apellido_administrador_apertura: req.body.apellido_administrador_apertura,

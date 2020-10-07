@@ -9,7 +9,8 @@ class LoginController{
     getOne(req:Request,res:Response){
         const userData={
             rut:req.body.rut,
-            password:req.body.password
+            password:req.body.password,
+            
         }
         res.json({text:'this is a admin'+req.params.id});
         
