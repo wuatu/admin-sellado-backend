@@ -12,10 +12,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.monitoreoController = void 0;
+exports.monitoreoCalibradoresController = void 0;
 const database_1 = __importDefault(require("../database"));
-class MonitoreoController {
-    constructor() {
+class MonitoreoCalibradoresController {
+    getProductionLineTurno(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id_caliper, id_line, name_line, date, time, option } = req.params;
+                let productionLine;
+                let productionLineAux;
+                if (option == '1') {
+                    if (date && time && id_caliper) {
+                        console.log("promedio turno");
+                        productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [date, time, id_caliper, id_line]);
+                    }
+                    else {
+                        res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
+                    }
+                }
+                else if (option == '2') {
+                    if (date && time && id_caliper) {
+                        //Capturar fecha actual del sistema
+                        var fecha = new Date();
+                        let year = fecha.getFullYear() + "";
+                        console.log("hora.length: " + year.length);
+                        let month = fecha.getMonth() + "";
+                        console.log("minuto.length: " + month.length);
+                        let day = fecha.getDate() + "";
+                        console.log("segundo.length: " + day.length);
+                        if (month.length == 1) {
+                            month = "0" + month;
+                        }
+                        if (day.length == 1) {
+                            day = "0" + day;
+                        }
+                        let fechaActual = year + "-" + month + "-" + day;
+                        console.log("fechaActual: " + fechaActual);
+                        console.log("option 2");
+                        //let dateToday = this.fecha().substring(0,10);
+                        productionLine = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [date, time, id_caliper, id_line]);
+                        productionLineAux = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [fechaActual, '00:00:00', id_caliper, id_line]);
+                        productionLine[0].total = productionLine[0].total + productionLineAux[0].total;
+                    }
+                    else {
+                        res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
+                    }
+                }
+                if (productionLine.length > 0) {
+                    if (productionLine[0].total == 0) {
+                        productionLine[0].id_linea = parseInt(id_line);
+                    }
+                    if (productionLine[0].nombre_linea == null) {
+                        productionLine[0].nombre_linea = name_line;
+                    }
+                    return res.status(200).json(productionLine);
+                }
+                else {
+                    res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
+            }
+        });
     }
     getLastTurno(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -394,8 +453,12 @@ class MonitoreoController {
                     }
                 }
                 if (searchBox.length > 0) {
-                    console.log("total de cajas encontradas : " + searchBox[0].total);
-                    searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
+                    if (MinutosDiv == 0) {
+                        searchBox[0].total = 0;
+                    }
+                    else {
+                        searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
+                    }
                     return res.status(200).json(searchBox);
                 }
                 else {
@@ -408,4 +471,4 @@ class MonitoreoController {
         });
     }
 }
-exports.monitoreoController = new MonitoreoController();
+exports.monitoreoCalibradoresController = new MonitoreoCalibradoresController();

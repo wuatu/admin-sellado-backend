@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import pool from '../database';
 class ProduccionPorLineaController {
+  
     //obtengo las lineas del calibrador
     public async countBoxByline(req: Request, res: Response) {
         try {

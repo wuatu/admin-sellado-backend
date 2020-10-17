@@ -1,12 +1,73 @@
-
 import { Request, Response } from 'express';
 import pool from '../database';
-class MonitoreoController{
+class MonitoreoCalibradoresController{
+    
+    public async getProductionLineTurno(req: Request, res: Response){
+        try {
+            const {id_caliper,id_line, name_line,date, time, option } = req.params;            
+            
+             let productionLine: any;
+             let productionLineAux: any;
+            if(option == '1'){
+                if(date && time && id_caliper)  
+                {
+                    console.log("promedio turno");
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [date, time , id_caliper, id_line]);
+                    
+                }else{
+                    res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
+                } 
+            }else if(option == '2'){
+                if (date && time && id_caliper){ 
+                    
+                    //Capturar fecha actual del sistema
+                    var fecha = new Date(); 
+                    let year = fecha.getFullYear()+"";
+                    console.log("hora.length: " + year.length);
+                    let month = fecha.getMonth()+"";
+                    console.log("minuto.length: " + month.length);
+                    let day = fecha.getDate()+"";
+                    console.log("segundo.length: " + day.length);
+                    if(month.length==1){
+                        month = "0"+month;
+                    }
+                    if(day.length==1){
+                        day = "0"+day;
+                    }
+                    
+                    let fechaActual = year+"-"+month+"-"+day;                
+                    console.log("fechaActual: " + fechaActual);
 
-    constructor(){
 
+                    console.log("option 2");
+                    //let dateToday = this.fecha().substring(0,10);
+                    productionLine = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [date, time , id_caliper, id_line]);
+                    productionLineAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [fechaActual, '00:00:00' , id_caliper, id_line]);
+                    productionLine[0].total = productionLine[0].total + productionLineAux[0].total; 
+                }else{
+                    res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
+                } 
+            }
+            
+            if (productionLine.length > 0) {
+                
+                if(productionLine[0].total == 0){
+                    productionLine[0].id_linea = parseInt(id_line) ;
+                }
+                if(productionLine[0].nombre_linea == null){
+                    productionLine[0].nombre_linea = name_line;
+                }
+                return res.status(200).json(productionLine);
+            
+            } else {
+                
+                res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
+        }
+        
     }
-
     public async getLastTurno(req: Request, res: Response){
         try{
             let lastTurno: any;
@@ -413,10 +474,14 @@ class MonitoreoController{
             }     
 
             if (searchBox.length > 0) {
-                console.log("total de cajas encontradas : "+ searchBox[0].total);
-                    
-                searchBox[0].total = Math.round(searchBox[0].total/MinutosDiv);
                 
+                
+                if(MinutosDiv == 0){
+                    
+                    searchBox[0].total = 0;
+                }else{ 
+                    searchBox[0].total = Math.round(searchBox[0].total/MinutosDiv);
+                }
                 return res.status(200).json(searchBox);
             
             } else {
@@ -432,222 +497,5 @@ class MonitoreoController{
         }
     }
 
-     /*getMinutes(horaInicio: string, horaActual:string){
-        
-        var hora1 = horaInicio.split(":");
-        var hora2 = horaActual.split(":");
-        var t1 = new Date();
-        var t2 = new Date();
-        t1.setHours(parseInt(hora1[0]), parseInt(hora1[1]), parseInt(hora1[2]));
-        t2.setHours(parseInt(hora2[0]), parseInt(hora2[1]), parseInt(hora2[2]));
-                
-        var minutos;
-        if((t2.getHours()-t1.getHours()) == 0){
-            minutos = t2.getMinutes()-t1.getMinutes();
-        }else{
-            minutos = (t2.getHours()-t1.getHours())*60;
-            if((t2.getMinutes()-t1.getMinutes())<0){
-                minutos = (minutos - (t2.getMinutes()-t1.getMinutes())*-1);
-            }else{
-                minutos = minutos + (t2.getMinutes()-t1.getMinutes());
-            }
-        }
-            
-        return minutos;
-    }*/
-
-     /*getLessOneHour(hora1:string): string{
-        console.log("entre al metodo  !!!!!");
-        var t1 = new Date();
-  
-        t1.setHours(parseInt(hora1[0]), parseInt(hora1[1]), parseInt(hora1[2]));
-        
-        t1.setHours(t1.getHours() - 1);
-        
-        var hora2 ;
-        if(t1.getHours()<10){
-          hora2 = "0"+t1.getHours()+":";
-          if(t1.getMinutes()<10){
-              hora2 = hora2 + "0" +t1.getMinutes()+":";
-              if(t1.getSeconds()<10){
-                hora2 = hora2 + "0" +t1.getSeconds();
-              }else{
-                hora2 = hora2 + t1.getSeconds();
-              }
-          }else{
-            hora2 = hora2 + t1.getMinutes()+":";
-            if(t1.getSeconds()<10){
-              hora2 = hora2 + "0" +t1.getSeconds();
-            }else{
-              hora2 = hora2 + t1.getSeconds();
-            }
-          }
-        }else{
-          hora2 = t1.getHours()+":";
-          if(t1.getMinutes()<10){
-            hora2 = hora2 + "0" +t1.getMinutes()+":";
-            if(t1.getSeconds()<10){
-              hora2 = hora2 + "0" +t1.getSeconds();
-            }else{
-              hora2 = hora2 + t1.getSeconds();
-            }
-          }else{
-            hora2 = hora2 + t1.getMinutes()+":";
-            if(t1.getSeconds()<10){
-              hora2 = hora2 + "0" +t1.getSeconds();
-            }else{
-              hora2 = hora2 + t1.getSeconds();
-            }
-          }
-        }
-        console.log("dentro del metodo la hora es : "+hora1);
-        return hora1;
-    }*/
-    /*
-    
-    
-    public async searchTotal(req: Request, res: Response) {
-        try {
-            const { id_calibrador } = req.params;           
-             console.log(id_calibrador);
-             let idTurnoTotal: any;
-            if (id_calibrador != "0") {
-                idTurnoTotal = await pool.query('select count(registro_diario_caja_sellada.id) as total from registro_diario_caja_sellada where id_calibrador = ? and id_apertura_cierre_de_turno=(SELECT MAX(id_apertura_cierre_de_turno))', [id_calibrador]);
-            }
-            
-            if (idTurnoTotal.length > 0) {
-                
-                return res.status(200).json(idTurnoTotal);
-                
-            } else {
-                res.status(404).json({ text: 'Sin registros de cajas' });
-            }
-        } catch{
-            res.status(404).json({ text: 'No se pudo obtener cajas' });
-        }
-    }
-
-
-    public async searchAverageforMinute(req: Request, res: Response) {
-        try {
-            const { id_turno, id_calibrador } = req.params;           
-             console.log(id_calibrador);
-            let horasSellado: any;
-            if (id_calibrador != "0") {
-                horasSellado = await pool.query('select hora_sellado from registro_diario_caja_sellada where id_calibrador = ? and id_apertura_cierre_de_turno = (SELECT MAX(id_apertura_cierre_de_turno)) order by hora_sellado', [id_calibrador]);                          
-            }
-
-            
-            if (horasSellado.length > 0) {
-
-                console.log("horasSellado.lenght: " + horasSellado.length);
-
-                console.log("horasSellado: " + horasSellado[0].hora_sellado);
-
-                console.log("horasSellado: " + horasSellado[horasSellado.length-1].hora_sellado);
-
-                var hora1 = (horasSellado[horasSellado.length-1].hora_sellado).split(":");
-                var hora2 = (horasSellado[0].hora_sellado).split(":");
-                
-                let t1 = new Date();
-                let t2 = new Date();
-             
-                t1.setHours(hora1[0]-3, hora1[1], hora1[0]);
-                t2.setHours(hora2[0]-3, hora2[1], hora2[0]);
-                console.log(t1);
-                console.log(t2);
-
-                //Aquí hago la resta
-
-                let ms = t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
-                console.log("resta: "+ms);
-
-                let minutos = Math.ceil((ms % 3600000) / 60000);
-                
-                console.log("minutos totales en turno: " + minutos);
-
-                console.log("promedio cajas selladas por minuto: " + Math.round(horasSellado.length/(minutos))); //miunto+1 para que tome el primer minuto
-                
-                return res.status(200).json(Math.round(horasSellado.length/(minutos)));        
-                
-            } else {
-                res.status(404).json({ text: 'Sin registros de cajas' });
-            }
-        } catch{
-            res.status(404).json({ text: 'No se pudo obtener cajas' });
-        }
-    }
-
-    public async searchAverageLastHourforMinute(req: Request, res: Response) {
-        try {
-            const {id_calibrador } = req.params;           
-             console.log(id_calibrador);
-            let horasSellado: any;
-
-            //Capturar hora actual del sistema
-            var date = new Date(); 
-            let hora = date.getHours()+"";
-            console.log("hora.length: " + hora.length);
-            let minuto = date.getMinutes()+"";
-            console.log("minuto.length: " + minuto.length);
-            let segundo = date.getSeconds()+"";
-            console.log("segundo.length: " + segundo.length);
-            if(hora.length==1){
-                hora = "0"+hora;
-            }
-            if(minuto.length==1){
-                minuto = "0"+minuto;
-            }
-            if(segundo.length==1){
-                segundo = "0"+segundo;
-            }
-            let horaInicial =hora+":00:00";               
-            console.log("horaInicial: " + horaInicial);
-            let horaActual = hora+":"+minuto+":"+segundo;                
-            console.log("horaActual: " + horaActual);
-
-            if (id_calibrador != "0") {
-                horasSellado = await pool.query('select hora_sellado from registro_diario_caja_sellada where id_calibrador = ? and id_apertura_cierre_de_turno = (SELECT MAX(id_apertura_cierre_de_turno)) AND hora_sellado between ? AND ? order by hora_sellado', [id_calibrador,horaInicial,horaActual]);                          
-            }
-            
-            if (horasSellado.length > 0) {
-
-                console.log("horasSellado.lenght: " + horasSellado.length);
-
-                console.log("horasSellado: " + horasSellado[0].hora_sellado);
-
-                console.log("horasSellado: " + horasSellado[horasSellado.length-1].hora_sellado);
-
-                var hora1 = (horasSellado[horasSellado.length-1].hora_sellado).split(":");
-                var hora2 = (horasSellado[0].hora_sellado).split(":");
-                
-                let t1 = new Date();
-                let t2 = new Date();
-             
-                t1.setHours(hora1[0], hora1[1], hora1[2]);
-                t2.setHours(hora2[0], hora2[1], hora2[2]);
-                
-                //Aquí hago la resta
-                let ms = t1.setHours(t1.getHours() - t2.getHours(), t1.getMinutes() - t2.getMinutes(), t1.getSeconds() - t2.getSeconds());
-                let minutos = Math.floor((ms % 3600000) / 60000);
-                console.log("resta: " + minutos);
-
-                console.log("prom: " + horasSellado.length/(minutos+1)); //miunto+1 para que tome el primer minuto
-
-                return res.status(200).json(horasSellado.length/(minutos+1));        
-                
-            } else {
-                res.status(404).json({ text: 'Sin registros de cajas' });
-            }
-        } catch{
-            res.status(404).json({ text: 'No se pudo obtener cajas' });
-        }
-    }*/
-
-    /*public fecha() {
-        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString();
-        return localISOTime;
-    }*/
 }
-export const monitoreoController = new MonitoreoController();
+export const monitoreoCalibradoresController = new MonitoreoCalibradoresController();
