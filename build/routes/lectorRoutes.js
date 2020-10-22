@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const lectorController_1 = require("../controllers/lectorController");
-class LectorController {
+class LectorRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
@@ -15,5 +15,5 @@ class LectorController {
         this.router.delete('/lector/:id', lectorController_1.lectorController.delete);
     }
 }
-const lectorRoutes = new LectorController();
+const lectorRoutes = new LectorRoutes();
 exports.default = lectorRoutes.router;

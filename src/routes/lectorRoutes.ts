@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {lectorController} from '../controllers/lectorController';
 
-class LectorController{
+class LectorRoutes{
     public router:Router=Router();    
     constructor(){
         this.config();
@@ -15,5 +15,5 @@ class LectorController{
     }
 }
 
-const lectorRoutes=new LectorController();
+const lectorRoutes=new LectorRoutes();
 export default lectorRoutes.router;

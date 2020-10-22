@@ -21,6 +21,7 @@ import configuracionRoutes from './routes/configuracionRoutes';
 import userAdminRoutes from './routes/userAdmin.Routes';
 import monitoreoRoutes from './routes/monitoreoRoutes';
 import monitoreoCalibradoresRoutes from './routes/monitoreoCalibradoresRoutes';
+import lectorValidadorRoutes from './routes/lectorValidadorRoutes';
 
 
 
@@ -62,6 +63,7 @@ class Server{
         this.app.use('/api',userAdminRoutes);
         this.app.use('/api',monitoreoRoutes);
         this.app.use('/api',monitoreoCalibradoresRoutes);
+        this.app.use('/api',lectorValidadorRoutes);
     }
 
     start():void{

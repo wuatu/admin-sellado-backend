@@ -21,7 +21,7 @@ class LectorController {
                 const { id_calibrador, id_linea } = req.params;
                 let lectors;
                 if (id_calibrador != "0" && id_linea != "0") {
-                    lectors = yield database_1.default.query('SELECT DISTINCT lector.id,lector.nombre,lector.ip,lector.fk_linea FROM lector,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND lector.fk_linea= ?', [id_calibrador, id_linea]);
+                    lectors = yield database_1.default.query('SELECT DISTINCT lector.id,lector.nombre,lector.ip, lector.baudRate, lector.parity, lector.stopBits, lector.dataBits,lector.fk_linea FROM lector,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND lector.fk_linea= ?', [id_calibrador, id_linea]);
                 }
                 if (lectors.length > 0) {
                     return res.status(200).json(lectors);
@@ -53,7 +53,8 @@ class LectorController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const lector = yield database_1.default.query('INSERT INTO lector set ?', [req.body]);
+                console.log(req.body);
+                const lector = yield database_1.default.query('INSERT INTO lector SET ?', [req.body]);
                 if (lector != null) {
                     console.log(lector);
                     if (lector != null) {

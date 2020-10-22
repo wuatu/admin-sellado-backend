@@ -7,7 +7,7 @@ class RfidController {
             const { id_calibrador, id_linea } = req.params;
             let rfids: any;
             if (id_calibrador != "0" && id_linea != "0") {
-                rfids = await pool.query('SELECT DISTINCT rfid.id,rfid.nombre,rfid.ip,rfid.fk_linea FROM rfid,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND rfid.fk_linea= ?', [id_calibrador, id_linea]);
+                rfids = await pool.query('SELECT DISTINCT rfid.id,rfid.nombre,rfid.ip, rfid.baudRate, rfid.parity, rfid.stopBits, rfid.dataBits,rfid.fk_linea FROM rfid,calibrador INNER JOIN linea ON calibrador.id=linea.fk_calibrador WHERE calibrador.id= ? AND rfid.fk_linea= ?', [id_calibrador, id_linea]);
             }
             if (rfids.length > 0) {
                 return res.status(200).json(rfids);
@@ -34,7 +34,9 @@ class RfidController {
 
     public async create(req: Request, res: Response): Promise<void> {
         try {
-            const rfid = await pool.query('INSERT INTO rfid set ?', [req.body]);
+            console.log(req.body);
+            const rfid = await pool.query('INSERT INTO rfid SET ?', [req.body]);
+            console.log(rfid);
             if (rfid != null) {
                 console.log(rfid);
                 if (rfid != null) {
@@ -49,6 +51,26 @@ class RfidController {
             res.status(404).json({ text: 'No se pudo crear rfid' });
         }
     }
+
+    /*public async create(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("entre al create !!!!");
+            console.log(req.body);
+            const rfid = await pool.query('INSERT INTO rfid SET ?', [req.body]);
+            if (rfid != null) {
+                console.log(rfid);
+                if (rfid != null) {
+                    if (rfid.affectedRows > 0) {
+                        res.status(200).json({ message: 'rfid creado' });
+                    }
+                } else {
+                    res.status(404).json({ text: 'No se pudo crear rfid' });
+                }
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo crear rfid' });
+        }
+    }*/
 
     public async update(req: Request, res: Response) {
         try {
