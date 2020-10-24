@@ -13,7 +13,8 @@ class UsuarioEnLineaRoutes{
         //this.router.get('/usuario_en_linea/:id',usuarioEnLineaController.getOne);
         this.router.put('/usuario_en_linea/:id',usuarioEnLineaController.update);
         //this.router.delete('/usuario_en_Linea/:id',usuarioEnLineaController.delete);
-      
+        this.router.get('/usuarios_en_linea/:id_turno/:id_usuario/:id_linea',usuarioEnLineaController.validateCollaborator);
+        this.router.put('/usuarios_en_linea/:id_turno/:id_usuario/:id_linea/:fecha_termino/:hora_termino',usuarioEnLineaController.closeTurnCollaborators);
     }
 }
 

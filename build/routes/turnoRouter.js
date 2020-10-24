@@ -13,6 +13,7 @@ class TurnoRoutes {
         this.router.get('/turno/:id', turnoController_1.turnoController.getOne);
         this.router.get('/turno', turnoController_1.turnoController.getOneSinId);
         this.router.put('/turno/:id', turnoController_1.turnoController.update);
+        this.router.put('/turno/:fecha_termino/:hora_termino', turnoController_1.turnoController.closeTurnCollaborators);
         this.router.delete('/turno/:id', turnoController_1.turnoController.delete);
     }
 }

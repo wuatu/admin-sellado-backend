@@ -159,6 +159,8 @@ class AdministradorController {
         }
         return res.status(404).json({ text: "Rut o contraseña invalidos" })
     }
+
+    
     
 }
 

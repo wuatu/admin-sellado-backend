@@ -188,5 +188,26 @@ class TurnoController {
             return res.status(404).json({ text: "Rut o contraseña invalidos" });
         });
     }
+    closeTurnCollaborators(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("closeTurnCollaborators1");
+            try {
+                const { fecha_termino, hora_termino } = req.params;
+                console.log("closeTurnCollaborators2");
+                const respuesta = yield database_1.default.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino]);
+                if (respuesta != null) {
+                    if (respuesta.affectedRows > 0) {
+                        res.status(200).json({ message: 'Turno cerrado correctamente a los colaboradores' });
+                    }
+                    else {
+                        res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
+                    }
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
+            }
+        });
+    }
 }
 exports.turnoController = new TurnoController();

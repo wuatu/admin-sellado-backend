@@ -41,7 +41,9 @@ class UsuarioEnLineaController {
 
 
     public async create(req: Request, res: Response) {
-        try {            
+        try { 
+            console.log("USUARIO EN LINEA") ; 
+            console.log(req.body);         
             const usuarioEnLinea = await pool.query('INSERT INTO registro_diario_usuario_en_linea set ?', [req.body]);
             if (usuarioEnLinea != null) {
                 console.log(usuarioEnLinea);
@@ -75,7 +77,43 @@ class UsuarioEnLineaController {
         }
     }
 
-
+    public async validateCollaborator(req: Request, res: Response) {
+        try {
+            const { id_turno, id_usuario, id_linea } = req.params;
+            console.log("validateCollaborator!!!!!!  " + id_turno + id_usuario);
+            const validacion = await pool.query("SELECT COUNT(registro_diario_usuario_en_linea.id) AS enTurno FROM registro_diario_usuario_en_linea WHERE id_turno = ? AND id_usuario = ? AND id_linea = ? AND fecha_termino = '' AND hora_termino = ''", [id_turno, id_usuario, id_linea]);
+            if (validacion != null) {
+                console.log("ENTRE AL IF DIFERENTE DE NULL");
+                console.log("VALIDACION : "+ validacion[0].enTurno);
+                if (validacion[0].enTurno >= 0) {
+                    console.log("entre al if ");
+                    return res.status(200).json(validacion);
+                } else {
+                    console.log("entre al else ");
+                    res.status(404).json({ text: 'No se pudo realizar la validación' });
+                }
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la validación' });
+        }
+    }
+    public async closeTurnCollaborators(req: Request, res: Response){
+        console.log("closeTurnCollaborators1");
+        try {
+            const {id_turno, id_usuario, id_linea, fecha_termino, hora_termino } = req.params;
+            console.log("closeTurnCollaborators2");
+            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE id_turno = ? AND id_usuario = ? AND id_linea != ? AND fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino, id_turno, id_usuario, id_linea, fecha_termino, hora_termino]);
+            if (respuesta != null) {
+                if (respuesta.affectedRows > 0) {
+                    res.status(200).json({ message: 'Turno cerrado correctamente a colaborador' });
+                } else {
+                    res.status(404).json({ text: 'No se pudo cerrar correctamente el turno al colaborador' });
+                }
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores'  });
+        }
+    }
 }
 
 export const usuarioEnLineaController = new UsuarioEnLineaController();
