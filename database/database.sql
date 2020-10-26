@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 24, 2020 at 05:45 AM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.9
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 26-10-2020 a las 17:42:19
+-- Versión del servidor: 10.4.14-MariaDB
+-- Versión de PHP: 7.2.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,15 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `danich_sellado`
+-- Base de datos: `danich_sellado`
 --
+CREATE DATABASE IF NOT EXISTS `danich_sellado` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `danich_sellado`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `administrador`
+-- Estructura de tabla para la tabla `administrador`
 --
 
 CREATE TABLE `administrador` (
@@ -37,7 +39,7 @@ CREATE TABLE `administrador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `administrador`
+-- Volcado de datos para la tabla `administrador`
 --
 
 INSERT INTO `administrador` (`id`, `rut`, `nombre`, `apellido`, `password`, `rol`) VALUES
@@ -54,7 +56,7 @@ INSERT INTO `administrador` (`id`, `rut`, `nombre`, `apellido`, `password`, `rol
 -- --------------------------------------------------------
 
 --
--- Table structure for table `apertura_cierre_de_turno`
+-- Estructura de tabla para la tabla `apertura_cierre_de_turno`
 --
 
 CREATE TABLE `apertura_cierre_de_turno` (
@@ -72,7 +74,7 @@ CREATE TABLE `apertura_cierre_de_turno` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `apertura_cierre_de_turno`
+-- Volcado de datos para la tabla `apertura_cierre_de_turno`
 --
 
 INSERT INTO `apertura_cierre_de_turno` (`id`, `fecha_apertura`, `hora_apertura`, `id_administrador_apertura`, `nombre_administrador_apertura`, `apellido_administrador_apertura`, `fecha_cierre`, `hora_cierre`, `id_administrador_cierre`, `nombre_administrador_cierre`, `apellido_administrador_cierre`) VALUES
@@ -113,15 +115,16 @@ INSERT INTO `apertura_cierre_de_turno` (`id`, `fecha_apertura`, `hora_apertura`,
 (42, '2020-10-19', '15:46:13', 19, 'ignacio', 'correa', '2020-10-20', '09:26:39', 19, 'ignacio', 'correa'),
 (43, '2020-10-20', '10:34:06', 19, 'ignacio', 'correa', '2020-10-22', '16:57:33', 19, 'ignacio', 'correa'),
 (44, '2020-10-22', '16:54:33', 19, 'ignacio', 'correa', '2020-10-22', '17:08:28', 19, 'ignacio', 'correa'),
-(45, '2020-10-22', '16:57:15', 19, 'ignacio', 'correa', '', '', -1, '', ''),
-(46, '2020-10-22', '17:00:10', 19, 'ignacio', 'correa', '', '', -1, '', ''),
-(47, '2020-10-22', '17:06:32', 19, 'ignacio', 'correa', '', '', -1, '', ''),
-(48, '2020-10-22', '17:08:12', 19, 'ignacio', 'correa', '', '', -1, '', '');
+(45, '2020-10-22', '16:57:15', 19, 'ignacio', 'correa', '2020-10-26', '09:54:02', 18, 'cristian', 'farias'),
+(46, '2020-10-22', '17:00:10', 19, 'ignacio', 'correa', '2020-10-26', '09:57:56', 18, 'cristian', 'farias'),
+(47, '2020-10-22', '17:06:32', 19, 'ignacio', 'correa', '2020-10-26', '09:52:39', 18, 'cristian', 'farias'),
+(48, '2020-10-22', '17:08:12', 19, 'ignacio', 'correa', '2020-10-26', '09:49:32', 18, 'cristian', 'farias'),
+(49, '2020-10-26', '09:59:25', 18, 'cristian', 'farias', '', '', -1, '', '');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `caja`
+-- Estructura de tabla para la tabla `caja`
 --
 
 CREATE TABLE `caja` (
@@ -135,17 +138,42 @@ CREATE TABLE `caja` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `caja`
+-- Volcado de datos para la tabla `caja`
 --
 
 INSERT INTO `caja` (`id`, `envase`, `variedad`, `categoria`, `calibre`, `correlativo`, `ponderacion`) VALUES
-(1, 'envase1', 'variedad1', 'variedad1', 'variedad1', 'cal1', 1),
-(2, 'envase2', 'variedad2', 'variedad2', 'cat2', 'cal2', 0);
+(1, 'envase1caja_unitec', 'variedad1', 'variedad1', 'variedad1', 'cal1', 1),
+(2, 'envase2caja_unitec', 'variedad2', 'variedad2', 'cat2', 'cal2', 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `calibrador`
+-- Estructura de tabla para la tabla `caja_unitec`
+--
+
+CREATE TABLE `caja_unitec` (
+  `id` int(11) NOT NULL,
+  `envase` varchar(70) NOT NULL,
+  `variedad` varchar(70) NOT NULL,
+  `categoria` varchar(70) NOT NULL,
+  `calibre` varchar(70) NOT NULL,
+  `correlativo` varchar(70) NOT NULL,
+  `ponderacion` int(11) NOT NULL,
+  `codigo` varchar(70) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `caja_unitec`
+--
+
+INSERT INTO `caja_unitec` (`id`, `envase`, `variedad`, `categoria`, `calibre`, `correlativo`, `ponderacion`, `codigo`) VALUES
+(1, 'envase1caja_unitec', 'variedad1caja_unitec', 'variedad1caja_unitec', 'variedad1caja_unitec', 'cal1caja_unitec', 1, '20981538'),
+(2, 'envase2caja_unitec', 'variedad2caja_unitec', 'variedad2caja_unitec', 'cat2caja_unitec', 'cal2caja_unitec', 0, '2091541');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `calibrador`
 --
 
 CREATE TABLE `calibrador` (
@@ -154,7 +182,7 @@ CREATE TABLE `calibrador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `calibrador`
+-- Volcado de datos para la tabla `calibrador`
 --
 
 INSERT INTO `calibrador` (`id`, `nombre`) VALUES
@@ -165,7 +193,7 @@ INSERT INTO `calibrador` (`id`, `nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `colaborador`
+-- Estructura de tabla para la tabla `colaborador`
 --
 
 CREATE TABLE `colaborador` (
@@ -177,7 +205,7 @@ CREATE TABLE `colaborador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `colaborador`
+-- Volcado de datos para la tabla `colaborador`
 --
 
 INSERT INTO `colaborador` (`id`, `rut`, `nombre`, `apellido`, `password`) VALUES
@@ -187,7 +215,7 @@ INSERT INTO `colaborador` (`id`, `rut`, `nombre`, `apellido`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `configuracion`
+-- Estructura de tabla para la tabla `configuracion`
 --
 
 CREATE TABLE `configuracion` (
@@ -196,7 +224,7 @@ CREATE TABLE `configuracion` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `configuracion`
+-- Volcado de datos para la tabla `configuracion`
 --
 
 INSERT INTO `configuracion` (`id`, `max_wait_time`) VALUES
@@ -205,7 +233,7 @@ INSERT INTO `configuracion` (`id`, `max_wait_time`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lector`
+-- Estructura de tabla para la tabla `lector`
 --
 
 CREATE TABLE `lector` (
@@ -220,20 +248,16 @@ CREATE TABLE `lector` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `lector`
+-- Volcado de datos para la tabla `lector`
 --
 
 INSERT INTO `lector` (`id`, `nombre`, `ip`, `baudRate`, `parity`, `stopBits`, `dataBits`, `fk_linea`) VALUES
-(7, 'Lector 2', 'COM4', '115200', 'Even', '1.5', '6', 22),
-(8, 'Lector 1', 'COM1', '19200', 'None', '1', '5', 22),
-(9, 'lector 3 ', 'COM3', '256000', 'Odd', '2', '7', 22),
-(10, 'Lector 4', 'COM4', '38400', 'Space', '1', '8', 22),
-(11, 'Lector 5', 'COM5', '57600', 'Mart', '1.5', '6', 22);
+(7, 'Lector 2', 'COM6', '115200', 'None', '1', '8', 22);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lector_validador`
+-- Estructura de tabla para la tabla `lector_validador`
 --
 
 CREATE TABLE `lector_validador` (
@@ -245,7 +269,7 @@ CREATE TABLE `lector_validador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `lector_validador`
+-- Volcado de datos para la tabla `lector_validador`
 --
 
 INSERT INTO `lector_validador` (`id`, `nombre`, `ip`, `max_wait_time`, `fk_calibrador`) VALUES
@@ -255,7 +279,7 @@ INSERT INTO `lector_validador` (`id`, `nombre`, `ip`, `max_wait_time`, `fk_calib
 -- --------------------------------------------------------
 
 --
--- Table structure for table `linea`
+-- Estructura de tabla para la tabla `linea`
 --
 
 CREATE TABLE `linea` (
@@ -266,7 +290,7 @@ CREATE TABLE `linea` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `linea`
+-- Volcado de datos para la tabla `linea`
 --
 
 INSERT INTO `linea` (`id`, `nombre`, `fk_calibrador`, `nombre_calibrador`) VALUES
@@ -279,7 +303,7 @@ INSERT INTO `linea` (`id`, `nombre`, `fk_calibrador`, `nombre_calibrador`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `registro`
+-- Estructura de tabla para la tabla `registro`
 --
 
 CREATE TABLE `registro` (
@@ -293,7 +317,41 @@ CREATE TABLE `registro` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `registro`
+-- Volcado de datos para la tabla `registro`
+--
+
+--
+-- Estructura de tabla para la tabla `registro_produccion`
+--
+
+CREATE TABLE `registro_produccion` (
+  `id` int(11) NOT NULL,
+  `id_colaborador` int(11) NOT NULL,
+  `nombre_colaborador` varchar(70) NOT NULL,
+  `apellido_colaborador` varchar(70) NOT NULL,
+  `registro` varchar(255) NOT NULL,
+  `fecha` varchar(10) NOT NULL,
+  `hora` varchar(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `registro_produccion`
+--
+
+--
+-- Estructura de tabla para la tabla `registro_dev`
+--
+
+CREATE TABLE `registro_dev` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(70) NOT NULL,
+  `registro` varchar(255) NOT NULL,
+  `fecha` varchar(10) NOT NULL,
+  `hora` varchar(8) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `registro_produccion`
 --
 
 INSERT INTO `registro` (`id`, `id_administrador`, `nombre_administrador`, `apellido_administrador`, `registro`, `fecha`, `hora`) VALUES
@@ -464,12 +522,31 @@ INSERT INTO `registro` (`id`, `id_administrador`, `nombre_administrador`, `apell
 (338, 19, 'ignacio', 'correa', 'Se ha agregado el usuario con rut: 16879548-3, nombre: Ignacio  en la linea linea3 del calibrador calibrador1', '2020-10-24', '00:14:08'),
 (339, 19, 'ignacio', 'correa', 'Se ha agregado el usuario con rut: 16879548-3, nombre: Ignacio  en la linea linea2 del calibrador calibrador1', '2020-10-24', '00:14:37'),
 (340, 19, 'ignacio', 'correa', 'Se ha agregado el usuario con rut: 24270021-6, nombre: agustin en la linea linea2 del calibrador calibrador1', '2020-10-24', '00:35:19'),
-(341, 19, 'ignacio', 'correa', 'Se ha agregado el usuario con rut: 24270021-6, nombre: agustin en la linea linea2 del calibrador calibrador1', '2020-10-24', '00:37:23');
+(341, 19, 'ignacio', 'correa', 'Se ha agregado el usuario con rut: 24270021-6, nombre: agustin en la linea linea2 del calibrador calibrador1', '2020-10-24', '00:37:23'),
+(342, 18, 'cristian', 'farias', 'Turno cerrado', '2020-10-26', '09:49:32'),
+(343, 18, 'cristian', 'farias', 'Turno cerrado', '2020-10-26', '09:52:39'),
+(344, 18, 'cristian', 'farias', 'Turno cerrado', '2020-10-26', '09:54:02'),
+(345, 18, 'cristian', 'farias', 'Turno cerrado', '2020-10-26', '09:57:56'),
+(346, 18, 'cristian', 'farias', 'Turno iniciado', '2020-10-26', '09:59:25'),
+(347, 18, 'cristian', 'farias', 'Se ha eliminado un lector, id: 11', '2020-10-26', '10:04:20'),
+(348, 18, 'cristian', 'farias', 'Se ha eliminado un lector, id: 10', '2020-10-26', '10:04:22'),
+(349, 18, 'cristian', 'farias', 'Se ha eliminado un lector, id: 9', '2020-10-26', '10:04:24'),
+(350, 18, 'cristian', 'farias', 'Se ha eliminado un lector, id: 8', '2020-10-26', '10:04:29'),
+(351, 18, 'cristian', 'farias', 'Se ha editado un lector, id: 7 y nombre: Lector 2', '2020-10-26', '13:07:37'),
+(352, 18, 'cristian', 'farias', 'Se ha eliminado un rfid, id: 10, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:08:14'),
+(353, 18, 'cristian', 'farias', 'Se ha eliminado un rfid, id: 9, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:08:16'),
+(354, 18, 'cristian', 'farias', 'Se ha eliminado un rfid, id: 8, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:08:17'),
+(355, 18, 'cristian', 'farias', 'Se ha eliminado un rfid, id: 7, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:08:19'),
+(356, 18, 'cristian', 'farias', 'Se ha editado un rfid, id: 6, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:08:33'),
+(357, 18, 'cristian', 'farias', 'Se ha editado un lector, id: 7 y nombre: Lector 2', '2020-10-26', '13:08:57'),
+(358, 18, 'cristian', 'farias', 'Se ha editado un rfid, id: 6, linea: linea2, y calibrador: calibrador1', '2020-10-26', '13:10:00'),
+(359, 18, 'cristian', 'farias', 'Se ha editado un lector, id: 7 y nombre: Lector 2', '2020-10-26', '13:10:10'),
+(360, 18, 'cristian', 'farias', 'Se ha editado un colaborador, id de registro: 1, rut:24270021-6', '2020-10-26', '13:11:45');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `registro_diario_caja_sellada`
+-- Estructura de tabla para la tabla `registro_diario_caja_sellada`
 --
 
 CREATE TABLE `registro_diario_caja_sellada` (
@@ -506,7 +583,7 @@ CREATE TABLE `registro_diario_caja_sellada` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `registro_diario_caja_sellada`
+-- Volcado de datos para la tabla `registro_diario_caja_sellada`
 --
 
 INSERT INTO `registro_diario_caja_sellada` (`id`, `id_calibrador`, `nombre_calibrador`, `id_linea`, `nombre_linea`, `id_rfid`, `nombre_rfid`, `ip_rfid`, `id_lector`, `nombre_lector`, `ip_lector`, `id_usuario`, `rut_usuario`, `nombre_usuario`, `apellido_usuario`, `codigo_de_barra`, `id_caja`, `envase_caja`, `variedad_caja`, `categoria_caja`, `calibre_caja`, `correlativo_caja`, `ponderacion_caja`, `fecha_sellado`, `hora_sellado`, `fecha_validacion`, `hora_validacion`, `is_verificado`, `is_before_time`, `id_apertura_cierre_de_turno`) VALUES
@@ -906,12 +983,13 @@ INSERT INTO `registro_diario_caja_sellada` (`id`, `id_calibrador`, `nombre_calib
 (849, 1, 'calibrador_1', 22, 'linea_2', 3100, 'rfid_1213', '192.168.0.2', 2, 'lector_1', '192.168.10.2', 2, '13954687-7', 'Ignacio', 'Correa', '54682000', 2000, 'caja mediana', 'variedad caja', 'categoria de caja', 'calibre de caja', 'correlativo caja', 'ponderación caja', '2020-10-15', '15:55:15', '2020-10-16', '08:39:02', 1, 1, 0),
 (850, 1, 'calibrador_1', 22, 'linea_2', 3100, 'rfid_1213', '192.168.0.2', 2, 'lector_1', '192.168.10.2', 2, '13954687-7', 'Ignacio', 'Correa', '54682000', 2000, 'caja mediana', 'variedad caja', 'categoria de caja', 'calibre de caja', 'correlativo caja', 'ponderación caja', '2020-10-15', '15:56:15', '2020-10-16', '08:39:02', 1, 1, 0),
 (851, 1, 'calibrador_1', 22, 'linea_2', 3100, 'rfid_1213', '192.168.0.2', 2, 'lector_1', '192.168.10.2', 2, '13954687-7', 'Ignacio', 'Correa', '54682000', 2000, 'caja mediana', 'variedad caja', 'categoria de caja', 'calibre de caja', 'correlativo caja', 'ponderación caja', '2020-10-15', '15:57:15', '2020-10-16', '08:39:02', 1, 1, 0),
-(852, 1, 'calibrador_1', 22, 'linea_2', 3100, 'rfid_1213', '192.168.0.2', 2, 'lector_1', '192.168.10.2', 2, '13954687-7', 'Ignacio', 'Correa', '54682000', 2000, 'caja mediana', 'variedad caja', 'categoria de caja', 'calibre de caja', 'correlativo caja', 'ponderación caja', '2020-10-15', '15:58:15', '2020-10-16', '08:39:02', 1, 1, 0);
+(852, 1, 'calibrador_1', 22, 'linea_2', 3100, 'rfid_1213', '192.168.0.2', 2, 'lector_1', '192.168.10.2', 2, '13954687-7', 'Ignacio', 'Correa', '54682000', 2000, 'caja mediana', 'variedad caja', 'categoria de caja', 'calibre de caja', 'correlativo caja', 'ponderación caja', '2020-10-15', '15:58:15', '2020-10-16', '08:39:02', 1, 1, 0),
+(853, 1, 'calibrador1', 22, 'linea2', 6, 'Rfid 1', 'COM5', 7, 'Lector 2', 'COM6', 1, '24270021-6', 'agustin', 'lopez', '20981538', 1, 'envase1caja_unitec', 'variedad1', 'variedad1', 'variedad1', 'cal1', '1', '2020-10-26', '01:37:26', '', '', 0, 0, 49);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `registro_diario_usuario_en_linea`
+-- Estructura de tabla para la tabla `registro_diario_usuario_en_linea`
 --
 
 CREATE TABLE `registro_diario_usuario_en_linea` (
@@ -932,20 +1010,20 @@ CREATE TABLE `registro_diario_usuario_en_linea` (
   `hora_termino` varchar(8) NOT NULL,
   `id_calibrador` int(11) DEFAULT NULL,
   `nombre_calibrador` varchar(70) DEFAULT NULL,
-  `id_turno` int(11) NOT NULL
+  `id_apertura_cierre_de_turno` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `registro_diario_usuario_en_linea`
+-- Volcado de datos para la tabla `registro_diario_usuario_en_linea`
 --
 
-INSERT INTO `registro_diario_usuario_en_linea` (`id`, `id_linea`, `nombre_linea`, `id_rfid`, `nombre_rfid`, `ip_rfid`, `id_usuario`, `usuario_rut`, `nombre_usuario`, `apellido_usuario`, `rfid_usuario`, `fecha_inicio`, `hora_inicio`, `fecha_termino`, `hora_termino`, `id_calibrador`, `nombre_calibrador`, `id_turno`) VALUES
-(40, 22, 'linea2', 0, '', '', 1, '24270021-6', 'agustin', 'lopez', '123456', '2020-10-24', '00:37:23', '', '', 1, 'calibrador1', 48);
+INSERT INTO `registro_diario_usuario_en_linea` (`id`, `id_linea`, `nombre_linea`, `id_rfid`, `nombre_rfid`, `ip_rfid`, `id_usuario`, `usuario_rut`, `nombre_usuario`, `apellido_usuario`, `rfid_usuario`, `fecha_inicio`, `hora_inicio`, `fecha_termino`, `hora_termino`, `id_calibrador`, `nombre_calibrador`, `id_apertura_cierre_de_turno`) VALUES
+(42, 22, 'linea2', 6, 'Rfid 1', 'COM5', 1, '24270021-6', 'agustin', 'lopez', '0014666635', '2020-10-26', '01:20:51', '', '', 1, 'calibrador1', 49);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `rfid`
+-- Estructura de tabla para la tabla `rfid`
 --
 
 CREATE TABLE `rfid` (
@@ -960,20 +1038,16 @@ CREATE TABLE `rfid` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `rfid`
+-- Volcado de datos para la tabla `rfid`
 --
 
 INSERT INTO `rfid` (`id`, `nombre`, `ip`, `baudRate`, `parity`, `stopBits`, `dataBits`, `fk_linea`) VALUES
-(6, 'Rfid 1', 'COM2', '115200', 'None', '2', '8', 22),
-(7, 'Rfid 2', 'COM2', '38400', 'None', '2', '7', 22),
-(8, 'Rfid 3', 'COM3', '57600', 'Space', '1', '7', 22),
-(9, 'Rfid 4', 'COM2', '57600', 'Mart', '1.5', '8', 22),
-(10, 'Rfid 5', 'COM16', '19200', 'Space', '2', '8', 22);
+(6, 'Rfid 1', 'COM5', '9600', 'None', '1', '8', 22);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `usuario`
+-- Estructura de tabla para la tabla `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -985,219 +1059,231 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `usuario`
+-- Volcado de datos para la tabla `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `rut`, `nombre`, `apellido`, `rfid`) VALUES
-(1, '24270021-6', 'agustin', 'lopez', '123456'),
+(1, '24270021-6', 'agustin', 'lopez', '0014666635'),
 (2, '16879548-3', 'Ignacio ', 'Correa', '1234567898');
 
 --
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `administrador`
+-- Indices de la tabla `administrador`
 --
 ALTER TABLE `administrador`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `rut` (`rut`);
 
 --
--- Indexes for table `apertura_cierre_de_turno`
+-- Indices de la tabla `apertura_cierre_de_turno`
 --
 ALTER TABLE `apertura_cierre_de_turno`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `caja`
+-- Indices de la tabla `caja`
 --
 ALTER TABLE `caja`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `calibrador`
+-- Indices de la tabla `caja_unitec`
+--
+ALTER TABLE `caja_unitec`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `calibrador`
 --
 ALTER TABLE `calibrador`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `colaborador`
+-- Indices de la tabla `colaborador`
 --
 ALTER TABLE `colaborador`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `configuracion`
+-- Indices de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `lector`
+-- Indices de la tabla `lector`
 --
 ALTER TABLE `lector`
   ADD PRIMARY KEY (`id`),
   ADD KEY `lector_fk_linea` (`fk_linea`);
 
 --
--- Indexes for table `lector_validador`
+-- Indices de la tabla `lector_validador`
 --
 ALTER TABLE `lector_validador`
   ADD PRIMARY KEY (`id`),
   ADD KEY `lector_validador_fk_linea` (`fk_calibrador`);
 
 --
--- Indexes for table `linea`
+-- Indices de la tabla `linea`
 --
 ALTER TABLE `linea`
   ADD PRIMARY KEY (`id`),
   ADD KEY `linea_fk_calibrador` (`fk_calibrador`);
 
 --
--- Indexes for table `registro`
+-- Indices de la tabla `registro`
 --
 ALTER TABLE `registro`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `registro_diario_caja_sellada`
+-- Indices de la tabla `registro_diario_caja_sellada`
 --
 ALTER TABLE `registro_diario_caja_sellada`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `registro_diario_usuario_en_linea`
+-- Indices de la tabla `registro_diario_usuario_en_linea`
 --
 ALTER TABLE `registro_diario_usuario_en_linea`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `rfid`
+-- Indices de la tabla `rfid`
 --
 ALTER TABLE `rfid`
   ADD PRIMARY KEY (`id`),
   ADD KEY `rfid_fk_linea` (`fk_linea`);
 
 --
--- Indexes for table `usuario`
+-- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `rfid` (`rfid`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `administrador`
+-- AUTO_INCREMENT de la tabla `administrador`
 --
 ALTER TABLE `administrador`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
--- AUTO_INCREMENT for table `apertura_cierre_de_turno`
+-- AUTO_INCREMENT de la tabla `apertura_cierre_de_turno`
 --
 ALTER TABLE `apertura_cierre_de_turno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
--- AUTO_INCREMENT for table `caja`
+-- AUTO_INCREMENT de la tabla `caja`
 --
 ALTER TABLE `caja`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `calibrador`
+-- AUTO_INCREMENT de la tabla `caja_unitec`
+--
+ALTER TABLE `caja_unitec`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `calibrador`
 --
 ALTER TABLE `calibrador`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `colaborador`
+-- AUTO_INCREMENT de la tabla `colaborador`
 --
 ALTER TABLE `colaborador`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `configuracion`
+-- AUTO_INCREMENT de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `lector`
+-- AUTO_INCREMENT de la tabla `lector`
 --
 ALTER TABLE `lector`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `lector_validador`
+-- AUTO_INCREMENT de la tabla `lector_validador`
 --
 ALTER TABLE `lector_validador`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
--- AUTO_INCREMENT for table `linea`
+-- AUTO_INCREMENT de la tabla `linea`
 --
 ALTER TABLE `linea`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `registro`
+-- AUTO_INCREMENT de la tabla `registro`
 --
 ALTER TABLE `registro`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=342;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
 
 --
--- AUTO_INCREMENT for table `registro_diario_caja_sellada`
+-- AUTO_INCREMENT de la tabla `registro_diario_caja_sellada`
 --
 ALTER TABLE `registro_diario_caja_sellada`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=853;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=854;
 
 --
--- AUTO_INCREMENT for table `registro_diario_usuario_en_linea`
+-- AUTO_INCREMENT de la tabla `registro_diario_usuario_en_linea`
 --
 ALTER TABLE `registro_diario_usuario_en_linea`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
--- AUTO_INCREMENT for table `rfid`
+-- AUTO_INCREMENT de la tabla `rfid`
 --
 ALTER TABLE `rfid`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `usuario`
+-- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `lector`
+-- Filtros para la tabla `lector`
 --
 ALTER TABLE `lector`
   ADD CONSTRAINT `lector_fk_linea` FOREIGN KEY (`fk_linea`) REFERENCES `linea` (`id`) ON UPDATE NO ACTION;
 
 --
--- Constraints for table `lector_validador`
+-- Filtros para la tabla `lector_validador`
 --
 ALTER TABLE `lector_validador`
   ADD CONSTRAINT `lector_validador_fk_linea` FOREIGN KEY (`fk_calibrador`) REFERENCES `calibrador` (`id`) ON UPDATE NO ACTION;
 
 --
--- Constraints for table `linea`
+-- Filtros para la tabla `linea`
 --
 ALTER TABLE `linea`
   ADD CONSTRAINT `linea_fk_calibrador` FOREIGN KEY (`fk_calibrador`) REFERENCES `calibrador` (`id`);
 
 --
--- Constraints for table `rfid`
+-- Filtros para la tabla `rfid`
 --
 ALTER TABLE `rfid`
   ADD CONSTRAINT `rfid_fk_linea` FOREIGN KEY (`fk_linea`) REFERENCES `linea` (`id`) ON UPDATE NO ACTION;
