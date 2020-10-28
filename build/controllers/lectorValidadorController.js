@@ -27,7 +27,7 @@ class LectorValidadorController {
                     return res.status(200).json(lectors_validador);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros de lector validador' });
+                    res.status(204).json({ text: 'No existen registros de lector validador para mostrar' });
                 }
             }
             catch (_a) {
@@ -43,7 +43,9 @@ class LectorValidadorController {
                 if (lector_validador.length > 0) {
                     return res.status(200).json(lector_validador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener lector validador' });
+                else {
+                    res.status(204).json({ text: 'No existen registros de lector validador para mostar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener lector validador' });

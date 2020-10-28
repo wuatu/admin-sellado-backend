@@ -11,7 +11,7 @@ class CajaController {
             if (cajas.length > 0) {
                 return res.status(200).json(cajas);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de cajas para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener cajas' });
@@ -25,7 +25,7 @@ class CajaController {
             if (caja.length > 0) {
                 return res.status(200).json(caja[0]);
             }
-            res.status(404).json({ text: 'No se pudo obtener caja' });
+            res.status(204).json({ text: 'No existen registros de cajas para mostrar' });
         } catch{
             res.status(404).json({ text: 'No se pudo obtener caja' });
         }

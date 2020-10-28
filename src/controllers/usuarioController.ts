@@ -11,7 +11,7 @@ class UsuarioController {
             if (usuarios.length > 0) {
                 return res.status(200).json(usuarios);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de usuarios para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener usuarios' });
@@ -24,8 +24,10 @@ class UsuarioController {
             const usuario = await pool.query('SELECT * FROM usuario WHERE id = ?', [id]);
             if (usuario.length > 0) {
                 return res.status(200).json(usuario[0]);
+            }else{
+                res.status(204).json({ text: 'No existen registros de usuarios para mostrar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener usuario' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener usuario' });
         }

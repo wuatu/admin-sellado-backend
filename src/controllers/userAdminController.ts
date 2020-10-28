@@ -8,13 +8,13 @@ class UserAdminController {
         try {
             const {  } = req.params;
             let administradores: any;
-
+        
             administradores = await pool.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=2');
             
             if (administradores.length > 0) {
                 return res.status(200).json(administradores);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de administradores para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener administrador(es)' });
@@ -31,8 +31,10 @@ class UserAdminController {
             if (administrador.length > 0) {
                 return res.status(200).json(administrador[0]);
                 
+            }else{
+                res.status(204).json({ text: 'no existe registro de administrdor para mostrar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener administrador' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener administrador' });
         }
@@ -44,8 +46,9 @@ class UserAdminController {
             if (administrador.length > 0) {
                 return res.status(200).json(administrador[0]);
                 
+            }else{
+                res.status(204).json({ text: 'no existe registro de administrdor para mostrar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener administrador' });
         } catch{
             res.status(404).json({ text: 'No se pudo obtener administrador' });
         }

@@ -26,7 +26,7 @@ class AdministradorController {
                     return res.status(200).json(administradores);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'Sin registros' });
                 }
             }
             catch (_a) {
@@ -44,7 +44,7 @@ class AdministradorController {
                     return res.status(200).json(administradores);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de administradores para mostrar' });
                 }
             }
             catch (_a) {
@@ -61,7 +61,9 @@ class AdministradorController {
                 if (administrador.length > 0) {
                     return res.status(200).json(administrador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener administrador' });
+                else {
+                    res.status(204).json({ text: 'No existen registros de administradores para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener administrador' });
@@ -76,7 +78,9 @@ class AdministradorController {
                 if (administrador.length > 0) {
                     return res.status(200).json(administrador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener administrador' });
+                else {
+                    res.status(204).json({ text: 'No existen registros de administradores para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener administrador' });
@@ -102,12 +106,12 @@ class AdministradorController {
                         }
                     }
                     else {
-                        res.status(404).json({ text: 'No se pudo crear administrador' });
+                        res.status(404).json({ text: 'no se pudo crear el administrador' });
                     }
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo crear administrador' });
+                res.status(404).json({ text: 'No se pudo crear el administrador' });
             }
         });
     }

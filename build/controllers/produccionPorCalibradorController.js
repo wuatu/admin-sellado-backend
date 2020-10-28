@@ -59,7 +59,7 @@ class ProduccionPorCalibradorController {
                     return res.status(200).json(searchCaliper);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros para esta busqueda' });
+                    res.status(204).json({ text: 'Sin registros para esta busqueda' });
                 }
             }
             catch (_a) {

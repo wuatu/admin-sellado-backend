@@ -13,7 +13,7 @@ class LectorValidadorController {
             if (lectors_validador.length > 0) {
                 return res.status(200).json(lectors_validador);
             } else {
-                res.status(404).json({ text: 'Sin registros de lector validador' });
+                res.status(204).json({ text: 'No existen registros de lector validador para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lector(es) validador' });
@@ -26,8 +26,10 @@ class LectorValidadorController {
             const lector_validador = await pool.query('SELECT * FROM lector_validador WHERE id = ?', [id]);
             if (lector_validador.length > 0) {
                 return res.status(200).json(lector_validador[0]);
+            }else{
+                res.status(204).json({ text: 'No existen registros de lector validador para mostar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener lector validador' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lector validador' });
         }

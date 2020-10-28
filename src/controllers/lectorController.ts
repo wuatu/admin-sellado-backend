@@ -12,7 +12,7 @@ class LectorController {
             if (lectors.length > 0) {
                 return res.status(200).json(lectors);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de lectores para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lector(es)' });
@@ -25,8 +25,10 @@ class LectorController {
             const lector = await pool.query('SELECT * FROM lector WHERE id = ?', [id]);
             if (lector.length > 0) {
                 return res.status(200).json(lector[0]);
+            }else{
+                res.status(204).json({ text: 'No existen registros del lector para mostrar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener lector' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lector' });
         }

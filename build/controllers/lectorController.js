@@ -27,7 +27,7 @@ class LectorController {
                     return res.status(200).json(lectors);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de lectores para mostrar' });
                 }
             }
             catch (_a) {
@@ -43,7 +43,9 @@ class LectorController {
                 if (lector.length > 0) {
                     return res.status(200).json(lector[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener lector' });
+                else {
+                    res.status(204).json({ text: 'No existen registros del lector para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener lector' });

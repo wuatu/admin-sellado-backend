@@ -27,6 +27,8 @@ const userAdmin_Routes_1 = __importDefault(require("./routes/userAdmin.Routes"))
 const monitoreoRoutes_1 = __importDefault(require("./routes/monitoreoRoutes"));
 const monitoreoCalibradoresRoutes_1 = __importDefault(require("./routes/monitoreoCalibradoresRoutes"));
 const lectorValidadorRoutes_1 = __importDefault(require("./routes/lectorValidadorRoutes"));
+const registroDevRoutes_1 = __importDefault(require("./routes/registroDevRoutes"));
+const registroProduccionRoutes_1 = __importDefault(require("./routes/registroProduccionRoutes"));
 //
 class Server {
     constructor() {
@@ -63,6 +65,8 @@ class Server {
         this.app.use('/api', monitoreoRoutes_1.default);
         this.app.use('/api', monitoreoCalibradoresRoutes_1.default);
         this.app.use('/api', lectorValidadorRoutes_1.default);
+        this.app.use('/api', registroDevRoutes_1.default);
+        this.app.use('/api', registroProduccionRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

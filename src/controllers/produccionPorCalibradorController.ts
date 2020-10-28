@@ -46,7 +46,7 @@ class ProduccionPorCalibradorController {
             
             } else {
                 
-                res.status(404).json({ text: 'Sin registros para esta busqueda' });
+                res.status(204).json({ text: 'Sin registros para esta busqueda' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo realizar la busqueda' });

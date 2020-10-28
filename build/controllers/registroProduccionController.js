@@ -12,23 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registroController = void 0;
+exports.registroProduccionController = void 0;
 const database_1 = __importDefault(require("../database"));
-class RegistroController {
+class RegistroProduccionController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let registros;
-                registros = yield database_1.default.query('SELECT * FROM registro ORDER BY fecha, hora ASC');
-                if (registros.length > 0) {
-                    return res.status(200).json(registros);
+                let registrosProduccion;
+                registrosProduccion = yield database_1.default.query('SELECT * FROM registro_produccion ORDER BY fecha, hora ASC');
+                if (registrosProduccion.length > 0) {
+                    return res.status(200).json(registrosProduccion);
                 }
                 else {
-                    res.status(204).json({ text: 'No existen registros para mostrar' });
+                    res.status(204).json({ text: 'No existen registros producción para mostrar' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo obtener el registro' });
+                res.status(404).json({ text: 'No se pudo obtener el registro Producción' });
             }
         });
     }
@@ -36,20 +36,20 @@ class RegistroController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 //console.log(req.body);
-                const registro = yield database_1.default.query('INSERT INTO registro set ?', [req.body]);
+                const registro = yield database_1.default.query('INSERT INTO registro_produccion set ?', [req.body]);
                 if (registro != null) {
                     if (registro.affectedRows > 0) {
-                        res.status(200).json({ message: 'registro creado' });
+                        res.status(200).json({ message: 'registro producción creado' });
                     }
                 }
                 else {
-                    res.status(404).json({ text: 'No se pudo crear el registro' });
+                    res.status(404).json({ text: 'No se pudo crear el registro producción' });
                 }
             }
             catch (_a) {
-                res.status(404).json({ text: 'No se pudo crear el registro' });
+                res.status(404).json({ text: 'No se pudo crear el registro Producción' });
             }
         });
     }
 }
-exports.registroController = new RegistroController();
+exports.registroProduccionController = new RegistroProduccionController();

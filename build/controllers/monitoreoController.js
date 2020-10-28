@@ -19,16 +19,20 @@ class MonitoreoController {
     getLastTurno(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("entre al try ");
                 let lastTurno;
                 lastTurno = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno ORDER by ID DESC LIMIT 1;');
                 if (lastTurno.length > 0) {
+                    console.log("entre al if > 0");
                     return res.status(200).json(lastTurno);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+                    res.status(204).json({ text: 'Sin registros para esta búsqueda' });
+                    console.log("entre al else > 0");
                 }
             }
             catch (_a) {
+                console.log("entre al catch");
                 res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
             }
         });

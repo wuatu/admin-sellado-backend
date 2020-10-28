@@ -9,7 +9,7 @@ class RegistroController {
             if (registros.length > 0) {
                 return res.status(200).json(registros);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener el registro' });

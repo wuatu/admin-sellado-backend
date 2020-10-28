@@ -12,7 +12,7 @@ class RfidController {
             if (rfids.length > 0) {
                 return res.status(200).json(rfids);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de rfid para mostrar'});
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener rfid(s)' });
@@ -25,8 +25,10 @@ class RfidController {
             const rfid = await pool.query('SELECT * FROM rfid WHERE id = ?', [id]);
             if (rfid.length > 0) {
                 return res.status(200).json(rfid[0]);
+            }else{
+                res.status(204).json({ text: 'no existen registros de rfid para mostar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener rfid' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener rfid' });
         }

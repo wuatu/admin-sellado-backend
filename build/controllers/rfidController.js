@@ -27,7 +27,7 @@ class RfidController {
                     return res.status(200).json(rfids);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de rfid para mostrar' });
                 }
             }
             catch (_a) {
@@ -43,7 +43,9 @@ class RfidController {
                 if (rfid.length > 0) {
                     return res.status(200).json(rfid[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener rfid' });
+                else {
+                    res.status(204).json({ text: 'no existen registros de rfid para mostar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener rfid' });

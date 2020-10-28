@@ -27,7 +27,7 @@ class CajaSelladaController {
                     return res.status(200).json(usuariosEnLinea);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros de seguimiento de cajas' });
+                    res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
                 }
             }
             catch (_a) {
@@ -126,7 +126,7 @@ class CajaSelladaController {
                     return res.status(200).json(registerByCriterion);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros para esta busqueda' });
+                    res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
                 }
             }
             catch (_a) {

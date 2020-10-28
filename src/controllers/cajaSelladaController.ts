@@ -13,7 +13,7 @@ class CajaSelladaController {
             if(usuariosEnLinea.length > 0) {
                 return res.status(200).json(usuariosEnLinea);
             } else {
-                res.status(404).json({ text: 'Sin registros de seguimiento de cajas' });
+                res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener registro de seguimiento de cajas' });
@@ -111,7 +111,7 @@ class CajaSelladaController {
                 return res.status(200).json(registerByCriterion);
             
             } else {
-                res.status(404).json({ text: 'Sin registros para esta busqueda' });
+                res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo realizar la busqueda' });

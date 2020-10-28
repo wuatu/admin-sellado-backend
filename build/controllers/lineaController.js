@@ -30,7 +30,7 @@ class LineaController {
                     return res.status(200).json(lineas);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de líneas para mostrar' });
                 }
             }
             catch (_a) {
@@ -46,7 +46,9 @@ class LineaController {
                 if (linea.length > 0) {
                     return res.status(200).json(linea[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener linea' });
+                else {
+                    res.status(404).json({ text: 'No existen registros de la linea para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener linea' });

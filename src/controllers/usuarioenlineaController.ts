@@ -32,10 +32,10 @@ class UsuarioEnLineaController {
             if (usuariosEnLinea.length > 0) {
                 return res.status(200).json(usuariosEnLinea);
             } else {
-                res.status(404).json({ text: 'Sin registros de usuarios en linea' });
+                res.status(204).json({ text: 'No existen registros de usuarios en línea para mostrar'});
             }
         } catch{
-            res.status(404).json({ text: 'No se pudo obtener usuarios en linea' });
+            res.status(404).json({ text: 'No se pudo obtener usuarios en línea' });
         }
     }
 
@@ -81,7 +81,7 @@ class UsuarioEnLineaController {
         try {
             const { id_turno, id_usuario, id_linea } = req.params;
             console.log("validateCollaborator!!!!!!  " + id_turno + id_usuario);
-            const validacion = await pool.query("SELECT COUNT(registro_diario_usuario_en_linea.id) AS enTurno FROM registro_diario_usuario_en_linea WHERE id_turno = ? AND id_usuario = ? AND id_linea = ? AND fecha_termino = '' AND hora_termino = ''", [id_turno, id_usuario, id_linea]);
+            const validacion = await pool.query("SELECT COUNT(registro_diario_usuario_en_linea.id) AS enTurno FROM registro_diario_usuario_en_linea WHERE id_apertura_cierre_de_turno = ? AND id_usuario = ? AND id_linea = ? AND fecha_termino = '' AND hora_termino = ''", [id_turno, id_usuario, id_linea]);
             if (validacion != null) {
                 console.log("ENTRE AL IF DIFERENTE DE NULL");
                 console.log("VALIDACION : "+ validacion[0].enTurno);
@@ -102,7 +102,7 @@ class UsuarioEnLineaController {
         try {
             const {id_turno, id_usuario, id_linea, fecha_termino, hora_termino } = req.params;
             console.log("closeTurnCollaborators2");
-            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE id_turno = ? AND id_usuario = ? AND id_linea != ? AND fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino, id_turno, id_usuario, id_linea, fecha_termino, hora_termino]);
+            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE id_apertura_cierre_de_turno = ? AND id_usuario = ? AND id_linea != ? AND fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino, id_turno, id_usuario, id_linea, fecha_termino, hora_termino]);
             if (respuesta != null) {
                 if (respuesta.affectedRows > 0) {
                     res.status(200).json({ message: 'Turno cerrado correctamente a colaborador' });

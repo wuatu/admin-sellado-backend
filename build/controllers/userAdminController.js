@@ -26,7 +26,7 @@ class UserAdminController {
                     return res.status(200).json(administradores);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de administradores para mostrar' });
                 }
             }
             catch (_a) {
@@ -44,7 +44,9 @@ class UserAdminController {
                 if (administrador.length > 0) {
                     return res.status(200).json(administrador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener administrador' });
+                else {
+                    res.status(204).json({ text: 'no existe registro de administrdor para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener administrador' });
@@ -59,7 +61,9 @@ class UserAdminController {
                 if (administrador.length > 0) {
                     return res.status(200).json(administrador[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener administrador' });
+                else {
+                    res.status(204).json({ text: 'no existe registro de administrdor para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener administrador' });

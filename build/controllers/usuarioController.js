@@ -24,7 +24,7 @@ class UsuarioController {
                     return res.status(200).json(usuarios);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'No existen registros de usuarios para mostrar' });
                 }
             }
             catch (_a) {
@@ -40,7 +40,9 @@ class UsuarioController {
                 if (usuario.length > 0) {
                     return res.status(200).json(usuario[0]);
                 }
-                res.status(404).json({ text: 'No se pudo obtener usuario' });
+                else {
+                    res.status(204).json({ text: 'No existen registros de usuarios para mostrar' });
+                }
             }
             catch (_a) {
                 res.status(404).json({ text: 'No se pudo obtener usuario' });

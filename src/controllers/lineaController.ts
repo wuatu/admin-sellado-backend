@@ -14,7 +14,7 @@ class LineaController {
             if (lineas.length > 0) {
                 return res.status(200).json(lineas);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'No existen registros de líneas para mostrar' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo obtener lineas' });
@@ -27,8 +27,10 @@ class LineaController {
             const linea = await pool.query('SELECT * FROM linea WHERE id = ?', [id]);
             if (linea.length > 0) {
                 return res.status(200).json(linea[0]);
+            }else{
+                res.status(404).json({ text: 'No existen registros de la linea para mostrar' });
             }
-            res.status(404).json({ text: 'No se pudo obtener linea' });
+            
         } catch{
             res.status(404).json({ text: 'No se pudo obtener linea' });
         }
