@@ -31,6 +31,23 @@ class CajaController {
         }
     }
 
+    public async searchBox(req: Request, res: Response) {
+        try {
+            const { criterio } = req.params;
+            let criterio2 = criterio;
+            console.log("criterio :"+ criterio);
+            console.log("criterio2 :"+ criterio2);
+            let cajas: any;
+            cajas = await pool.query('SELECT * FROM caja WHERE id = ? OR envase = ? ', [criterio, criterio2]);
+            if (cajas.length > 0) {
+                return res.status(200).json(cajas);
+            }
+            res.status(204).json({ text: 'No existen registros de cajas para mostrar' });
+        } catch{
+            res.status(404).json({ text: 'No se pudo obtener caja' });
+        }
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
         try {
             const caja = await pool.query('INSERT INTO caja set ?', [req.body]);

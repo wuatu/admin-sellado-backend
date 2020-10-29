@@ -11,6 +11,7 @@ class CajaRoutes {
         this.router.get('/cajas', cajaController_1.cajaController.list);
         this.router.post('/caja', cajaController_1.cajaController.create);
         this.router.get('/caja/:id', cajaController_1.cajaController.getOne);
+        this.router.get('/caja_search/:criterio', cajaController_1.cajaController.searchBox);
         this.router.put('/caja/:id', cajaController_1.cajaController.update);
         this.router.delete('/caja/:id', cajaController_1.cajaController.delete);
     }

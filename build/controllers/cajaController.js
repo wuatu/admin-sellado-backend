@@ -47,6 +47,25 @@ class CajaController {
             }
         });
     }
+    searchBox(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { criterio } = req.params;
+                let criterio2 = criterio;
+                console.log("criterio :" + criterio);
+                console.log("criterio2 :" + criterio2);
+                let cajas;
+                cajas = yield database_1.default.query('SELECT * FROM caja WHERE id = ? OR envase = ? ', [criterio, criterio2]);
+                if (cajas.length > 0) {
+                    return res.status(200).json(cajas);
+                }
+                res.status(204).json({ text: 'No existen registros de cajas para mostrar' });
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener caja' });
+            }
+        });
+    }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
