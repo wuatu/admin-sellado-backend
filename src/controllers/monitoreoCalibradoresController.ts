@@ -4,7 +4,7 @@ class MonitoreoCalibradoresController{
     //Este método realiza la consulta de la producción del turno hasta la hora de la consulta de una linea y calibrador en específico
     public async getProductionLineTurno(req: Request, res: Response){
         try {
-            const {id_caliper,id_line, name_line,date, time, option } = req.params;            
+            const {id_caliper,id_line, name_line,date, time, option, fecha_actual } = req.params;            
             
              let productionLine: any;
              let productionLineAux: any;
@@ -45,7 +45,9 @@ class MonitoreoCalibradoresController{
                     console.log("option 2");
                     //let dateToday = this.fecha().substring(0,10);
                     productionLine = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [date, time , id_caliper, id_line]);
-                    productionLineAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [fechaActual, '00:00:00' , id_caliper, id_line]);
+                    productionLineAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ? AND id_linea = ?', [fecha_actual, '00:00:00' , id_caliper, id_line]);
+                    console.log(productionLine[0].total);
+                    console.log(productionLineAux[0].total);
                     productionLine[0].total = productionLine[0].total + productionLineAux[0].total; 
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -69,6 +71,7 @@ class MonitoreoCalibradoresController{
                 res.status(404).json({ text: 'Sin registros para esta búsqueda' });
             }
         } catch{
+            
             res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
         }
         
@@ -95,8 +98,8 @@ class MonitoreoCalibradoresController{
     
     public async countBoxBycaliper(req: Request, res: Response) {
         try {
-            const { date, time, id_caliper, option } = req.params;            
-            
+            const { date, time, id_caliper, option , fecha_actual} = req.params;            
+             console.log("CountBoxByCaliper: "+date+time+id_caliper+option+fecha_actual);   
              let searchBox: any;
              let searchBoxAux: any;
             // option 1, para contar las cajas del turno que se encuentra en un mismo día
@@ -133,9 +136,13 @@ class MonitoreoCalibradoresController{
                     console.log("fechaActual: " + fechaActual);
                     /**********************************************************************************************************/
                     console.log("option 2");
+                    console.log(fecha_actual);
+                    console.log(id_caliper);
                     //let dateToday = this.fecha().substring(0,10);
                     searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time , id_caliper]);
-                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, '00:00:00' , id_caliper]);
+                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00' , id_caliper]);
+                    console.log(searchBox[0].total);
+                    console.log(searchBoxAux[0].total);
                     searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -143,7 +150,7 @@ class MonitoreoCalibradoresController{
             }
             
             if (searchBox.length > 0) {
-
+                
                 return res.status(200).json(searchBox);
             
             } else {
@@ -165,6 +172,7 @@ class MonitoreoCalibradoresController{
     public async searchAverageforMinute(req: Request, res: Response) {
         //En esta sección se captura la hora actual del sistema. Se útiliza para saber cuantos minutos 
         //han transcurrido desde que comenzo el turno hasta el momento de la consulta.
+        console.log("searchAverageforMinute")
         var hoy = new Date(); 
         let hora = hoy.getHours()+"";
         console.log("hora.length: " + hora.length);
@@ -205,12 +213,18 @@ class MonitoreoCalibradoresController{
         console.log("fechaActual: " + fechaActual);
         
         /**********************************************************************************************************/
+        console.log("antes del try");
         try {
-            const { date, time, id_caliper, option } = req.params;            
+            const { date, time, id_caliper, option, fecha_actual } = req.params; 
+            console.log("dentro del try option : "+option);           
             let searchBox: any;
             let searchBoxAux: any;
             let totalMinutos = 0;
             let totalMinutosAux = 0;
+            console.log(date);
+            console.log(time);
+            console.log(id_caliper);
+            console.log(option);
             // option 1, para contar las cajas del turno que se encuentra en un mismo día
             if(option == '1'){
                 console.log("pase if ");
@@ -250,7 +264,7 @@ class MonitoreoCalibradoresController{
                 { 
                     console.log("option 2");
                     // En esta sección se calcula la cantidad de minutos transcurridos desde el inicio del turno. 
-                    // hasta la hora actual al momento de realizar la consulta a la base de datos. Primer día
+                    // hasta la 23:59:59 del primer día
                     var hora1 = time.split(":");
                     var hora2 = '23:59:59'.split(":");
                     var t1 = new Date();
@@ -271,8 +285,8 @@ class MonitoreoCalibradoresController{
                     }
 
                      /**********************************************************************************************************/
-                    // En esta sección se calcula la cantidad de minutos transcurridos desde el inicio del turno. 
-                    // hasta la hora actual al momento de realizar la consulta a la base de datos. Segundo día 
+                    // En esta sección se calcula la cantidad de minutos transcurridos desde el inicio del segunto dia. 
+                    // hasta la hora actual al momento de realizar la consulta a la base de datos.
                     var hora1 = '00:00:00'.split(":");
                     var hora2 = horaActual.split(":");
                     var t1 = new Date();
@@ -296,7 +310,8 @@ class MonitoreoCalibradoresController{
                     
                     /**********************************************************************************************************/
                     searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time , id_caliper]);
-                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, '00:00:00' , id_caliper]);
+                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00' , id_caliper]);
+                    console.log('total cajas');
                     searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -306,7 +321,7 @@ class MonitoreoCalibradoresController{
             if (searchBox.length > 0) {
                 console.log("entre al if del length");
                 console.log(searchBox[0].total);
-                console.log(totalMinutos);
+                console.log("Total de minutos transcurridos :" + totalMinutos);
                 searchBox[0].total = Math.round(searchBox[0].total/totalMinutos);
                 return res.status(200).json(searchBox);
             
@@ -328,7 +343,7 @@ class MonitoreoCalibradoresController{
     
     public async searchAverageLastHourforMinute(req: Request, res: Response) {
         try {
-            const { date, time, id_caliper, option } = req.params;            
+            const { date, time, id_caliper, option, fecha_actual } = req.params;            
             let searchBox: any;
             let searchBoxAux: any;
             let hourSearch:any;
@@ -471,7 +486,7 @@ class MonitoreoCalibradoresController{
                         console.log("if de 00");
                         let horaMenosUna = "11"+":"+minuto+":"+segundo;
                         searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND hora_sellado < ? AND id_calibrador = ?', [date, horaMenosUna , '23:59:59', id_caliper]);
-                        searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ?  AND id_calibrador = ?', [fechaActual, '00:00:00', id_caliper]);
+                        searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ?  AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
                         searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                     // sino, sinifica que son mas de las 00 horas y se realiza la resta normal de una hora a la hora actual del dia actual del turno. 
                     }else{
@@ -500,7 +515,7 @@ class MonitoreoCalibradoresController{
                         console.log("la hora actual es : " + horaActual);
                         console.log("La hora a buscar es :" + hourSearch);
                         /***************************************************************************************/
-                        searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, hourSearch , id_caliper]);
+                        searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, hourSearch , id_caliper]);
                         
                     }
                 }else{

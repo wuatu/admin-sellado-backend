@@ -52,6 +52,7 @@ class CalibradorController {
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log("Entre al create de calibrador");
                 yield database_1.default.query('INSERT INTO calibrador set ?', [req.body]);
                 res.status(200).json({ message: 'calibrador creada' });
             }

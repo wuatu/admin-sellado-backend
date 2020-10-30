@@ -28,8 +28,8 @@ class MonitoreoController{
     //de 1 y 2, en donde 1 representa un turno que esta dentro del mismo día y 2 da a conocer si el turno comenzo el dia anterior.
     public async countBoxBycaliper(req: Request, res: Response) {
         try {
-            const { date, time, id_caliper, option } = req.params;            
-            
+            const { date, time, id_caliper, option, fecha_actual } = req.params;            
+             console.log(date+ " "+ time +" "+ id_caliper+" " + option +" "+ fecha_actual);   
              let searchBox: any;
              let searchBoxAux: any;
             // option 1, para contar las cajas del turno que se encuentra en un mismo día
@@ -44,7 +44,7 @@ class MonitoreoController{
                 } 
             }else if(option == '2'){
                 if (date && time && id_caliper){ 
-                    
+                    console.log("option 2")
                     //Esta sección realiza la captura de la fecha actual del sistema, que se utiliza para realizar la consulta en el 
                     //caso de la option 2, para consultar la cantidad de caja en dos días.
                     var fecha = new Date(); 
@@ -67,7 +67,7 @@ class MonitoreoController{
                     console.log("option 2");
                     //let dateToday = this.fecha().substring(0,10);
                     searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time , id_caliper]);
-                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, '00:00:00' , id_caliper]);
+                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00' , id_caliper]);
                     searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -137,7 +137,7 @@ class MonitoreoController{
         /**********************************************************************************************************/
         
         try {
-            const { date, time, id_caliper, option } = req.params;            
+            const { date, time, id_caliper, option, fecha_actual } = req.params;            
             let searchBox: any;
             let searchBoxAux: any;
             let totalMinutos = 0;
@@ -227,7 +227,7 @@ class MonitoreoController{
                     /**********************************************************************************************************/
                 
                     searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time , id_caliper]);
-                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, '00:00:00' , id_caliper]);
+                    searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00' , id_caliper]);
                     searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -259,7 +259,7 @@ class MonitoreoController{
     
     public async searchAverageLastHourforMinute(req: Request, res: Response) {
         try {
-            const { date, time, id_caliper, option } = req.params;            
+            const { date, time, id_caliper, option, fecha_actual } = req.params;            
             let searchBox: any;
             let searchBoxAux: any;
             let hourSearch:any;
@@ -405,7 +405,7 @@ class MonitoreoController{
                         console.log("if de 00");
                         let horaMenosUna = "11"+":"+minuto+":"+segundo;
                         searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND hora_sellado < ? AND id_calibrador = ?', [date, horaMenosUna , '23:59:59', id_caliper]);
-                        searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ?  AND id_calibrador = ?', [fechaActual, '00:00:00', id_caliper]);
+                        searchBoxAux = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ?  AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
                         searchBox[0].total = searchBox[0].total + searchBoxAux[0].total; 
                     // sino, sinifica que son mas de las 00 horas y se realiza la resta normal de una hora a la hora actual del dia actual del turno. 
                     }else{
@@ -434,7 +434,7 @@ class MonitoreoController{
                         console.log("la hora actual es : " + horaActual);
                         console.log("La hora a buscar es :" + hourSearch);
                         /***************************************************************************************/
-                        searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [fechaActual, hourSearch , id_caliper]);
+                        searchBox = await pool.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, hourSearch , id_caliper]);
                         
                     }
                 }else{

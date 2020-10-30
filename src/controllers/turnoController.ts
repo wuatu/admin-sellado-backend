@@ -171,7 +171,7 @@ class TurnoController {
                 if (respuesta.affectedRows > 0) {
                     res.status(200).json({ message: 'Turno cerrado correctamente a los colaboradores' });
                 } else {
-                    res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
+                    res.status(204).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
                 }
             }
         } catch{

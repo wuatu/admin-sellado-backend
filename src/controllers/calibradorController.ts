@@ -32,7 +32,8 @@ class CalibradorController {
     }
 
     public async create(req: Request, res: Response): Promise<void> {
-        try {     
+        try {  
+            console.log("Entre al create de calibrador");   
             await pool.query('INSERT INTO calibrador set ?', [req.body]);
             res.status(200).json({ message: 'calibrador creada' });
         } catch{

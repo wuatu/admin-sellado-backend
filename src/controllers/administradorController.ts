@@ -79,6 +79,7 @@ class AdministradorController {
                 password: bcrypt.hashSync(req.body.password),
                 rol: req.body.rol
             }
+            console.log("No se por que no agrega")
             const administrador = await pool.query('INSERT INTO administrador set ?', newUser);
             if (administrador != null) {
                 console.log(administrador);
@@ -108,7 +109,7 @@ class AdministradorController {
             if (administrador != null) {
                 if (administrador.affectedRows > 0) {
                     res.status(200).json({ message: 'administrador actualizado' });
-                } else {
+                }else{
                     res.status(404).json({ text: 'No se pudo actualizar administrador' });
                 }
             }
