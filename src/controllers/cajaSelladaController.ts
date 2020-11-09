@@ -89,7 +89,7 @@ class CajaSelladaController {
              console.log(idCaliper);
             
              let registerByCriterion: any;
-            
+             console.log("1|234das");
             if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Calibre");
                 registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
@@ -105,6 +105,12 @@ class CajaSelladaController {
             } else if(criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper){
                 console.log("Envase");
                 registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+            } else if(criterionSearch=="undefined" && fromDateSearch && fromDateSearch!="null"){
+                console.log("aquiiiiiiiiiiii");
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, idLine, idCaliper]);
+            } else if(criterionSearch=="undefined" && fromDateSearch && fromDateSearch){
+                console.log("asas");
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, toDateSearch, idLine, idCaliper]);
             }
             
             if (registerByCriterion.length > 0) {

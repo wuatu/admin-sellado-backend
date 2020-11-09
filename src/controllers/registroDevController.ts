@@ -5,7 +5,7 @@ class RegistroDevController {
     public async list(req: Request, res: Response) {
         try {
             let registrosDev: any;
-            registrosDev = await pool.query('SELECT * FROM registro_dev ORDER BY fecha, hora ASC');
+            registrosDev = await pool.query('SELECT * FROM registro_dev ORDER BY id desc');
             if (registrosDev.length > 0) {
                 return res.status(200).json(registrosDev);
             } else {
