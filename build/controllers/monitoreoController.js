@@ -21,7 +21,7 @@ class MonitoreoController {
             try {
                 console.log("entre al try ");
                 let lastTurno;
-                lastTurno = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno ORDER by ID DESC LIMIT 1;');
+                lastTurno = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" ORDER by ID DESC LIMIT 1;');
                 if (lastTurno.length > 0) {
                     console.log("entre al if > 0");
                     return res.status(200).json(lastTurno);
@@ -45,14 +45,14 @@ class MonitoreoController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { date, time, id_caliper, option, fecha_actual } = req.params;
-                console.log(date + " " + time + " " + id_caliper + " " + option + " " + fecha_actual);
+                console.log("countBoxByCaliper " + date + " " + time + " " + id_caliper + " " + option + " " + fecha_actual);
                 let searchBox;
                 let searchBoxAux;
                 // option 1, para contar las cajas del turno que se encuentra en un mismo día
                 if (option == '1') {
                     if (date && time && id_caliper) {
                         console.log("promedio turno");
-                        searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time, id_caliper]);
+                        searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, time, id_caliper]);
                     }
                     else {
                         res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
@@ -81,8 +81,8 @@ class MonitoreoController {
                         /**********************************************************************************************************/
                         console.log("option 2");
                         //let dateToday = this.fecha().substring(0,10);
-                        searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time, id_caliper]);
-                        searchBoxAux = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
+                        searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, time, id_caliper]);
+                        searchBoxAux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [fecha_actual, '00:00:00', id_caliper]);
                         searchBox[0].total = searchBox[0].total + searchBoxAux[0].total;
                     }
                     else {
@@ -179,7 +179,7 @@ class MonitoreoController {
                     console.log("totalMinutos: " + totalMinutos);
                     /**********************************************************************************************************/
                     //Consulta a la base de datos.
-                    searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time, id_caliper]);
+                    searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, time, id_caliper]);
                     console.log("respuesta: " + searchBox[0].total);
                     //option 2, se utiliza cuando la duración de un turno se extiende de un día a otro 
                 }
@@ -229,8 +229,8 @@ class MonitoreoController {
                         }
                         totalMinutos = totalMinutosAux + totalMinutos;
                         /**********************************************************************************************************/
-                        searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time, id_caliper]);
-                        searchBoxAux = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
+                        searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, time, id_caliper]);
+                        searchBoxAux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [fecha_actual, '00:00:00', id_caliper]);
                         searchBox[0].total = searchBox[0].total + searchBoxAux[0].total;
                     }
                     else {
@@ -352,7 +352,7 @@ class MonitoreoController {
                                 }
                             }
                             MinutosDiv = totalMinutos;
-                            searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND id_calibrador = ?', [date, time, id_caliper]);
+                            searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, time, id_caliper]);
                         }
                         else {
                             //En esta sección se resta  una hora a la hora actual para realizar la consulta.
@@ -381,7 +381,7 @@ class MonitoreoController {
                             console.log("la hora actual es : " + horaActual);
                             console.log("La hora a buscar es :" + hourSearch);
                             /*********************************************************************************/
-                            searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [date, hourSearch, id_caliper]);
+                            searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [date, hourSearch, id_caliper]);
                         }
                     }
                     else {
@@ -396,8 +396,8 @@ class MonitoreoController {
                         if (hora == '00') {
                             console.log("if de 00");
                             let horaMenosUna = "11" + ":" + minuto + ":" + segundo;
-                            searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ? AND hora_sellado < ? AND id_calibrador = ?', [date, horaMenosUna, '23:59:59', id_caliper]);
-                            searchBoxAux = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado > ?  AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
+                            searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado < ? AND id_calibrador = ?', [date, horaMenosUna, '23:59:59', id_caliper]);
+                            searchBoxAux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ?  AND id_calibrador = ?', [fecha_actual, '00:00:00', id_caliper]);
                             searchBox[0].total = searchBox[0].total + searchBoxAux[0].total;
                             // sino, sinifica que son mas de las 00 horas y se realiza la resta normal de una hora a la hora actual del dia actual del turno. 
                         }
@@ -429,7 +429,7 @@ class MonitoreoController {
                             console.log("la hora actual es : " + horaActual);
                             console.log("La hora a buscar es :" + hourSearch);
                             /***************************************************************************************/
-                            searchBox = yield database_1.default.query('SELECT COUNT(registro_diario_caja_sellada.id) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado > ? AND id_calibrador = ?', [fecha_actual, hourSearch, id_caliper]);
+                            searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ?  AND hora_sellado >= ? AND id_calibrador = ? AND is_verificado = 1', [fecha_actual, hourSearch, id_caliper]);
                         }
                     }
                     else {

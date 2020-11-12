@@ -10,7 +10,7 @@ class ProduccionPorLineaController {
              let searchBox: any;
             if (id_caliper && id_line) 
             {
-                searchBox = await pool.query('SELECT fecha_sellado, Count(fecha_sellado) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_linea = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado', [id_caliper, id_line , fromDateSearch, toDateSearch]);
+                searchBox = await pool.query('SELECT fecha_sellado, COUNT(DISTINCT(codigo_de_barra)) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_linea = ? AND (fecha_sellado BETWEEN ? AND ?) AND is_verificado = 1 group by fecha_sellado', [id_caliper, id_line , fromDateSearch, toDateSearch]);
                 //console.log(producctionSearch);
             }else{
                 res.status(404).json({ text: 'error en datos de busqueda de cajas' });

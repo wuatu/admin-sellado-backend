@@ -29,6 +29,7 @@ const monitoreoCalibradoresRoutes_1 = __importDefault(require("./routes/monitore
 const lectorValidadorRoutes_1 = __importDefault(require("./routes/lectorValidadorRoutes"));
 const registroDevRoutes_1 = __importDefault(require("./routes/registroDevRoutes"));
 const registroProduccionRoutes_1 = __importDefault(require("./routes/registroProduccionRoutes"));
+const codigoUnitecRoutes_1 = __importDefault(require("./routes/codigoUnitecRoutes"));
 //
 class Server {
     constructor() {
@@ -67,6 +68,7 @@ class Server {
         this.app.use('/api', lectorValidadorRoutes_1.default);
         this.app.use('/api', registroDevRoutes_1.default);
         this.app.use('/api', registroProduccionRoutes_1.default);
+        this.app.use('/api', codigoUnitecRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

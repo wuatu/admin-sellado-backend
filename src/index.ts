@@ -24,9 +24,7 @@ import monitoreoCalibradoresRoutes from './routes/monitoreoCalibradoresRoutes';
 import lectorValidadorRoutes from './routes/lectorValidadorRoutes';
 import registroDevRoutes from './routes/registroDevRoutes';
 import registroProduccionRoutes from './routes/registroProduccionRoutes';
-
-
-
+import codigoUnitecRoutes from './routes/codigoUnitecRoutes';
 
 //
 class Server{
@@ -69,6 +67,7 @@ class Server{
         this.app.use('/api',lectorValidadorRoutes);
         this.app.use('/api',registroDevRoutes);
         this.app.use('/api',registroProduccionRoutes);
+        this.app.use('/api',codigoUnitecRoutes);
     }
 
     start():void{

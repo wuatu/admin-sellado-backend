@@ -20,6 +20,7 @@ class UsuarioEnLineaController {
             try {
                 const { id_linea, id_calibrador, rutSearch, fromDateSearch, toDateSearch } = req.params;
                 let usuariosEnLinea;
+                console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + " rutSearch: " + rutSearch + " fromDateSearch: " + fromDateSearch + " toDateSearch: " + toDateSearch);
                 if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch == "null" && toDateSearch == "null") {
                     usuariosEnLinea = yield database_1.default.query(' SELECT * FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ?', [id_linea, id_calibrador]);
                 }

@@ -6,6 +6,8 @@ class UsuarioEnLineaController {
         try {
             const { id_linea, id_calibrador, rutSearch, fromDateSearch, toDateSearch } = req.params;
             let usuariosEnLinea: any;
+
+            console.log("id linea: "+ id_linea+ " id calibrador: "+id_calibrador+ " rutSearch: "+ rutSearch+" fromDateSearch: "+fromDateSearch+" toDateSearch: "+ toDateSearch);
             
             if (id_calibrador != "null" && id_linea != "null" && rutSearch == "null" && fromDateSearch == "null" && toDateSearch == "null") {
                

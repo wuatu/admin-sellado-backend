@@ -23,7 +23,7 @@ class ProduccionPorCalibradorController {
                 console.log(id_caliper + fromDateSearch + toDateSearch);
                 let numberBox;
                 if (id_caliper) {
-                    numberBox = yield database_1.default.query('SELECT fecha_sellado, Count(fecha_sellado) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado', [id_caliper, fromDateSearch, toDateSearch]);
+                    numberBox = yield database_1.default.query('SELECT fecha_sellado, COUNT(DISTINCT(codigo_de_barra)) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND (fecha_sellado BETWEEN ? AND ?) AND is_verificado = 1 group by fecha_sellado', [id_caliper, fromDateSearch, toDateSearch]);
                     //numberBox = await pool.query('SELECT substr(fecha_sellado,1,10) as fecha_sellado2, Count(DATE_FORMAT(fecha_sellado, "%Y-%m-%d")) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado2', [id_caliper, fromDateSearch, toDateSearch]);
                     //console.log(producctionSearch);
                 }

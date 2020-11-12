@@ -20,6 +20,71 @@ class CajaSelladaController {
         }
     }
 
+    public async countBoxUnique(req: Request, res: Response) {
+        try {
+            const { criterionSearch, toSearch, fromDateSearch, toDateSearch , idLine, idCaliper} = req.params;            
+             console.log("criterionSearch: "+criterionSearch+ " toSearch: "+ toSearch+ "fromDateSearch: "+ fromDateSearch+" toDateSearch: "+toDateSearch+" idLine: "+ idLine+ " idCaliper: "+ idCaliper);
+            
+             let registerByCriterion: any;
+             console.log("1|234das");
+            if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
+                console.log("Calibre");
+                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidadFROM registro_diario_caja_sellada WHERE calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+            
+            } else if(criterionSearch == "Categoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper){
+                console.log("Categoria");
+                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+            
+            } else if (criterionSearch == "Variedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
+                console.log("Variedad");
+                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+            
+            } else if(criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper){
+                console.log("Envase");
+                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+            } else if(criterionSearch=="undefined" && fromDateSearch && fromDateSearch!="null"){
+                console.log("aquiiiiiiiiiiii");
+                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ?', [fromDateSearch, idLine, idCaliper]);
+            } else if(criterionSearch=="undefined" && fromDateSearch && fromDateSearch){
+                console.log("asas");
+                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [fromDateSearch, toDateSearch, idLine, idCaliper]);
+            }
+            
+            if (registerByCriterion.length > 0) {
+                return res.status(200).json(registerByCriterion);
+            
+            } else {
+                res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la busqueda' });
+        }
+
+
+
+        try {
+            const { rutSearch, fromDateSearch, toDateSearch } = req.params;            
+             let producctionSearch: any;
+            if (rutSearch && fromDateSearch && toDateSearch ) {
+                producctionSearch = await pool.query('SELECT fecha_sellado, Count(fecha_sellado) as numero FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado', [rutSearch, fromDateSearch, toDateSearch]);
+                console.log(producctionSearch);
+            }else{
+                res.status(404).json({ text: 'error en datos de busqueda' });
+            }
+            
+            if(producctionSearch.length > 0) {
+                return res.status(200).json(producctionSearch);
+            
+            } else {
+                console.log("Sin registros para esta busqueda");
+                res.status(404).json({ text: 'Sin registros para esta busqueda' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la busqueda' });
+        }
+
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
         try {
             console.log(req.body);
@@ -81,12 +146,7 @@ class CajaSelladaController {
     public async searchLineAndCaliper(req: Request, res: Response) {
         try {
             const { criterionSearch, toSearch, fromDateSearch, toDateSearch , idLine, idCaliper} = req.params;            
-             console.log(criterionSearch);
-             console.log(toSearch);
-             console.log(fromDateSearch);
-             console.log(toDateSearch);
-             console.log(idLine);
-             console.log(idCaliper);
+             console.log("criterionSearch: "+criterionSearch+ " toSearch: "+ toSearch+ "fromDateSearch: "+ fromDateSearch+" toDateSearch: "+toDateSearch+" idLine: "+ idLine+ " idCaliper: "+ idCaliper);
             
              let registerByCriterion: any;
              console.log("1|234das");

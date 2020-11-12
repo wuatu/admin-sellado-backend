@@ -38,7 +38,7 @@ class ProduccionColaboradorController {
             const { rutSearch, fromDateSearch, toDateSearch } = req.params;            
              let producctionSearch: any;
             if (rutSearch && fromDateSearch && toDateSearch ) {
-                producctionSearch = await pool.query('SELECT fecha_sellado, Count(fecha_sellado) as numero FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado', [rutSearch, fromDateSearch, toDateSearch]);
+                producctionSearch = await pool.query('SELECT fecha_sellado, Count(DISTINCT(codigo_de_barra)) as numero FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) AND is_verificado = 1 group by fecha_sellado', [rutSearch, fromDateSearch, toDateSearch]);
                 console.log(producctionSearch);
             }else{
                 res.status(404).json({ text: 'error en datos de busqueda' });
@@ -68,7 +68,7 @@ class ProduccionColaboradorController {
             
             if (rutSearch && fromDateSearch && toDateSearch ) {
                 
-                producctionSearch = await pool.query('SELECT envase_caja AS ENVASE, Count(envase_caja) as CANTIDAD FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) group by envase', [rutSearch, fromDateSearch, toDateSearch]);
+                producctionSearch = await pool.query('SELECT envase_caja AS ENVASE, COUNT(DISTINCT(codigo_de_barra)) as CANTIDAD FROM registro_diario_caja_sellada WHERE rut_usuario = ? AND (fecha_sellado BETWEEN ? AND ?) AND is_verificado = 1 group by envase', [rutSearch, fromDateSearch, toDateSearch]);
                 console.log(producctionSearch);
             }else{
                 res.status(404).json({ text: 'error en datos de busqueda' });
