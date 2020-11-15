@@ -31,6 +31,7 @@ const registroDevRoutes_1 = __importDefault(require("./routes/registroDevRoutes"
 const registroProduccionRoutes_1 = __importDefault(require("./routes/registroProduccionRoutes"));
 const codigoUnitecRoutes_1 = __importDefault(require("./routes/codigoUnitecRoutes"));
 const monitoreoUsuarioEnLineaRoutes_1 = __importDefault(require("./routes/monitoreoUsuarioEnLineaRoutes"));
+const rfidSalidaRoutes_1 = __importDefault(require("./routes/rfidSalidaRoutes"));
 //
 class Server {
     constructor() {
@@ -71,6 +72,7 @@ class Server {
         this.app.use('/api', registroProduccionRoutes_1.default);
         this.app.use('/api', codigoUnitecRoutes_1.default);
         this.app.use('/api', monitoreoUsuarioEnLineaRoutes_1.default);
+        this.app.use('/api', rfidSalidaRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
