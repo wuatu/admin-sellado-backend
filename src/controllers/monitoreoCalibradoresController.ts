@@ -14,33 +14,11 @@ class MonitoreoCalibradoresController{
                 {
                     console.log("promedio turno");
                     productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [date, time , id_caliper, id_line]);
-                    
                 }else{
                     res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
                 } 
             }else if(option == '2'){
                 if (date && time && id_caliper){ 
-                    
-                    //Esta sección realiza la captura de la fecha actual del sistema, que se utiliza para realizar la consulta en el 
-                    //caso de la option 2, para consultar la cantidad de caja en dos días.
-                    
-                    var fecha = new Date(); 
-                    let year = fecha.getFullYear()+"";
-                    console.log("hora.length: " + year.length);
-                    let month = fecha.getMonth()+"";
-                    console.log("minuto.length: " + month.length);
-                    let day = fecha.getDate()+"";
-                    console.log("segundo.length: " + day.length);
-                    if(month.length==1){
-                        month = "0"+month;
-                    }
-                    if(day.length==1){
-                        day = "0"+day;
-                    }
-                    
-                    let fechaActual = year+"-"+month+"-"+day;                
-                    console.log("fechaActual: " + fechaActual);
-
                     //option 2, se utiliza cuando la duración de un turno se extiende de un día a otro
                     console.log("option 2");
                     //let dateToday = this.fecha().substring(0,10);
@@ -534,9 +512,101 @@ class MonitoreoCalibradoresController{
                 
                 res.status(404).json({ text: 'Sin registros para esta búsqueda' });
             }
+
+
+        } catch{
+            res.status(404).json({ text: 'No se pudo obtener cajas' });
+        }
+    }
+
+    public async searchAverageLastMinuteByLine(req: Request, res: Response) {
+        try {
+            const { id_caliper,id_line, name_line,date, time, fecha_actual } = req.params;            
             
+            let productionLine: any;
+             let productionLineAux: any;
+            //En esta sección se captura la hora actual del sistema. Se útiliza para saber cuantos minutos 
+            //han transcurrido desde que comenzo el turno hasta el momento de la consulta.
+            var fecha = new Date();
+            var t1 = new Date; 
+            let hora = fecha.getHours()+"";
+            console.log("hora.length: " + hora.length);
+            let minuto = fecha.getMinutes()+"";
+            console.log("minuto.length: " + minuto.length);
+            let segundo = fecha.getSeconds()+"";
+            console.log("segundo.length: " + segundo.length);
+            if(hora.length==1){
+                hora = "0"+hora;
+            }
+            if(minuto.length==1){
+                minuto = "0"+minuto;
+            }
+            if(segundo.length==1){
+                segundo = "0"+segundo;
+            }
+            let horaActual = hora+":"+minuto+":"+segundo;                
+            console.log("horaActual: " + horaActual);
             
+            /************************************************************************************************************************/
+            if (date && time && id_caliper) { 
+                console.log("opcion 2 ");
+                // si son las 00 horas con xx minutos, se resta una hora, por lo que serian las 11 horas con xx minutos del dia anterior
+                if(hora == '00' && minuto == '00'){
+                    console.log("if de 00");
+                    let hourSearch = "11"+":"+"59"+":"+segundo;
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [date, hourSearch , '23:59:59', id_caliper, id_line]);
+                    productionLineAux = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, '00:00:00' , horaActual, id_caliper, id_line]);
+                    productionLine[0].total = productionLine[0].total + productionLineAux[0].total; 
+                // sino, sinifica que son mas de las 00 horas y se realiza la resta normal de una hora a la hora actual del dia actual del turno. 
+                }else if(hora != '00' && minuto == '00'){
+                    //En esta sección se resta  una hora a la hora actual para realizar la consulta.
+                    var t1 = new Date();
+                    let horaSplit = horaActual.split(":");
+                    t1.setHours(parseInt(horaSplit[0]), parseInt(horaSplit[1]), parseInt(horaSplit[2]));
+                    t1.setHours(t1.getHours() - 1);
+                    let horaBusqueda : any;
+                    if(t1.getHours()<10){
+                        horaBusqueda = "0"+ t1.getHours()+":";
+                    }else{
+                        horaBusqueda = t1.getHours()+":";
+                    }
+                    let hourSearch = horaBusqueda+"59"+":"+segundo;
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch , horaActual, id_caliper, id_line]);
+                }else if(hora != '00' && minuto != '00'){
+                    //En esta sección se resta  una hora a la hora actual para realizar la consulta.
+                    var t1 = new Date();
+                    let horaSplit = horaActual.split(":");
+                    t1.setHours(parseInt(horaSplit[0]), parseInt(horaSplit[1]), parseInt(horaSplit[2]));
+                    t1.setMinutes(t1.getMinutes() - 1);
+                    let minutoBusqueda : any;
+                    if(t1.getMinutes()<10){
+                        minutoBusqueda = "0"+ t1.getMinutes()+":";
+                    }else{
+                        minutoBusqueda = t1.getMinutes()+":";
+                    }
+                    let hourSearch = hora+":"+minutoBusqueda+segundo;
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch , horaActual, id_caliper, id_line]);        
+                }    
+            }else{
+                    res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
+            }     
+
+            if (productionLine.length > 0) {
+                
+                if(productionLine[0].total == 0){
+                    //si la linea no tiene producción 
+                    productionLine[0].id_linea = parseInt(id_line) ;
+                }
+                if(productionLine[0].nombre_linea == null){
+                    //si la linea no tiene producción
+                    productionLine[0].nombre_linea = name_line;
+                }
+                return res.status(200).json(productionLine);
             
+            } else {
+                
+                res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+            }
 
         } catch{
             res.status(404).json({ text: 'No se pudo obtener cajas' });

@@ -1,15 +1,15 @@
 import express, {Application} from 'express';
 import morgan from 'morgan';
-import cors from 'cors'
-import authRoutes from './auth/auth.routes'
-import indexRoutes from './routes/indexRoutes'
-import lineaRoutes from './routes/lineaRoutes'
-import calibradorRoutes from './routes/calibradorRoutes'
-import lectorRoutes from './routes/lectorRoutes'
-import rfidRoutes from './routes/rfidRoutes'
-import administradorRoutes from './routes/administradorRoutes'
-import usuarioRoutes from './routes/usuarioRoutes'
-import turnoRouter from './routes/turnoRouter'
+import cors from 'cors';
+import authRoutes from './auth/auth.routes';
+import indexRoutes from './routes/indexRoutes';
+import lineaRoutes from './routes/lineaRoutes';
+import calibradorRoutes from './routes/calibradorRoutes';
+import lectorRoutes from './routes/lectorRoutes';
+import rfidRoutes from './routes/rfidRoutes';
+import administradorRoutes from './routes/administradorRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
+import turnoRouter from './routes/turnoRouter';
 import usuarioEnLineaRoutes from './routes/usuarioenlineaRoutes';
 import registroRoutes from './routes/registroRoutes';
 import cajaSelladaRoutes from './routes/cajaSelladaRoutes';
@@ -25,6 +25,7 @@ import lectorValidadorRoutes from './routes/lectorValidadorRoutes';
 import registroDevRoutes from './routes/registroDevRoutes';
 import registroProduccionRoutes from './routes/registroProduccionRoutes';
 import codigoUnitecRoutes from './routes/codigoUnitecRoutes';
+import monitoreoUsuarioEnLineaRoutes from './routes/monitoreoUsuarioEnLineaRoutes';
 
 //
 class Server{
@@ -68,6 +69,7 @@ class Server{
         this.app.use('/api',registroDevRoutes);
         this.app.use('/api',registroProduccionRoutes);
         this.app.use('/api',codigoUnitecRoutes);
+        this.app.use('/api',monitoreoUsuarioEnLineaRoutes);
     }
 
     start():void{
