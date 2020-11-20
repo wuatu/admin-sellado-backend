@@ -7,7 +7,7 @@ const SECRET_KEY = 'secretkey123456';
 import { Request, Response, request } from 'express';
 import pool from '../database';
 class AuthController {
-    public async createUser(req: Request, res: Response) {
+    public async createSuperAdmin(req: Request, res: Response) {
         const newUser = {
             nombre: req.body.nombre,
             apellido: req.body.apellido,
@@ -64,6 +64,7 @@ class AuthController {
                 return res.send({dataUser});
             }
         }
+        console
         return res.status(404).json({ text: "Usuario o contraseña invalidos" })
     }
 }

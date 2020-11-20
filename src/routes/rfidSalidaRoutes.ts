@@ -7,7 +7,7 @@ class RfidSalidaController{
         this.config();
     }
     config(){
-        this.router.get('/rfids_salida/:id_calibrador/:id_linea',rfidSalidaController.list);
+        this.router.get('/rfids_salida/:id_calibrador',rfidSalidaController.list);
         this.router.post('/rfid_salida',rfidSalidaController.create);
         this.router.get('/rfid_salida/:id',rfidSalidaController.getOne);
         this.router.put('/rfid_salida/:id',rfidSalidaController.update);

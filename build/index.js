@@ -32,6 +32,9 @@ const registroProduccionRoutes_1 = __importDefault(require("./routes/registroPro
 const codigoUnitecRoutes_1 = __importDefault(require("./routes/codigoUnitecRoutes"));
 const monitoreoUsuarioEnLineaRoutes_1 = __importDefault(require("./routes/monitoreoUsuarioEnLineaRoutes"));
 const rfidSalidaRoutes_1 = __importDefault(require("./routes/rfidSalidaRoutes"));
+const monitoreoSistemaRoutes_1 = __importDefault(require("./routes/monitoreoSistemaRoutes"));
+const lectorEnLineaRoutes_1 = __importDefault(require("./routes/lectorEnLineaRoutes"));
+const rfidEnLineaRoutes_1 = __importDefault(require("./routes/rfidEnLineaRoutes"));
 //
 class Server {
     constructor() {
@@ -73,6 +76,9 @@ class Server {
         this.app.use('/api', codigoUnitecRoutes_1.default);
         this.app.use('/api', monitoreoUsuarioEnLineaRoutes_1.default);
         this.app.use('/api', rfidSalidaRoutes_1.default);
+        this.app.use('/api', monitoreoSistemaRoutes_1.default);
+        this.app.use('/api', lectorEnLineaRoutes_1.default);
+        this.app.use('/api', rfidEnLineaRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

@@ -9,7 +9,7 @@ class AdministradorController {
             const {  } = req.params;
             let administradores: any;
 
-            administradores = await pool.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=0');
+            administradores = await pool.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=1');
             
             if (administradores.length > 0) {
                 return res.status(200).json(administradores);

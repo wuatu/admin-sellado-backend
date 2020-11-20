@@ -19,7 +19,7 @@ const bcrypt = require('bcryptjs');
 const SECRET_KEY = 'secretkey123456';
 const database_1 = __importDefault(require("../database"));
 class AuthController {
-    createUser(req, res) {
+    createSuperAdmin(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const newUser = {
                 nombre: req.body.nombre,
@@ -78,6 +78,7 @@ class AuthController {
                     return res.send({ dataUser });
                 }
             }
+            console;
             return res.status(404).json({ text: "Usuario o contraseña invalidos" });
         });
     }

@@ -7,7 +7,7 @@ class AuthRoutes{
         this.config();
     }
     config(){
-        this.router.post('/register',authController.createUser);
+        this.router.post('/register_super_admin',authController.createSuperAdmin);
         this.router.post('/login', authController.loginUser);
     }
 }

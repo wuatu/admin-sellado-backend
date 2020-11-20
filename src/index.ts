@@ -27,6 +27,10 @@ import registroProduccionRoutes from './routes/registroProduccionRoutes';
 import codigoUnitecRoutes from './routes/codigoUnitecRoutes';
 import monitoreoUsuarioEnLineaRoutes from './routes/monitoreoUsuarioEnLineaRoutes';
 import rfidSalidaRoutes from './routes/rfidSalidaRoutes';
+import monitoreoSistemaRoutes from './routes/monitoreoSistemaRoutes';
+import lectorEnLineaRoutes from './routes/lectorEnLineaRoutes';
+import rfidEnLineaRoutes from './routes/rfidEnLineaRoutes';
+
 
 //
 class Server{
@@ -72,6 +76,9 @@ class Server{
         this.app.use('/api',codigoUnitecRoutes);
         this.app.use('/api',monitoreoUsuarioEnLineaRoutes);
         this.app.use('/api',rfidSalidaRoutes);
+        this.app.use('/api',monitoreoSistemaRoutes);
+        this.app.use('/api',lectorEnLineaRoutes);
+        this.app.use('/api',rfidEnLineaRoutes);
     }
 
     start():void{

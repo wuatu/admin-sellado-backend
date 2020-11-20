@@ -21,7 +21,7 @@ class AdministradorController {
             try {
                 const {} = req.params;
                 let administradores;
-                administradores = yield database_1.default.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=0');
+                administradores = yield database_1.default.query('SELECT administrador.id, administrador.rut,administrador.nombre,administrador.apellido,administrador.rol FROM administrador WHERE administrador.rol=1');
                 if (administradores.length > 0) {
                     return res.status(200).json(administradores);
                 }

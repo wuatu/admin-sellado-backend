@@ -18,10 +18,10 @@ class RfidSalidaController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_calibrador, id_linea } = req.params;
+                const { id_calibrador } = req.params;
                 let rfids;
-                if (id_calibrador != "0" && id_linea != "0") {
-                    rfids = yield database_1.default.query('SELECT DISTINCT rfid_salida.id, rfid_salida.nombre, rfid_salida.ip, rfid_salida.baudRate, rfid_salida.parity, rfid_salida.stopBits, rfid_salida.dataBits, rfid_salida.fk_linea FROM rfid_salida, calibrador INNER JOIN linea ON calibrador.id = linea.fk_calibrador WHERE calibrador.id = ? AND rfid_salida.fk_linea = ?', [id_calibrador, id_linea]);
+                if (id_calibrador != "0") {
+                    rfids = yield database_1.default.query('SELECT DISTINCT rfid_salida.id, rfid_salida.nombre, rfid_salida.ip, rfid_salida.baudRate, rfid_salida.parity, rfid_salida.stopBits, rfid_salida.dataBits, rfid_salida.fk_calibrador FROM rfid_salida WHERE rfid_salida.fk_calibrador = ? ', [id_calibrador]);
                 }
                 if (rfids.length > 0) {
                     return res.status(200).json(rfids);
@@ -85,11 +85,13 @@ class RfidSalidaController {
                         res.status(200).json({ message: 'rfid salida salida actualizado' });
                     }
                     else {
+                        console.log("else!!");
                         res.status(404).json({ text: 'No se pudo actualizar rfid salida' });
                     }
                 }
             }
             catch (_a) {
+                console.log("catch");
                 res.status(404).json({ text: 'No se pudo actualizar rfid salida' });
             }
         });
