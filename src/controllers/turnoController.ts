@@ -6,12 +6,12 @@ class TurnoController {
 
     public async list(req: Request, res: Response) {
         try {
-            const { fromDate,toDate } = req.params;
+            const { fromDate, toDate } = req.params;
             let turnos: any;
-            if(toDate==null){
+            if (toDate == null) {
                 turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate]);
             } else {
-                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)',[fromDate,toDate]);
+                turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)', [fromDate, toDate]);
 
             }
 
@@ -20,7 +20,7 @@ class TurnoController {
             } else {
                 res.status(404).json({ text: 'Sin registros' });
             }
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo obtener turno(s)' });
         }
     }
@@ -33,19 +33,19 @@ class TurnoController {
                 return res.status(200).json(turno[0]);
             }
             res.status(404).json({ text: 'No se pudo obtener turno' });
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo obtener turno' });
         }
     }
 
     public async getOneSinId(req: Request, res: Response) {
-        try {        
-            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT 1");            
+        try {
+            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT 1");
             if (turno.length > 0) {
                 return res.status(200).json(turno[0]);
             }
             res.status(404).json({ text: 'No se pudo obtener turno' });
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo obtener turno' });
         }
     }
@@ -60,23 +60,26 @@ class TurnoController {
                 nombre_administrador_apertura: req.body.nombre_administrador_apertura,
                 apellido_administrador_apertura: req.body.apellido_administrador_apertura,
                 fecha_cierre: "",
-                id_administrador_cierre: -1,
+                hora_cierre: "",
+                id_administrador_cierre: 10,
                 nombre_administrador_cierre: "",
                 apellido_administrador_cierre: "",
             }
             console.log(newUser);
             const turno = await pool.query('INSERT INTO apertura_cierre_de_turno set ?', [newUser]);
+            console.log(turno);
             if (turno != null) {
-                console.log(turno);
+                
                 if (turno != null) {
                     if (turno.affectedRows > 0) {
                         res.status(200).json({ message: 'turno creado' });
                     }
-                } else {
-                    res.status(404).json({ text: 'No se pudo crear turno' });
+                    else {
+                        res.status(404).json({ text: 'No se pudo crear turno' });
+                    }
                 }
             }
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo crear turno' });
         }
     }
@@ -97,7 +100,7 @@ class TurnoController {
             }
 
             res.status(404).json({ text: 'No se pudo obtener turno' });
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo obtener turno' });
         }
     }
@@ -131,7 +134,7 @@ class TurnoController {
                     res.status(404).json({ text: 'No se pudo eliminar turno' });
                 }
             }
-        } catch{
+        } catch {
             res.status(404).json({ text: 'No se pudo eliminar turno' });
         }
     }
@@ -161,7 +164,7 @@ class TurnoController {
         return res.status(404).json({ text: "Rut o contraseña invalidos" })
     }
 
-    public async closeTurnCollaborators(req: Request, res: Response){
+    public async closeTurnCollaborators(req: Request, res: Response) {
         console.log("closeTurnCollaborators1");
         try {
             const { fecha_termino, hora_termino } = req.params;
@@ -174,8 +177,8 @@ class TurnoController {
                     res.status(204).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
                 }
             }
-        } catch{
-            res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores'  });
+        } catch {
+            res.status(404).json({ text: 'No se pudo cerrar correctamente el turno a los colaboradores' });
         }
     }
 

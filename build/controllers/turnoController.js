@@ -78,21 +78,22 @@ class TurnoController {
                     nombre_administrador_apertura: req.body.nombre_administrador_apertura,
                     apellido_administrador_apertura: req.body.apellido_administrador_apertura,
                     fecha_cierre: "",
-                    id_administrador_cierre: -1,
+                    hora_cierre: "",
+                    id_administrador_cierre: 10,
                     nombre_administrador_cierre: "",
                     apellido_administrador_cierre: "",
                 };
                 console.log(newUser);
                 const turno = yield database_1.default.query('INSERT INTO apertura_cierre_de_turno set ?', [newUser]);
+                console.log(turno);
                 if (turno != null) {
-                    console.log(turno);
                     if (turno != null) {
                         if (turno.affectedRows > 0) {
                             res.status(200).json({ message: 'turno creado' });
                         }
-                    }
-                    else {
-                        res.status(404).json({ text: 'No se pudo crear turno' });
+                        else {
+                            res.status(404).json({ text: 'No se pudo crear turno' });
+                        }
                     }
                 }
             }
