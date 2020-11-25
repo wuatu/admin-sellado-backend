@@ -33,12 +33,13 @@ class MonitoreoCalibradoresController{
             }
             
             if (productionLine.length > 0) {
-                
-                if(productionLine[0].total == 0){
+                //productionLine[0].nombre_linea = name_line;
+                if(productionLine[0].total >= 0){
                     //si la linea no tiene producción 
-                    productionLine[0].id_linea = parseInt(id_line) ;
+                    productionLine[0].id_linea = parseInt(id_line);
+                    productionLine[0].nombre_linea = name_line;
                 }
-                if(productionLine[0].nombre_linea == null){
+                if(productionLine[0].nombre_linea == null ){
                     //si la linea no tiene producción
                     productionLine[0].nombre_linea = name_line;
                 }
@@ -593,9 +594,10 @@ class MonitoreoCalibradoresController{
 
             if (productionLine.length > 0) {
                 
-                if(productionLine[0].total == 0){
+                if(productionLine[0].total >= 0){
                     //si la linea no tiene producción 
                     productionLine[0].id_linea = parseInt(id_line) ;
+                    productionLine[0].nombre_linea = name_line;
                 }
                 if(productionLine[0].nombre_linea == null){
                     //si la linea no tiene producción
