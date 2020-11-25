@@ -49,6 +49,37 @@ class UsuarioController {
             }
         });
     }
+    getRegisterRfid(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const registerRfid = yield database_1.default.query('SELECT * FROM registro_rfid ORDER BY id DESC LIMIT 1');
+                if (registerRfid.length > 0) {
+                    return res.status(200).json(registerRfid[0]);
+                }
+                else {
+                    return res.status(204).json({ id: 'undefine', codigo: 'undefine' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener el registro de rfid' });
+            }
+        });
+    }
+    deleteRegisterRfid(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const deleteRegister = yield database_1.default.query('DELETE FROM registro_rfid');
+                if (deleteRegister != null) {
+                    if (deleteRegister.affectedRows > 0) {
+                        res.status(200).json({ message: 'registro rfid eliminado' });
+                    }
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo eliminar el registro rfid' });
+            }
+        });
+    }
     create(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

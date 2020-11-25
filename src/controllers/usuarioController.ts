@@ -33,6 +33,33 @@ class UsuarioController {
         }
     }
 
+    public async getRegisterRfid(req: Request, res: Response) {
+        try {
+            const registerRfid = await pool.query('SELECT * FROM registro_rfid ORDER BY id DESC LIMIT 1');
+            if (registerRfid.length > 0) {
+                return res.status(200).json(registerRfid[0]);
+            }else{
+                return res.status(204).json({ id:'undefine', codigo:'undefine'});
+            }
+            
+        } catch{
+            res.status(404).json({ text: 'No se pudo obtener el registro de rfid' });
+        }
+    }
+
+    public async deleteRegisterRfid(req: Request, res: Response): Promise<void> {
+        try {
+            const deleteRegister = await pool.query('DELETE FROM registro_rfid');
+            if (deleteRegister != null) {
+                if (deleteRegister.affectedRows > 0) {
+                    res.status(200).json({ message: 'registro rfid eliminado' });
+                }
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo eliminar el registro rfid' });
+        }
+    }
+
     public async create(req: Request, res: Response): Promise<void> {
         try {
             const usuario = await pool.query('INSERT INTO usuario set ?', [req.body]);
