@@ -38,7 +38,7 @@ class CajaController {
             console.log("criterio :"+ criterio);
             console.log("criterio2 :"+ criterio2);
             let cajas: any;
-            cajas = await pool.query('SELECT * FROM caja WHERE id = ? OR envase = ? ', [criterio, criterio2]);
+            cajas = await pool.query('SELECT * FROM caja WHERE codigo_envase = ? OR envase = ? ', [criterio, criterio2]);
             if (cajas.length > 0) {
                 return res.status(200).json(cajas);
             }
