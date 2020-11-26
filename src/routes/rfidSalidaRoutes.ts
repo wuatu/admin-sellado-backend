@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {rfidSalidaController} from '../controllers/rfidSalidaController';
 
-class RfidSalidaController{
+class RfidSalidaRoutes{
     public router:Router=Router();    
     constructor(){
         this.config();
@@ -15,5 +15,5 @@ class RfidSalidaController{
     }
 }
 
-const rfidSalidaRoutes=new RfidSalidaController();
+const rfidSalidaRoutes=new RfidSalidaRoutes();
 export default rfidSalidaRoutes.router;

@@ -35,6 +35,7 @@ const rfidSalidaRoutes_1 = __importDefault(require("./routes/rfidSalidaRoutes"))
 const monitoreoSistemaRoutes_1 = __importDefault(require("./routes/monitoreoSistemaRoutes"));
 const lectorEnLineaRoutes_1 = __importDefault(require("./routes/lectorEnLineaRoutes"));
 const rfidEnLineaRoutes_1 = __importDefault(require("./routes/rfidEnLineaRoutes"));
+const rfidRegistroColaboradorRoutes_1 = __importDefault(require("./routes/rfidRegistroColaboradorRoutes"));
 //
 class Server {
     constructor() {
@@ -79,6 +80,7 @@ class Server {
         this.app.use('/api', monitoreoSistemaRoutes_1.default);
         this.app.use('/api', lectorEnLineaRoutes_1.default);
         this.app.use('/api', rfidEnLineaRoutes_1.default);
+        this.app.use('/api', rfidRegistroColaboradorRoutes_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

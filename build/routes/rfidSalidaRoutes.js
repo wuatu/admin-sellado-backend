@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const rfidSalidaController_1 = require("../controllers/rfidSalidaController");
-class RfidSalidaController {
+class RfidSalidaRoutes {
     constructor() {
         this.router = express_1.Router();
         this.config();
@@ -15,5 +15,5 @@ class RfidSalidaController {
         this.router.delete('/rfid_salida/:id', rfidSalidaController_1.rfidSalidaController.delete);
     }
 }
-const rfidSalidaRoutes = new RfidSalidaController();
+const rfidSalidaRoutes = new RfidSalidaRoutes();
 exports.default = rfidSalidaRoutes.router;
