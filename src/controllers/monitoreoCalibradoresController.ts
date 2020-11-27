@@ -332,7 +332,7 @@ class MonitoreoCalibradoresController {
             let searchBox: any;
             let MinutosDiv = 60;
 
-            //crear variable dateApertura desde la fecha y la hora de inicio para ello se pasa la fecha y la hora en formato ISO UTC
+            //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
             var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
             console.log(dateApertura);
 
@@ -350,7 +350,7 @@ class MonitoreoCalibradoresController {
             var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
             console.log(tiempoMenosUnaHora);    
 
-            //se buscan todos los registros (borré validado=1)
+            //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
             searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
 
             if (searchBox.length > 0) {
