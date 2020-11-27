@@ -155,6 +155,15 @@ class MonitoreoCalibradoresController {
             }
         });
     }
+    searchAverageforMinute2(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+            console.log(id_caliper);
+            console.log(id_turno);
+            console.log(fecha_apertura);
+            console.log(hora_apertura);
+        });
+    }
     //Este método cuenta todos los registros de cajas selladas dentro del turno por minuto en un calibrador en específico.
     //Recive los parametros date, que es la fecha del dia en que se inicio el turno, time es la hora en que se inicio el turno, 
     //id_caliper es el id del calibrador que se desea saber la cantidad de cajas que se han sellado en el y option toma los valores 
@@ -305,6 +314,47 @@ class MonitoreoCalibradoresController {
                     console.log(searchBox[0].total);
                     console.log("Total de minutos transcurridos :" + totalMinutos);
                     searchBox[0].total = Math.round(searchBox[0].total / totalMinutos);
+                    return res.status(200).json(searchBox);
+                }
+                else {
+                    res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo obtener cajas' });
+            }
+        });
+    }
+    searchAverageLastHourforMinute2(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+                console.log(id_caliper);
+                console.log(id_turno);
+                console.log(fecha_apertura);
+                console.log(hora_apertura);
+                let searchBox;
+                let MinutosDiv = 60;
+                //crear variable dateApertura desde la fecha y la hora de inicio para ello se pasa la fecha y la hora en formato ISO UTC
+                var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
+                console.log(dateApertura);
+                //creo variable date que corresponde a la fecha actual
+                var date = (new Date());
+                //se calcula la cantidad de minutos previamente para saber si el turno comenzo hace menos de una hora y asi no restar una hora a la consulta.
+                var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
+                console.log(tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
+                if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
+                    MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
+                }
+                //restar una hora a la hora actual, se obtiene un valor numerico con el que se puede hacer la comparación
+                var tiempoMenosUnaHora = (date.getTime() - (60000 * 60));
+                console.log(tiempoMenosUnaHora);
+                //se buscan todos los registros (borré validado=1)
+                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                if (searchBox.length > 0) {
+                    console.log("total de cajas encontradas : " + searchBox[0].total);
+                    //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
+                    searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
                     return res.status(200).json(searchBox);
                 }
                 else {
