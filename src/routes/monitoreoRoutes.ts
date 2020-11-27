@@ -8,12 +8,26 @@ class MonitoreoRoutes{
         this.config();
     }
     config(){
+        /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_produccion_turno/:date/:time/:id_caliper/:option/:fecha_actual', monitoreoController.countBoxBycaliper);
+        this.router.get('/monitoreo_produccion_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.countBoxBycaliper2);
+        /****************************************************************************************************************************************************************************************************/
+                
+        /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_produccion_minuto/:date/:time/:id_caliper/:option/:fecha_actual', monitoreoController.searchAverageforMinute);
+        this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.searchAverageforMinute2);
+        /****************************************************************************************************************************************************************************************************/
+
+        /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_produccion_minuto_ultima_hora/:date/:time/:id_caliper/:option/:fecha_actual', monitoreoController.searchAverageLastHourforMinute);
+        this.router.get('/monitoreo_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.searchAverageLastHourforMinute2);        
+        /****************************************************************************************************************************************************************************************************/
+         
         this.router.get('/monitoreo_last_turno/',monitoreoController.getLastTurno);
-        //this.router.get('/monitoreo_promedio_por_minuto/:id_calibrador',monitoreoController.searchAverageforMinute);
-        //this.router.get('/monitoreo_promedio_ultima_hora_por_minuto/:id_calibrador',monitoreoController.searchAverageLastHourforMinute);
+    
+
+
+
     }
 }
 
