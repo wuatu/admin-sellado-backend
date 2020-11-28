@@ -19,7 +19,7 @@ class RegistroProduccionController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let registrosProduccion;
-                registrosProduccion = yield database_1.default.query('SELECT * FROM registro_produccion ORDER BY fecha, hora DESC');
+                registrosProduccion = yield database_1.default.query('SELECT * FROM registro_produccion ORDER BY id desc');
                 if (registrosProduccion.length > 0) {
                     return res.status(200).json(registrosProduccion);
                 }

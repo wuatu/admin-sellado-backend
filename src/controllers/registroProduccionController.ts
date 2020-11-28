@@ -5,7 +5,7 @@ class RegistroProduccionController {
     public async list(req: Request, res: Response) {
         try {
             let registrosProduccion: any;
-            registrosProduccion = await pool.query('SELECT * FROM registro_produccion ORDER BY fecha, hora DESC');
+            registrosProduccion = await pool.query('SELECT * FROM registro_produccion ORDER BY id desc');
             if (registrosProduccion.length > 0) {
                 return res.status(200).json(registrosProduccion);
             } else {
