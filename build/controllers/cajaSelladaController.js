@@ -38,33 +38,39 @@ class CajaSelladaController {
     countBoxUnique(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { criterionSearch, toSearch, fromDateSearch, toDateSearch, idLine, idCaliper } = req.params;
-                console.log("criterionSearch: " + criterionSearch + " toSearch: " + toSearch + "fromDateSearch: " + fromDateSearch + " toDateSearch: " + toDateSearch + " idLine: " + idLine + " idCaliper: " + idCaliper);
+                const { criterionSearch, toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, validadas } = req.params;
+                let verificadas = 0;
+                if (validadas == "true") {
+                    verificadas = 1;
+                }
+                console.log(validadas);
+                //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
+                //console.log("criterionSearch: "+criterionSearch+ " toSearch: "+ toSearch+ "fromDateSearch: "+ fromDateSearch+" toDateSearch: "+toDateSearch+" idLine: "+ idLine+ " idCaliper: "+ idCaliper);
                 let registerByCriterion;
                 console.log("1|234das");
                 if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Calibre");
-                    registerByCriterion = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidadFROM registro_diario_caja_sellada WHERE calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidadFROM registro_diario_caja_sellada WHERE calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Categoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Categoria");
-                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Variedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Variedad");
-                    registerByCriterion = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Envase");
-                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch != "null") {
-                    console.log("aquiiiiiiiiiiii");
-                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ?', [fromDateSearch, idLine, idCaliper]);
+                    //console.log("aquiiiiiiiiiiii");
+                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [fromDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch) {
                     console.log("asas");
-                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ?', [fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 if (registerByCriterion.length > 0) {
                     return res.status(200).json(registerByCriterion);
@@ -162,33 +168,41 @@ class CajaSelladaController {
     searchLineAndCaliper(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { criterionSearch, toSearch, fromDateSearch, toDateSearch, idLine, idCaliper } = req.params;
-                console.log("criterionSearch: " + criterionSearch + " toSearch: " + toSearch + "fromDateSearch: " + fromDateSearch + " toDateSearch: " + toDateSearch + " idLine: " + idLine + " idCaliper: " + idCaliper);
+                const { criterionSearch, toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, validadas } = req.params;
+                let verificadas = 0;
+                if (validadas == "true") {
+                    verificadas = 1;
+                }
+                console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                console.log(validadas);
+                console.log(verificadas);
+                console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+                //console.log("criterionSearch: " + criterionSearch + " toSearch: " + toSearch + "fromDateSearch: " + fromDateSearch + " toDateSearch: " + toDateSearch + " idLine: " + idLine + " idCaliper: " + idCaliper);
                 let registerByCriterion;
-                console.log("1|234das");
+                //console.log("1|234das");
                 if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Calibre");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Categoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Categoria");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Variedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Variedad");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Envase");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch != "null") {
                     console.log("aquiiiiiiiiiiii");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, idLine, idCaliper, verificadas]);
                 }
                 else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch) {
                     console.log("asas");
-                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, toDateSearch, idLine, idCaliper]);
+                    registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
                 }
                 if (registerByCriterion.length > 0) {
                     return res.status(200).json(registerByCriterion);
