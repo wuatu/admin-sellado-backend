@@ -18,21 +18,23 @@ class MonitoreoSistemaController {
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_linea, id_calibrador, id_turno, nombre_linea } = req.params;
+                const { id_linea, id_calibrador, nombre_linea } = req.params;
                 let usuariosEnLinea;
                 console.log("try!!!!!!!!!!!!!!!!!!!!!!!");
-                console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + " id_turno: " + id_turno + "nombre linea: " + nombre_linea);
-                if (id_calibrador != "null" && id_linea != "null" && id_turno != "null") {
+                console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + "nombre linea: " + nombre_linea);
+                if (id_calibrador != "null" && id_linea != "null") {
                     console.log("backend!!!!!!!!!!!!!!!!!!!!!!!");
-                    usuariosEnLinea = yield database_1.default.query('SELECT id, id_usuario, nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ?', [id_linea, id_calibrador, id_turno]);
+                    usuariosEnLinea = yield database_1.default.query('SELECT id, id_usuario, nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = id_apertura_cierre_de_turno = ( SELECT MAX(id) FROM apertura_cierre_de_turno )', [id_linea, id_calibrador]);
                 }
                 if (usuariosEnLinea.length > 0) {
                     return res.status(200).json(usuariosEnLinea);
                 }
                 else {
-                    return res.status(200).json([{ id: "undefine", id_usuario: "undefine",
+                    return res.status(200).json([{
+                            id: "undefine", id_usuario: "undefine",
                             nombre_usuario: "undefine", apellido_usuario: "undefine",
-                            nombre_linea: nombre_linea, id_linea: "undefine" }]);
+                            nombre_linea: nombre_linea, id_linea: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -43,20 +45,22 @@ class MonitoreoSistemaController {
     getCollaboratorsInLine(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_linea, id_calibrador, id_turno, nombre_linea } = req.params;
+                const { id_linea, id_calibrador, nombre_linea } = req.params;
                 let usuariosEnLinea;
                 console.log("try!!!!!!!!!!!!!!!!!!!!!!!");
-                console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + " id_turno: " + id_turno + "nombre linea: " + nombre_linea);
-                if (id_calibrador != "null" && id_linea != "null" && id_turno != "null") {
+                console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + "nombre linea: " + nombre_linea);
+                if (id_calibrador != "null" && id_linea != "null") {
                     console.log("backend!!!!!!!!!!!!!!!!!!!!!!!");
-                    usuariosEnLinea = yield database_1.default.query('SELECT  nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ?', [id_linea, id_calibrador, id_turno]);
+                    usuariosEnLinea = yield database_1.default.query('SELECT  nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ( SELECT MAX(id) FROM apertura_cierre_de_turno )', [id_linea, id_calibrador]);
                 }
                 if (usuariosEnLinea.length > 0) {
                     return res.status(200).json(usuariosEnLinea);
                 }
                 else {
-                    return res.status(200).json([{ nombre_usuario: "undefine", apellido_usuario: "undefine",
-                            nombre_linea: nombre_linea, id_linea: id_linea }]);
+                    return res.status(200).json([{
+                            nombre_usuario: "undefine", apellido_usuario: "undefine",
+                            nombre_linea: nombre_linea, id_linea: id_linea
+                        }]);
                 }
             }
             catch (_a) {
@@ -76,8 +80,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(rfidInLine);
                 }
                 else {
-                    return res.status(200).json([{ id_rfid: "undefine", nombre_rfid: "undefine", baudRate_rfid: "undefine",
-                            id_linea: id_linea, puerto_rfid: "undefine" }]);
+                    return res.status(200).json([{
+                            id_rfid: "undefine", nombre_rfid: "undefine", baudRate_rfid: "undefine",
+                            id_linea: id_linea, puerto_rfid: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -97,8 +103,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(lectorInLine);
                 }
                 else {
-                    return res.status(200).json([{ id_lector: "undefine", nombre_lector: "undefine", baudRate_lector: "undefine",
-                            id_linea: id_linea, puerto_lector: "undefine" }]);
+                    return res.status(200).json([{
+                            id_lector: "undefine", nombre_lector: "undefine", baudRate_lector: "undefine",
+                            id_linea: id_linea, puerto_lector: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -120,8 +128,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(lectorInLine);
                 }
                 else {
-                    return res.status(200).json([{ id_lector_validador: "undefine", nombre_lector_validador: "undefine", max_wait_time: "undefine",
-                            id_calibrador: id_calibrador, ip_lector_validador: "undefine", registro_inicial_lectura: "undefine" }]);
+                    return res.status(200).json([{
+                            id_lector_validador: "undefine", nombre_lector_validador: "undefine", max_wait_time: "undefine",
+                            id_calibrador: id_calibrador, ip_lector_validador: "undefine", registro_inicial_lectura: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -141,8 +151,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(rfidOut);
                 }
                 else {
-                    return res.status(200).json([{ id_rfid_salida: "undefine", nombre_rfid_salida: "undefine", baudRate_rfid_salida: "undefine",
-                            id_calibrador: id_calibrador, puerto_rfid_salida: "undefine" }]);
+                    return res.status(200).json([{
+                            id_rfid_salida: "undefine", nombre_rfid_salida: "undefine", baudRate_rfid_salida: "undefine",
+                            id_calibrador: id_calibrador, puerto_rfid_salida: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -159,8 +171,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(lastRfidSalidaInCaliper);
                 }
                 else {
-                    return res.status(200).json([{ id: "undefine", codigo_last_rfid_salida: "undefine", fecha_last_rfid_salida: "undefine", hora_last_rfid_salida: "undefine",
-                            id_linea: id_calibrador, id_rfid_salida: "undefine" }]);
+                    return res.status(200).json([{
+                            id: "undefine", codigo_last_rfid_salida: "undefine", fecha_last_rfid_salida: "undefine", hora_last_rfid_salida: "undefine",
+                            id_linea: id_calibrador, id_rfid_salida: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
@@ -177,8 +191,10 @@ class MonitoreoSistemaController {
                     return res.status(200).json(lastLectorValidatorInCaliper);
                 }
                 else {
-                    return res.status(200).json([{ id: "undefine", codigo_last_lector_validador: "undefine", fecha_last_lector_validador: "undefine", hora_last_lector_validador: "undefine",
-                            id_calibrador: id_calibrador, id_lector_validador: "undefine" }]);
+                    return res.status(200).json([{
+                            id: "undefine", codigo_last_lector_validador: "undefine", fecha_last_lector_validador: "undefine", hora_last_lector_validador: "undefine",
+                            id_calibrador: id_calibrador, id_lector_validador: "undefine"
+                        }]);
                 }
             }
             catch (_a) {
