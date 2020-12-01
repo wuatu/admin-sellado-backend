@@ -30,27 +30,25 @@ class CajaSelladaController {
             }
 
             console.log(validadas);
-            //console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa");
-            //console.log("criterionSearch: "+criterionSearch+ " toSearch: "+ toSearch+ "fromDateSearch: "+ fromDateSearch+" toDateSearch: "+toDateSearch+" idLine: "+ idLine+ " idCaliper: "+ idCaliper);
-
+            
             let registerByCriterion: any;
             console.log("1|234das");
             if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Calibre");
-                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidadFROM registro_diario_caja_sellada WHERE calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE Calibre_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
             } else if (criterionSearch == "Categoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Categoria");
-                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE Categoria_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
-            } else if (criterionSearch == "Variedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
-                console.log("Variedad");
-                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+            } else if (criterionSearch == "Embalaje" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
+                console.log("Embalaje");
+                registerByCriterion = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE Embalaje_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
             } else if (criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Envase");
-                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
-            } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch != "null") {
+                registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE  Envase_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+            } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch && idLine && idCaliper) {
                 //console.log("aquiiiiiiiiiiii");
                 registerByCriterion = await pool.query(' SELECT COUNT(DISTINCT(codigo_de_barra)) as cantidad FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ?', [fromDateSearch, idLine, idCaliper, verificadas]);
             } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch) {
@@ -108,6 +106,7 @@ class CajaSelladaController {
                 }
             }
         } catch {
+            console.log("catch!!!!!!");
             res.status(404).json({ text: 'No se pudo crear el registro de seguimiento de cajas' });
         }
     }
@@ -159,7 +158,8 @@ class CajaSelladaController {
             if(validadas=="true"){
                 verificadas=1;
             }
-
+            console.log(criterionSearch);
+            console.log(toSearch);
             console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
             console.log(validadas);
             console.log(verificadas);
@@ -170,20 +170,20 @@ class CajaSelladaController {
             //console.log("1|234das");
             if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Calibre");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  calibre_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE Calibre_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
             } else if (criterionSearch == "Categoria" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Categoria");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  categoria_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  Categoria_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
-            } else if (criterionSearch == "Variedad" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
-                console.log("Variedad");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  variedad_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+            } else if (criterionSearch == "Embalaje" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
+                console.log("Embalaje");
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  Embalaje_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
 
             } else if (criterionSearch == "Envase" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                 console.log("Envase");
-                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  envase_caja = ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [toSearch, fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
-            } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch != "null") {
+                registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE  Envase_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', ['%'+toSearch+'%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);
+            } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch && idLine && idCaliper) {
                 console.log("aquiiiiiiiiiiii");
                 registerByCriterion = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE (fecha_sellado like ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', [fromDateSearch, idLine, idCaliper, verificadas]);
             } else if (criterionSearch == "undefined" && fromDateSearch && fromDateSearch) {

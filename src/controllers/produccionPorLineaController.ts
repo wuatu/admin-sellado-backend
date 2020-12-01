@@ -64,19 +64,21 @@ class ProduccionPorLineaController {
         
             let registerLine: any ;
             if(id){
-                registerLine = await pool.query('UPDATE registro_diario_caja_sellada SET is_verificado = ?, is_before_time = ? WHERE id_calibrador = ? AND id_linea = ? AND codigo_de_barra = ? AND fecha_sellado = ? AND hora_sellado = ?', [req.body.is_verificado, req.body.is_before_time, req.body.id_calibrador, req.body.id_linea, req.body.codigo_de_barra, req.body.fecha_sellado, req.body.hora_sellado]);
+                registerLine = await pool.query('UPDATE registro_diario_caja_sellada SET fecha_validacion_time = ?, is_verificado = ?, is_before_time = ? WHERE id_calibrador = ? AND id_linea = ? AND codigo_de_barra = ? AND fecha_sellado = ? AND hora_sellado = ?', [req.body.fecha_validacion_time, req.body.is_verificado, req.body.is_before_time, req.body.id_calibrador, req.body.id_linea, req.body.codigo_de_barra, req.body.fecha_sellado, req.body.hora_sellado]);
             }else{
+                console.log("else id update !!");
                 res.status(404).json({ text: 'id invalido' });
             }
             if (registerLine != null) {
                 if (registerLine.affectedRows > 0) {
                     res.status(200).json({ message: 'Registro actualizado' });
                 } else {
+                    console.log("else registerLine == null update !!");
                     res.status(404).json({ text: 'No se pudo actualizar el registro' });
                 }
             }
         } catch{
-            
+            console.log("catch update !!");
             res.status(404).json({ text: 'No se pudo actualizar el registro' });
         }
     }

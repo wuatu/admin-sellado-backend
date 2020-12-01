@@ -75,7 +75,7 @@ class ProduccionPorCalibradorController {
                 console.log(req.body);
                 let registerUser;
                 if (id) {
-                    registerUser = yield database_1.default.query('UPDATE registro_diario_caja_sellada SET is_verificado = ?, is_before_time = ? WHERE id_calibrador = ? AND id_linea = ? AND codigo_de_barra = ? AND fecha_sellado = ? AND hora_sellado = ?', [req.body.is_verificado, req.body.is_before_time, req.body.id_calibrador, req.body.id_linea, req.body.codigo_de_barra, req.body.fecha_sellado, req.body.hora_sellado]);
+                    registerUser = yield database_1.default.query('UPDATE registro_diario_caja_sellada SET fecha_validacion_time = ?, is_verificado = ?, is_before_time = ? WHERE id_calibrador = ? AND id_linea = ? AND codigo_de_barra = ? AND fecha_sellado = ? AND hora_sellado = ?', [req.body.fecha_validacion_time, req.body.is_verificado, req.body.is_before_time, req.body.id_calibrador, req.body.id_linea, req.body.codigo_de_barra, req.body.fecha_sellado, req.body.hora_sellado]);
                 }
                 else {
                     res.status(404).json({ text: 'id invalido' });

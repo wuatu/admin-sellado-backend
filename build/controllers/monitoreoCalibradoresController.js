@@ -105,10 +105,10 @@ class MonitoreoCalibradoresController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
-                //console.log(id_caliper);
-                //console.log(id_turno);
-                //console.log(fecha_apertura);
-                //console.log(hora_apertura);
+                console.log(id_caliper);
+                console.log(id_turno);
+                console.log(fecha_apertura);
+                console.log(hora_apertura);
                 let searchBox;
                 let MinutosDiv = 60;
                 //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
@@ -127,10 +127,13 @@ class MonitoreoCalibradoresController {
                 //var tiempoMenosUnaHora: number = date.getHours() - 1;
                 //console.log("hora actual menos una hora  : " + tiempoMenosUnaHora);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                console.log("antes de la consulta !!");
+                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                console.log("despues de la consulta ");
                 if (searchBox.length > 0) {
                     //console.log("total de cajas encontradas : " + searchBox[0].total);
                     //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
+                    console.log("total de cajas: " + searchBox[0].total);
                     searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
                     return res.status(200).json(searchBox);
                 }
@@ -168,12 +171,12 @@ class MonitoreoCalibradoresController {
                 if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
                     MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
                 }
-                //restar una hora a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
-                var tiempoMenosUnaMinuto = (date.getTime() - (60000));
+                //restar un minuto a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
+                var tiempoMenosUnMinuto = (date.getTime() - (60000));
                 //var tiempoMenosUnaHora: number = date.getHours() - 1;
-                console.log("hora actual menos una hora  : " + tiempoMenosUnaMinuto);
+                console.log("hora actual menos un minuto  : " + tiempoMenosUnMinuto);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosUnaMinuto, id_line]);
+                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosUnMinuto, id_line]);
                 if (productionLine.length > 0) {
                     if (productionLine[0].total >= 0) {
                         //si la linea no tiene producción 

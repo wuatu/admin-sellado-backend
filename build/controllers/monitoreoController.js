@@ -133,6 +133,7 @@ class MonitoreoController {
                 console.log("hora actual menos una hora  : " + tiempoMenosUnaHora);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
                 searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND is_verificado = 1', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                console.log("pase la consulta ");
                 if (searchBox.length > 0) {
                     console.log("total de cajas encontradas : " + searchBox[0].total);
                     //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
@@ -140,10 +141,12 @@ class MonitoreoController {
                     return res.status(200).json(searchBox);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+                    searchBox[0].total = 0;
+                    return res.status(200).json({ total: 0 });
                 }
             }
             catch (_a) {
+                console.log("Entrando al catch !");
                 res.status(404).json({ text: 'No se pudo obtener cajas' });
             }
         });

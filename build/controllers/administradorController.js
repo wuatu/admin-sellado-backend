@@ -186,10 +186,10 @@ class AdministradorController {
                     return res.send({ dataAdmin });
                 }
                 else {
-                    return res.status(404).json({ text: "Rut o contraseña invalidos" });
+                    return res.status(404).json({ text: "Rut o contraseña invalidoss" });
                 }
             }
-            return res.status(404).json({ text: "Rut o contraseña invalidos" });
+            return res.status(404).json({ text: "Rut o contraseña invalidosss" });
         });
     }
 }
