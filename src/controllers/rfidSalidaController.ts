@@ -4,12 +4,12 @@ class RfidSalidaController {
 
     public async list(req: Request, res: Response) {
         try {
-            const { id_calibrador } = req.params;
+            const {id_calibrador} = req.params;
             let rfids: any;
-            if (id_calibrador != "0" ) {
+            if(id_calibrador != "0" ){
                 rfids = await pool.query('SELECT DISTINCT rfid_salida.id, rfid_salida.nombre, rfid_salida.ip, rfid_salida.baudRate, rfid_salida.parity, rfid_salida.stopBits, rfid_salida.dataBits, rfid_salida.fk_calibrador FROM rfid_salida WHERE rfid_salida.fk_calibrador = ? ', [id_calibrador]);
             }
-            if (rfids.length > 0) {
+            if(rfids.length > 0) {
                 return res.status(200).json(rfids);
             } else {
                 res.status(204).json({ text: 'No existen registros de rfid salida para mostrar'});

@@ -97,7 +97,6 @@ class AdministradorController {
                     password: bcrypt.hashSync(req.body.password),
                     rol: req.body.rol
                 };
-                console.log("No se por que no agrega");
                 const administrador = yield database_1.default.query('INSERT INTO administrador set ?', newUser);
                 if (administrador != null) {
                     console.log(administrador);
@@ -186,10 +185,10 @@ class AdministradorController {
                     return res.send({ dataAdmin });
                 }
                 else {
-                    return res.status(404).json({ text: "Rut o contraseña invalidoss" });
+                    return res.status(404).json({ text: "Rut o contraseña invalidos" });
                 }
             }
-            return res.status(404).json({ text: "Rut o contraseña invalidosss" });
+            return res.status(404).json({ text: "Rut o contraseña invalidos" });
         });
     }
 }

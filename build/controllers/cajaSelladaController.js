@@ -172,15 +172,7 @@ class CajaSelladaController {
                 if (validadas == "true") {
                     verificadas = 1;
                 }
-                console.log(criterionSearch);
-                console.log(toSearch);
-                console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                console.log(validadas);
-                console.log(verificadas);
-                console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                //console.log("criterionSearch: " + criterionSearch + " toSearch: " + toSearch + "fromDateSearch: " + fromDateSearch + " toDateSearch: " + toDateSearch + " idLine: " + idLine + " idCaliper: " + idCaliper);
                 let registerByCriterion;
-                //console.log("1|234das");
                 if (criterionSearch == "Calibre" && fromDateSearch && toDateSearch && toSearch && idLine && idCaliper) {
                     console.log("Calibre");
                     registerByCriterion = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE Calibre_Unitec LIKE ? AND (fecha_sellado BETWEEN ? AND ?) AND id_linea = ? AND id_calibrador = ? AND is_verificado = ? ORDER BY fecha_sellado, hora_sellado ASC', ['%' + toSearch + '%', fromDateSearch, toDateSearch, idLine, idCaliper, verificadas]);

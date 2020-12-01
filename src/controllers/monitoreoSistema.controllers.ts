@@ -6,14 +6,10 @@ class MonitoreoSistemaController {
         try {
             const { id_linea, id_calibrador, nombre_linea } = req.params;
             let usuariosEnLinea: any;
-            console.log("try!!!!!!!!!!!!!!!!!!!!!!!");
-            console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + "nombre linea: " + nombre_linea);
-
+           
             if (id_calibrador != "null" && id_linea != "null") {
-                console.log("backend!!!!!!!!!!!!!!!!!!!!!!!");
                 usuariosEnLinea = await pool.query('SELECT id, id_usuario, nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = id_apertura_cierre_de_turno = ( SELECT MAX(id) FROM apertura_cierre_de_turno )', [id_linea, id_calibrador]);
             }
-
             if (usuariosEnLinea.length > 0) {
                 return res.status(200).json(usuariosEnLinea);
             } else {
@@ -32,11 +28,8 @@ class MonitoreoSistemaController {
         try {
             const { id_linea, id_calibrador, nombre_linea } = req.params;
             let usuariosEnLinea: any;
-            console.log("try!!!!!!!!!!!!!!!!!!!!!!!");
-            console.log("id linea: " + id_linea + " id calibrador: " + id_calibrador + "nombre linea: " + nombre_linea);
-
+            
             if (id_calibrador != "null" && id_linea != "null") {
-                console.log("backend!!!!!!!!!!!!!!!!!!!!!!!");
                 usuariosEnLinea = await pool.query('SELECT  nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ( SELECT MAX(id) FROM apertura_cierre_de_turno )', [id_linea, id_calibrador]);
             }
 

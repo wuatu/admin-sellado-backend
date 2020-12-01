@@ -158,10 +158,10 @@ class TurnoController {
                 }
                 return res.send({ dataAdmin });
             } else {
-                return res.status(404).json({ text: "Rut o contraseña invalidos" })
+                return res.status(404).json({ text: "Rutt o contraseña invalidoss" })
             }
         }
-        return res.status(404).json({ text: "Rut o contraseña invalidos" })
+        return res.status(404).json({ text: "Ruttt o contraseña invalidosss" })
     }
 
     public async closeTurnCollaborators(req: Request, res: Response) {

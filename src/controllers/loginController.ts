@@ -17,4 +17,4 @@ class LoginController{
     }
 }
 
-export const loginController=new LoginController();
+export const loginController = new LoginController();
