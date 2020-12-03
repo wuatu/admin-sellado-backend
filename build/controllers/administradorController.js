@@ -91,12 +91,14 @@ class AdministradorController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const newUser = {
+                    rut: req.body.rut,
                     nombre: req.body.nombre,
                     apellido: req.body.apellido,
-                    rut: req.body.rut,
                     password: bcrypt.hashSync(req.body.password),
                     rol: req.body.rol
                 };
+                console.log("CREATE");
+                console.log(newUser);
                 const administrador = yield database_1.default.query('INSERT INTO administrador set ?', newUser);
                 if (administrador != null) {
                     console.log(administrador);

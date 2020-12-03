@@ -180,14 +180,14 @@ class MonitoreoSistemaController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { id_calibrador } = req.params;
-                const lastLectorValidatorInCaliper = yield database_1.default.query('SELECT id,codigo AS codigo_last_lector_validador,fecha AS fecha_last_lector_validador,hora AS hora_last_lector_validador, fk_calibrador AS id_calibrador, fk_lector_validador AS id_lector_validador FROM lector_validador_en_calibrador WHERE fk_calibrador = ? ORDER BY id DESC LIMIT 1', [id_calibrador]);
+                const lastLectorValidatorInCaliper = yield database_1.default.query('SELECT id,codigo AS codigo_last_lector_validador,fecha AS fecha_last_lector_validador,hora AS hora_last_lector_validador, fk_calibrador AS id_calibrador FROM lector_validador_en_calibrador WHERE fk_calibrador = ? ORDER BY id DESC LIMIT 1', [id_calibrador]);
                 if (lastLectorValidatorInCaliper.length > 0) {
                     return res.status(200).json(lastLectorValidatorInCaliper);
                 }
                 else {
                     return res.status(200).json([{
                             id: "undefine", codigo_last_lector_validador: "undefine", fecha_last_lector_validador: "undefine", hora_last_lector_validador: "undefine",
-                            id_calibrador: id_calibrador, id_lector_validador: "undefine"
+                            id_calibrador: id_calibrador
                         }]);
                 }
             }

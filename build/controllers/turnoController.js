@@ -31,7 +31,7 @@ class TurnoController {
                     return res.status(200).json(turnos);
                 }
                 else {
-                    res.status(404).json({ text: 'Sin registros' });
+                    res.status(204).json({ text: 'Sin registros' });
                 }
             }
             catch (_a) {

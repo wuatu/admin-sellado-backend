@@ -12,13 +12,11 @@ class TurnoController {
                 turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where fecha_apertura like ? ', [fromDate]);
             } else {
                 turnos = await pool.query('SELECT * FROM apertura_cierre_de_turno where (fecha_apertura BETWEEN ? AND ?)', [fromDate, toDate]);
-
             }
-
             if (turnos.length > 0) {
                 return res.status(200).json(turnos);
             } else {
-                res.status(404).json({ text: 'Sin registros' });
+                res.status(204).json({ text: 'Sin registros' });
             }
         } catch {
             res.status(404).json({ text: 'No se pudo obtener turno(s)' });
