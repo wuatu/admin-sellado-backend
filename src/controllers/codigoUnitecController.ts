@@ -5,7 +5,7 @@ class CodigoUnitecController {
     public async list(req: Request, res: Response) {
         try {
             let registrosDev: any;
-            registrosDev = await pool.query('SELECT * FROM codigo_unitec ORDER BY id DESC LIMIT 100');
+            registrosDev = await pool.query('SELECT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada  FROM registro_diario_caja_sellada ORDER BY id DESC LIMIT 100');
             if (registrosDev.length > 0) {
                 return res.status(200).json(registrosDev);
             } else {
@@ -20,7 +20,7 @@ class CodigoUnitecController {
         try {
             const { code } = req.params;
             let cajas: any;
-            cajas = await pool.query('SELECT * FROM codigo_unitec WHERE cod_caja = ? ', [code]);
+            cajas = await pool.query('SELECT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada FROM registro_diario_caja_sellada WHERE Cod_Caja_Unitec = ? ', [code]);
             if (cajas.length > 0) {
                 return res.status(200).json(cajas);
             }
