@@ -31,6 +31,7 @@ import monitoreoSistemaRoutes from './routes/monitoreoSistemaRoutes';
 import lectorEnLineaRoutes from './routes/lectorEnLineaRoutes';
 import rfidEnLineaRoutes from './routes/rfidEnLineaRoutes';
 import rfidRegistroColaboradorRoutes from './routes/rfidRegistroColaboradorRoutes';
+import dateRoutes from './routes/dateRoutes';
 
 
 //
@@ -81,6 +82,7 @@ class Server{
         this.app.use('/api',lectorEnLineaRoutes);
         this.app.use('/api',rfidEnLineaRoutes);
         this.app.use('/api',rfidRegistroColaboradorRoutes);
+        this.app.use('/api',dateRoutes);
     }
 
     start():void{

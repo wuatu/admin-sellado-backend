@@ -134,7 +134,7 @@ class MonitoreoController{
             if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
                 MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
             }
-
+            
             //restar una hora a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
             var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
             //var tiempoMenosUnaHora: number = date.getHours() - 1;
