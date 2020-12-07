@@ -19,9 +19,10 @@ class MonitoreoController {
     getLastTurno(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const { fk_calibrador } = req.params;
                 console.log("entre al try ");
                 let lastTurno;
-                lastTurno = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" ORDER by ID DESC LIMIT 1;');
+                lastTurno = yield database_1.default.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" AND fk_calibrador = ? ORDER by ID DESC LIMIT 1;', [fk_calibrador]);
                 if (lastTurno.length > 0) {
                     console.log("entre al if > 0");
                     return res.status(200).json(lastTurno);

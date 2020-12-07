@@ -5,9 +5,10 @@ class MonitoreoController{
     //Este método obiene el último turno registrado en la base de datos, el cual es el turno que se mantiene activo
     public async getLastTurno(req: Request, res: Response){
         try{
+            const {fk_calibrador} = req.params;
             console.log("entre al try ");
             let lastTurno: any;
-            lastTurno = await pool.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" ORDER by ID DESC LIMIT 1;');
+            lastTurno = await pool.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" AND fk_calibrador = ? ORDER by ID DESC LIMIT 1;', [fk_calibrador]);
             if(lastTurno.length > 0){
                 console.log("entre al if > 0")
                 return res.status(200).json(lastTurno);
