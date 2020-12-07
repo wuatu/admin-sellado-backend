@@ -38,11 +38,14 @@ class TurnoController {
 
     public async getOneSinId(req: Request, res: Response) {
         try {
-            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre IS NULL OR fecha_cierre = ''  ORDER BY fecha_apertura DESC LIMIT 1");
+            const { fk_calibrador } = req.params;
+            const turno = await pool.query("SELECT * FROM apertura_cierre_de_turno WHERE (fecha_cierre IS NULL OR fecha_cierre = '') AND fk_calibrador = ? ORDER BY fecha_apertura DESC LIMIT 1", [fk_calibrador]);
             if (turno.length > 0) {
                 return res.status(200).json(turno[0]);
+            }else{
+                res.status(204).json({ text: 'No se pudo obtener turno' });
             }
-            res.status(404).json({ text: 'No se pudo obtener turno' });
+            
         } catch {
             res.status(404).json({ text: 'No se pudo obtener turno' });
         }
@@ -62,6 +65,8 @@ class TurnoController {
                 id_administrador_cierre: 10,
                 nombre_administrador_cierre: "",
                 apellido_administrador_cierre: "",
+                fk_calibrador:req.body.fk_calibrador,
+                nombre_calibrador:req.body.nombre_calibrador,
             }
             console.log(newUser);
             const turno = await pool.query('INSERT INTO apertura_cierre_de_turno set ?', [newUser]);
@@ -165,9 +170,9 @@ class TurnoController {
     public async closeTurnCollaborators(req: Request, res: Response) {
         console.log("closeTurnCollaborators1");
         try {
-            const { fecha_termino, hora_termino } = req.params;
+            const { fecha_termino, hora_termino, fk_calibrador } = req.params;
             console.log("closeTurnCollaborators2");
-            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino]);
+            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE fecha_termino = '' AND hora_termino = '' AND id_calibrador = ? ", [fecha_termino, hora_termino, fk_calibrador]);
             if (respuesta != null) {
                 if (respuesta.affectedRows > 0) {
                     res.status(200).json({ message: 'Turno cerrado correctamente a los colaboradores' });

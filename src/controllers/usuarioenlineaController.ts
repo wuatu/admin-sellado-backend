@@ -102,9 +102,9 @@ class UsuarioEnLineaController {
     public async closeTurnCollaborators(req: Request, res: Response){
         console.log("closeTurnCollaborators1");
         try {
-            const {id_turno, id_usuario, id_linea, fecha_termino, hora_termino } = req.params;
+            const {id_turno, id_usuario, id_linea,fecha_termino, hora_termino } = req.params;
             console.log("closeTurnCollaborators2");
-            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE id_apertura_cierre_de_turno = ? AND id_usuario = ? AND id_linea != ? AND fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino, id_turno, id_usuario, id_linea, fecha_termino, hora_termino]);
+            const respuesta = await pool.query("UPDATE registro_diario_usuario_en_linea SET fecha_termino = ?, hora_termino = ? WHERE id_apertura_cierre_de_turno = ? AND id_usuario = ? AND id_linea != ? AND fecha_termino = '' AND hora_termino = '' ", [fecha_termino, hora_termino, id_turno, id_usuario, id_linea,fecha_termino, hora_termino]);
             if (respuesta != null) {
                 if (respuesta.affectedRows > 0) {
                     res.status(200).json({ message: 'Turno cerrado correctamente a colaborador' });
