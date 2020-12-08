@@ -88,7 +88,7 @@ class MonitoreoCalibradoresController {
             if (searchBox.length > 0) {
                 //console.log("total de cajas encontradas : " + searchBox[0].total);
                 //se divide el total de cajas encontradas por la cantidas de minutos transcurridos en el turno.  
-                searchBox[0].total = Math.round(searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
+                searchBox[0].total = (searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos).toFixed(1);
 
                 return res.status(200).json(searchBox);
 
@@ -124,7 +124,7 @@ class MonitoreoCalibradoresController {
             var date = (new Date());
 
             //se calcula la cantidad de minutos previamente para saber si el turno comenzo hace menos de una hora y asi no restar una hora a la consulta.
-            var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
+            var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / (60000 * 60);
             //console.log("tiempo transcurrido desde que se inicia el turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
 
             if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
@@ -143,11 +143,12 @@ class MonitoreoCalibradoresController {
             if (searchBox.length > 0) {
                 //console.log("total de cajas encontradas : " + searchBox[0].total);
                 //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
-                console.log("total de cajas: "+ searchBox[0].total);
-                searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
-                
+                console.log("total de cajas: " + searchBox[0].total);
+                //searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
+                searchBox[0].total = (searchBox[0].total / MinutosDiv).toFixed(1);
+
                 return res.status(200).json(searchBox);
-                
+
             } else {
                 res.status(404).json({ text: 'Sin registros para esta búsqueda' });
             }
