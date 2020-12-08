@@ -61,7 +61,8 @@ class MonitoreoCalibradoresController {
     //al tener el id no es necesario saber si el turno esta en un dia u otro.
     public async searchAverageforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
+            let totalLineas = Number(lineas_length);
             //console.log(id_caliper);
             //console.log(id_turno);
             //console.log(fecha_apertura);
@@ -74,7 +75,7 @@ class MonitoreoCalibradoresController {
             //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
             var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
             dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
-            //console.log("date apertura: " + dateApertura);
+            console.log("date apertura: " + dateApertura);
 
             //creo variable date que corresponde a la fecha actual
             var date = (new Date());
@@ -88,7 +89,7 @@ class MonitoreoCalibradoresController {
             if (searchBox.length > 0) {
                 //console.log("total de cajas encontradas : " + searchBox[0].total);
                 //se divide el total de cajas encontradas por la cantidas de minutos transcurridos en el turno.  
-                searchBox[0].total = (searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos).toFixed(1);
+                searchBox[0].total = ((searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos) / totalLineas).toFixed(1);
 
                 return res.status(200).json(searchBox);
 
@@ -100,17 +101,18 @@ class MonitoreoCalibradoresController {
             res.status(404).json({ text: 'No se pudo obtener cajas' });
         }
 
-
     }
 
 
     public async searchAverageLastHourforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
+            let totalLineas = Number(lineas_length);
             console.log(id_caliper);
             console.log(id_turno);
             console.log(fecha_apertura);
             console.log(hora_apertura);
+            console.log(lineas_length);
 
             let searchBox: any;
             let MinutosDiv = 60;
@@ -131,6 +133,12 @@ class MonitoreoCalibradoresController {
                 MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
             }
 
+            if(tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos<1){
+                MinutosDiv=1;
+            }
+
+            console.log("minutosDivvvvvvvvvvv:"+MinutosDiv);
+
             //restar una hora a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
             var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
             //var tiempoMenosUnaHora: number = date.getHours() - 1;
@@ -145,7 +153,7 @@ class MonitoreoCalibradoresController {
                 //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
                 console.log("total de cajas: " + searchBox[0].total);
                 //searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
-                searchBox[0].total = (searchBox[0].total / MinutosDiv).toFixed(1);
+                searchBox[0].total = ((searchBox[0].total / MinutosDiv) / totalLineas).toFixed(1);
 
                 return res.status(200).json(searchBox);
 
@@ -189,6 +197,10 @@ class MonitoreoCalibradoresController {
 
             if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
                 MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
+            }
+
+            if(tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos<1){
+                MinutosDiv=1;
             }
 
             //restar un minuto a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación

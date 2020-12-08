@@ -14,11 +14,11 @@ class MonitoreoCalibradoresRoutes{
         /****************************************************************************************************************************************************************************************************/   
         
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_calibrador_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoCalibradoresController.searchAverageforMinute2);
+        this.router.get('/monitoreo_calibrador_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length/', monitoreoCalibradoresController.searchAverageforMinute2);
          /****************************************************************************************************************************************************************************************************/
          
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_calibrador_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoCalibradoresController.searchAverageLastHourforMinute2);
+        this.router.get('/monitoreo_calibrador_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoCalibradoresController.searchAverageLastHourforMinute2);
         /****************************************************************************************************************************************************************************************************/
 
 

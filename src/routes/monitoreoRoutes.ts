@@ -15,12 +15,12 @@ class MonitoreoRoutes{
                 
         /****************************************************************************************************************************************************************************************************/
 
-        this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.searchAverageforMinute2);
+        this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoController.searchAverageforMinute2);
         /****************************************************************************************************************************************************************************************************/
 
         /****************************************************************************************************************************************************************************************************/
 
-        this.router.get('/monitoreo_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.searchAverageLastHourforMinute2);        
+        this.router.get('/monitoreo_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoController.searchAverageLastHourforMinute2);        
         /****************************************************************************************************************************************************************************************************/
          
         this.router.get('/monitoreo_last_turno/:fk_calibrador',monitoreoController.getLastTurno);
