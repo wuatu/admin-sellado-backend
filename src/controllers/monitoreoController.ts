@@ -70,15 +70,17 @@ class MonitoreoController{
             //console.log(id_turno);
             //console.log(fecha_apertura);
             //console.log(hora_apertura);
+            console.log("searchAverageForMinute2");
             console.log("aaaaaaaaaasssss"+lineas_length);
 
             //console.log("getAverageforMinute2()");
 
             let searchBox: any;
+            let numLine: any;
 
             //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
-            var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
-            dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
+            //var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
+            var dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
             console.log("date apertura: " + dateApertura);
 
             //creo variable date que corresponde a la fecha actual
@@ -86,14 +88,15 @@ class MonitoreoController{
             // Se calcula la cantidad de minutos para realizar el promedio 
             var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
             //console.log("tiempo transcurrido desde que se inicia el turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
-
+            console.log("Tiempo transcurrido desde el inicio del turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
             //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
             searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
-
+            numLine = await pool.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
+            console.log("El total de lineas en produccion es : "+numLine[0].totalLine);
             if (searchBox.length > 0) {
                 //console.log("total de cajas encontradas : " + searchBox[0].total);
                 //se divide el total de cajas encontradas por la cantidas de minutos transcurridos en el turno.  
-                searchBox[0].total = ((searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos) / totalLineas).toFixed(1);                
+                searchBox[0].total = ((searchBox[0].total / tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos) / numLine[0].totalLine).toFixed(1);                
 
                 return res.status(200).json(searchBox);
 
@@ -117,8 +120,9 @@ class MonitoreoController{
             console.log(fecha_apertura);
             console.log(hora_apertura);            
             */
-
+            console.log("searchAverageLastHourforMinute2");
             let searchBox: any;
+            let numLine: any;
             let MinutosDiv = 60;
 
             //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
@@ -128,9 +132,9 @@ class MonitoreoController{
 
             //creo variable date que corresponde a la fecha actual
             var date = (new Date());
-
+            //var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
             //se calcula la cantidad de minutos previamente para saber si el turno comenzo hace menos de una hora y asi no restar una hora a la consulta.
-            var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / (60000 * 60);
+            var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / (60000);
             //console.log("tiempo transcurrido desde que se inicia el turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
 
             if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
@@ -140,7 +144,8 @@ class MonitoreoController{
             if(tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos<1){
                 MinutosDiv=1;
             }
-
+            console.log("la fecha de apertura es : "+dateApertura);
+            console.log("tiempo transcurrido : "+ tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos)
             console.log("minutosDivvvvvvvvvvv:"+MinutosDiv);
 
             //restar una hora a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
@@ -151,13 +156,15 @@ class MonitoreoController{
             //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
             console.log("antes de la consulta !!");
             searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+            numLine = await pool.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
             console.log("despues de la consulta ");
+            console.log("La cantidad de linea en produccion es : "+ numLine[0].totalLine);
             if (searchBox.length > 0) {
                 //console.log("total de cajas encontradas : " + searchBox[0].total);
                 //se divide el total de cajas encontradas por la cantidas de minutos de la última hora (60) o los minutos transcurridos en el turno en la primera hora depúes de ser iniciado.  
                 console.log("total de cajas: " + searchBox[0].total);
                 //searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
-                searchBox[0].total = ((searchBox[0].total / MinutosDiv) / totalLineas).toFixed(1);
+                searchBox[0].total = ((searchBox[0].total / MinutosDiv) / numLine[0].totalLine).toFixed(1);
 
                 return res.status(200).json(searchBox);
 
