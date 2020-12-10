@@ -139,6 +139,9 @@ class MonitoreoController{
 
             if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
                 MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
+                var tiempoMenosUnaHora: number = (dateApertura.getTime());
+            }else{
+                var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
             }
 
             if(tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos<1){
@@ -149,14 +152,14 @@ class MonitoreoController{
             console.log("minutosDivvvvvvvvvvv:"+MinutosDiv);
 
             //restar una hora a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
-            var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
+            //var tiempoMenosUnaHora: number = (date.getTime() - (60000 * 60));
             //var tiempoMenosUnaHora: number = date.getHours() - 1;
             //console.log("hora actual menos una hora  : " + tiempoMenosUnaHora);
-
+            console.log("tiempo menos una hora :"+tiempoMenosUnaHora);
             //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
             console.log("antes de la consulta !!");
-            searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
-            numLine = await pool.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+            searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND is_verificado = 1', [id_caliper, id_turno, tiempoMenosUnaHora]);
+            numLine = await pool.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND is_verificado = 1', [id_caliper, id_turno, tiempoMenosUnaHora]);
             console.log("despues de la consulta ");
             console.log("La cantidad de linea en produccion es : "+ numLine[0].totalLine);
             if (searchBox.length > 0) {
@@ -165,7 +168,7 @@ class MonitoreoController{
                 console.log("total de cajas: " + searchBox[0].total);
                 //searchBox[0].total = Math.round(searchBox[0].total / MinutosDiv);
                 searchBox[0].total = ((searchBox[0].total / MinutosDiv) / numLine[0].totalLine).toFixed(1);
-
+                console.log("el promedio es  : "+searchBox[0].total)
                 return res.status(200).json(searchBox);
 
             } else {

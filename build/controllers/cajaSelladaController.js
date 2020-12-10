@@ -15,6 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cajaSelladaController = void 0;
 const database_1 = __importDefault(require("../database"));
 class CajaSelladaController {
+    searchByCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Entre a searchByCode !!!!");
+                const { criterionSearch, toSearch, validadas } = req.params;
+                let verificadas = 0;
+                if (validadas == "true") {
+                    verificadas = 1;
+                }
+                let searchByCode;
+                if (criterionSearch == "Codigo" && toSearch) {
+                    console.log("Calibre");
+                    searchByCode = yield database_1.default.query(' SELECT * FROM registro_diario_caja_sellada WHERE codigo_de_barra LIKE ? AND is_verificado = ?', [toSearch, verificadas]);
+                }
+                if (searchByCode.length > 0) {
+                    return res.status(200).json(searchByCode);
+                }
+                else {
+                    res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo realizar la busqueda' });
+            }
+        });
+    }
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

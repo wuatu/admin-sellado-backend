@@ -8,7 +8,9 @@ class CajaSelladaRoutes {
         this.config();
     }
     config() {
+        console.log("entre a la wea !!");
         this.router.get('/cajas_selladas/:id_linea/:id_calibrador', cajaSelladaController_1.cajaSelladaController.list);
+        this.router.get('/caja_sellada_search_by_code/:criterionSearch/:toSearch/:validadas', cajaSelladaController_1.cajaSelladaController.searchByCode);
         this.router.post('/caja_sellada', cajaSelladaController_1.cajaSelladaController.create);
         //this.router.get('/caja_sellada_search/:criterionSearch/:toSearch/:fromDateSearch/:toDateSearch',cajaSelladaController.search);
         this.router.get('/caja_sellada_search_line_caliper/:criterionSearch/:toSearch/:fromDateSearch/:toDateSearch/:idLine/:idCaliper/:validadas', cajaSelladaController_1.cajaSelladaController.searchLineAndCaliper);

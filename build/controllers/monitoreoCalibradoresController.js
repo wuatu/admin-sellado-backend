@@ -172,6 +172,7 @@ class MonitoreoCalibradoresController {
                 let productionLine;
                 let searchBox;
                 let MinutosDiv = 60;
+                let div;
                 //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
                 var dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
                 console.log("date apertura: " + dateApertura);
@@ -180,18 +181,29 @@ class MonitoreoCalibradoresController {
                 //se calcula la cantidad de minutos previamente para saber si el turno comenzo hace menos de una hora y asi no restar una hora a la consulta.
                 var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
                 console.log("tiempo transcurrido desde que se inicia el turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
+                let tiempoMenosCincoMinutos;
+                //restar un minuto a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
+                //var tiempoMenosUnMinuto: number = (date.getTime() - (60000));
+                if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos >= 5) {
+                    tiempoMenosCincoMinutos = (date.getTime() - (60000 * 5));
+                    div = 5;
+                }
+                else {
+                    tiempoMenosCincoMinutos = (date.getTime() - (60000 * tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos));
+                    div = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
+                }
                 if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 60) {
                     MinutosDiv = tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos;
                 }
                 if (tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos < 1) {
                     MinutosDiv = 1;
+                    div = 1;
                 }
-                //restar un minuto a la hora actual, se obtiene un valor númerico con el que se puede hacer la comparación
-                var tiempoMenosUnMinuto = (date.getTime() - (60000));
+                console.log("minutos a dividir !!! : " + div);
                 //var tiempoMenosUnaHora: number = date.getHours() - 1;
-                console.log("hora actual menos un minuto  : " + tiempoMenosUnMinuto);
+                console.log("hora actual menos cinco minutos  : " + tiempoMenosCincoMinutos);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosUnMinuto, id_line]);
+                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosCincoMinutos, id_line]);
                 if (productionLine.length > 0) {
                     if (productionLine[0].total >= 0) {
                         //si la linea no tiene producción 
@@ -201,6 +213,11 @@ class MonitoreoCalibradoresController {
                     if (productionLine[0].nombre_linea == null) {
                         //si la linea no tiene producción
                         productionLine[0].nombre_linea = name_line;
+                    }
+                    if (productionLine[0].total > 0) {
+                        console.log("total de cajas en 5 minutos : " + productionLine[0].total);
+                        productionLine[0].total = productionLine[0].total / div;
+                        console.log("total de cajas en 5 minutos dividido 5: " + productionLine[0].total);
                     }
                     return res.status(200).json(productionLine);
                 }

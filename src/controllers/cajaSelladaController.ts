@@ -2,6 +2,32 @@ import { Request, Response } from 'express';
 import pool from '../database';
 class CajaSelladaController {
 
+    public async searchByCode(req: Request, res: Response) {
+        try {
+            console.log("Entre a searchByCode !!!!");
+            const { criterionSearch, toSearch, validadas} = req.params;
+            let verificadas=0;
+            if(validadas=="true"){
+                verificadas=1;
+            }
+            let searchByCode: any;
+            if (criterionSearch == "Codigo" && toSearch) {
+                console.log("Calibre");
+                searchByCode = await pool.query(' SELECT * FROM registro_diario_caja_sellada WHERE codigo_de_barra LIKE ? AND is_verificado = ?', [toSearch, verificadas]);
+            } 
+
+            if (searchByCode.length > 0) {
+                return res.status(200).json(searchByCode);
+
+            } else {
+                res.status(204).json({ text: 'No existen registros de seguimiento de cajas para mostrar' });
+            }
+        } catch {
+            res.status(404).json({ text: 'No se pudo realizar la busqueda' });
+        }
+
+    }
+
     public async list(req: Request, res: Response) {
         try {
             const { id_linea, id_calibrador } = req.params;
