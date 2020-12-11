@@ -19,7 +19,7 @@ class CodigoUnitecController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let registrosDev;
-                registrosDev = yield database_1.default.query('SELECT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada  FROM registro_diario_caja_sellada ORDER BY id DESC LIMIT 100');
+                registrosDev = yield database_1.default.query('SELECT DISTINCT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada  FROM registro_diario_caja_sellada ORDER BY id DESC LIMIT 100');
                 if (registrosDev.length > 0) {
                     return res.status(200).json(registrosDev);
                 }
@@ -37,7 +37,7 @@ class CodigoUnitecController {
             try {
                 const { code } = req.params;
                 let cajas;
-                cajas = yield database_1.default.query('SELECT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada FROM registro_diario_caja_sellada WHERE Cod_Caja_Unitec = ? ', [code]);
+                cajas = yield database_1.default.query('SELECT DISTINCT cod_Caja_Unitec AS cod_caja, Codigo_Confection_Unitec AS codigo_confection, Confection_Unitec AS confection, Codigo_Embalaje_Unitec AS codigo_embalaje, Embalaje_Unitec AS embalaje, Codigo_Envase_Unitec AS codigo_envase, Envase_Unitec AS envase, Categoria_Unitec AS categoria, Categoria_Timbrada_Unitec AS categoria_timbrada FROM registro_diario_caja_sellada WHERE Cod_Caja_Unitec = ? ', [code]);
                 if (cajas.length > 0) {
                     return res.status(200).json(cajas);
                 }
