@@ -18,6 +18,31 @@ class MonitoreoCalibradoresController {
 
     }
 
+    //Este método obiene el último turno registrado en la base de datos, el cual es el turno que se mantiene activo
+    public async getCajasPorLinea(req: Request, res: Response) {
+        try {
+            const { id_calibrador, id_turno} = req.params;
+            let lineasCalibrador: any;
+            let totalCajasPorLinea: any = [];
+            lineasCalibrador = await pool.query('SELECT DISTINCT(id_linea) FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea;', [id_calibrador, id_turno]);
+            if(lineasCalibrador.length > 0){
+                for(let i = 0 ; i < lineasCalibrador.length; i++){
+                    let id_linea =  lineasCalibrador[i].id_linea;
+                    let aux = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_linea = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea', [id_calibrador, id_linea, id_turno]);
+                    totalCajasPorLinea.push({total:aux[0].total, id_linea: lineasCalibrador[i].id_linea});
+                }
+            }
+            if (totalCajasPorLinea.length > 0) {
+                return res.status(200).json(totalCajasPorLinea);
+            } else {
+                res.status(204).json({ text: 'Sin registros para esta búsqueda' });
+            }
+        } catch {
+            res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
+        }
+
+    }
+
     public async countBoxBycaliper2(req: Request, res: Response) {
         try {
             const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
@@ -186,6 +211,7 @@ class MonitoreoCalibradoresController {
             let searchBox: any;
             let MinutosDiv = 60;
             let div;
+            let cajasPorLinea: any;
 
             //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
             var dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
@@ -225,7 +251,8 @@ class MonitoreoCalibradoresController {
 
             //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
             productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosCincoMinutos, id_line]);
-
+            // see busca la catidad de cajas selladas en la linea 
+            cajasPorLinea = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, dateApertura.getTime(), id_line]);
             if (productionLine.length > 0) {
 
                 if (productionLine[0].total >= 0) {
@@ -243,7 +270,7 @@ class MonitoreoCalibradoresController {
                     console.log("total de cajas en 5 minutos dividido 5: "+productionLine[0].total)
                 }
                 
-                return res.status(200).json(productionLine);
+                return res.status(200).json({id_linea:productionLine[0].id_linea, nombre_linea:productionLine[0].nombre_linea, total:productionLine[0].total, total_turno: cajasPorLinea[0].total});
 
             } else {
 
