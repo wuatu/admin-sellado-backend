@@ -33,6 +33,33 @@ class MonitoreoCalibradoresController {
             }
         });
     }
+    //Este método obiene el último turno registrado en la base de datos, el cual es el turno que se mantiene activo
+    getCajasPorLinea(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id_calibrador, id_turno } = req.params;
+                let lineasCalibrador;
+                let totalCajasPorLinea = [];
+                lineasCalibrador = yield database_1.default.query('SELECT DISTINCT(id_linea) FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea;', [id_calibrador, id_turno]);
+                if (lineasCalibrador.length > 0) {
+                    for (let i = 0; i < lineasCalibrador.length; i++) {
+                        let id_linea = lineasCalibrador[i].id_linea;
+                        let aux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_linea = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea', [id_calibrador, id_linea, id_turno]);
+                        totalCajasPorLinea.push({ total: aux[0].total, id_linea: lineasCalibrador[i].id_linea });
+                    }
+                }
+                if (totalCajasPorLinea.length > 0) {
+                    return res.status(200).json(totalCajasPorLinea);
+                }
+                else {
+                    res.status(204).json({ text: 'Sin registros para esta búsqueda' });
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
+            }
+        });
+    }
     countBoxBycaliper2(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -173,6 +200,7 @@ class MonitoreoCalibradoresController {
                 let searchBox;
                 let MinutosDiv = 60;
                 let div;
+                let cajasPorLinea;
                 //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
                 var dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
                 console.log("date apertura: " + dateApertura);
@@ -204,6 +232,8 @@ class MonitoreoCalibradoresController {
                 console.log("hora actual menos cinco minutos  : " + tiempoMenosCincoMinutos);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
                 productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosCincoMinutos, id_line]);
+                // see busca la catidad de cajas selladas en la linea 
+                cajasPorLinea = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ? AND id_linea = ?', [id_caliper, id_turno, dateApertura.getTime(), id_line]);
                 if (productionLine.length > 0) {
                     if (productionLine[0].total >= 0) {
                         //si la linea no tiene producción 
@@ -219,7 +249,7 @@ class MonitoreoCalibradoresController {
                         productionLine[0].total = productionLine[0].total / div;
                         console.log("total de cajas en 5 minutos dividido 5: " + productionLine[0].total);
                     }
-                    return res.status(200).json(productionLine);
+                    return res.status(200).json({ id_linea: productionLine[0].id_linea, nombre_linea: productionLine[0].nombre_linea, total: productionLine[0].total, total_turno: cajasPorLinea[0].total });
                 }
                 else {
                     res.status(404).json({ text: 'Sin registros para esta búsqueda' });
