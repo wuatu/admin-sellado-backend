@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import pool from '../database';
 class ProduccionPorCalibradorController {
 
-    //obtengo las lineas del calibrador
-    public async getTurnos(req: Request, res: Response) {
+    //obtengo los turnos del calibrador en un rango de fechas
+    /*public async getTurnos(req: Request, res: Response) {
         try {
             const { id_caliper, fromDateSearch, toDateSearch } = req.params;            
              
@@ -50,14 +50,73 @@ class ProduccionPorCalibradorController {
             res.status(404).json({ text: 'No se pudo realizar la busqueda de turnos' });
         }
 
+    }*/
+
+    public async getTurnos(req: Request, res: Response) {
+        try {
+            const { id_caliper, fromDateSearch, toDateSearch } = req.params;            
+             console.log("FECHAS : "+fromDateSearch +"  " + toDateSearch);
+            let id_turnos: any;
+            let turno: any;
+            let turnos: any = [];
+            let aux;
+            if (id_caliper && fromDateSearch && toDateSearch ) 
+            {
+                turno = await pool.query('SELECT id AS id_turno, fecha_apertura AS fApertura, hora_apertura AS hApertura, fecha_cierre AS fCierre, hora_cierre AS hCierre FROM apertura_cierre_de_turno WHERE fk_calibrador = ? AND (fecha_apertura BETWEEN ? AND ?)', [id_caliper, fromDateSearch, toDateSearch]);
+                console.log(" ");
+                console.log("id turnos encontrados");
+                console.log(turno);
+                console.log(" ");
+                /*if(id_turnos.length > 0){
+                    console.log("PASE EL IF!!!!!!   :  "+ id_turnos.length);
+                    for(let i = 0; i < id_turnos.length ; i++){
+                        console.log("FOR!!!!!!");
+                        aux = id_turnos[i].id_turno;
+                        turno = await pool.query('SELECT id AS id_turno, fecha_apertura AS fApertura, hora_apertura AS hApertura, fecha_cierre AS fCierre, hora_cierre AS hCierre FROM apertura_cierre_de_turno where id = ?', [aux]);
+                        console.log(turno);
+                        turnos.push(turno[0]);
+                    }
+                    console.log(" ");
+                    console.log("¡¡¡¡ TURNOS ENCONTRADOS !!!!");
+                    console.log(turnos);
+                    console.log(" ");
+                }*/
+                
+                
+                
+            }else{
+                res.status(404).json({ text: 'error en datos de busqueda de turnos' });
+            }
+            
+            if (turno.length > 0) {
+                return res.status(200).json(turno);
+            
+            } else {
+                
+                res.status(204).json({ text: 'Sin registros para la busqueda de turnos' });
+            }
+        } catch{
+            res.status(404).json({ text: 'No se pudo realizar la busqueda de turnos' });
+        }
+
     }
+
 
     //obtengo las lineas del calibrador
     public async getPromedioCajasPorMinutoTurno(req: Request, res: Response) {
         try {
             const { id_calibrador, id_turno, fecha_inicio, hora_inicio, fecha_termino, hora_termino } = req.params;            
+            console.log("FECHA TERMINO EN GETPROMEDIOCAJASPORMINUTOTURNO ES : "+ fecha_termino + hora_termino)
             let fechaInicio = new Date(fecha_inicio+ "T"+ hora_inicio);
-            let fechaTermino = new Date(fecha_termino+ "T"+ hora_termino);
+            let fechaTermino : any;
+            if(fecha_termino != "undefine" && hora_termino != "undefine"){
+                fechaTermino = new Date(fecha_termino+ "T"+ hora_termino);
+            }else{
+                fechaTermino = new Date();
+            }
+            
+            
+            //let fechaTermino = new Date(fecha_termino+ "T"+ hora_termino);
             let minutosDuracionTurno = 0;
             minutosDuracionTurno = (fechaTermino.getTime() -  fechaInicio.getTime())/60000;
             let totalCajasTurno: any;
@@ -190,7 +249,7 @@ class ProduccionPorCalibradorController {
              let numberBox: any;
             if (id_caliper ) 
             {
-                numberBox = await pool.query('SELECT fecha_sellado, COUNT(DISTINCT(codigo_de_barra)) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND (fecha_sellado BETWEEN ? AND ?) AND is_verificado = 1 AND id_apertura_cierre_de_turno = ? group by fecha_sellado', [id_caliper, fromDateSearch, toDateSearch, id_turno]);
+                numberBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ?  AND is_verificado = 1 AND id_apertura_cierre_de_turno = ?', [id_caliper, id_turno]);
                 //numberBox = await pool.query('SELECT substr(fecha_sellado,1,10) as fecha_sellado2, Count(DATE_FORMAT(fecha_sellado, "%Y-%m-%d")) as numero FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND (fecha_sellado BETWEEN ? AND ?) group by fecha_sellado2', [id_caliper, fromDateSearch, toDateSearch]);
                 //console.log(producctionSearch);
             }else{
@@ -198,11 +257,11 @@ class ProduccionPorCalibradorController {
             }
             
             if (numberBox.length > 0) {
-                return res.status(200).json(numberBox);
+                return res.status(200).json(numberBox[0]);
             
             } else {
                 
-                res.status(404).json({ text: 'Sin registros para esta busqueda' });
+                res.status(204).json({ text: 'Sin registros para esta busqueda' });
             }
         } catch{
             res.status(404).json({ text: 'No se pudo realizar la busqueda' });
