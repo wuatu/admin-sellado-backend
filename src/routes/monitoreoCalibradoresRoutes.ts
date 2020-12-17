@@ -26,7 +26,7 @@ class MonitoreoCalibradoresRoutes{
         this.router.get('/monitoreo_calibrador_last_turno/',monitoreoCalibradoresController.getLastTurno);
         this.router.get('/monitoreo_calibrador_production_line2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:id_line/:name_line', monitoreoCalibradoresController.searchAverageLastMinuteByLine2);
         /****************************************************************************************************************************************************************************************************/
-
+        this.router.delete('/monitoreo_calibrador_delete/:id',monitoreoCalibradoresController.deleteRegisterAux);
 
     }
 }

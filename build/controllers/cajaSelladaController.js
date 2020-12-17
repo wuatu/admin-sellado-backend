@@ -134,6 +134,7 @@ class CajaSelladaController {
             try {
                 console.log(req.body);
                 const registroSegimientoCaja = yield database_1.default.query('INSERT INTO registro_diario_caja_sellada set ?', [req.body]);
+                const registroSegimientoCaja2 = yield database_1.default.query('INSERT INTO registro_diario_caja_sellada_aux set ?', [req.body]);
                 if (registroSegimientoCaja != null) {
                     console.log(registroSegimientoCaja);
                     if (registroSegimientoCaja != null) {

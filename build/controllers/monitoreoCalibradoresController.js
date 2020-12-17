@@ -15,6 +15,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.monitoreoCalibradoresController = void 0;
 const database_1 = __importDefault(require("../database"));
 class MonitoreoCalibradoresController {
+    deleteRegisterAux(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const rfid = yield database_1.default.query('DELETE FROM registro_diario_caja_sellada_aux WHERE id_apertura_cierre_de_turno = ?', [id]);
+                if (rfid != null) {
+                    if (rfid.affectedRows > 0) {
+                        res.status(200).json({ message: 'registros de cajas selladas eliminados' });
+                    }
+                    else {
+                        res.status(404).json({ text: 'No se pudo eliminar los registros de cajas selladas' });
+                    }
+                }
+            }
+            catch (_a) {
+                res.status(404).json({ text: 'No se pudo eliminar los registros de cajas selladas' });
+            }
+        });
+    }
     //Este método obiene el último turno registrado en la base de datos, el cual es el turno que se mantiene activo
     getLastTurno(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -76,7 +95,7 @@ class MonitoreoCalibradoresController {
                 dateApertura = new Date(fecha_apertura + "T" + hora_apertura);
                 //console.log("date apertura: " + dateApertura);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
+                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
                 if (searchBox.length > 0) {
                     console.log("produccion turno : " + searchBox[0].total);
                     return res.status(200).json(searchBox);
@@ -114,8 +133,8 @@ class MonitoreoCalibradoresController {
                 var tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos = (date.getTime() - dateApertura.getTime()) / 60000;
                 //console.log("tiempo transcurrido desde que se inicia el turno : " + tiempoTranscurridoDesdeQueSeIniciaTurnoEnMinutos);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
-                numLine = yield database_1.default.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
+                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
+                numLine = yield database_1.default.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = 1', [id_caliper, id_turno]);
                 if (searchBox.length > 0) {
                     //console.log("total de cajas encontradas : " + searchBox[0].total);
                     //se divide el total de cajas encontradas por la cantidas de minutos transcurridos en el turno.  
@@ -165,8 +184,8 @@ class MonitoreoCalibradoresController {
                 //console.log("hora actual menos una hora  : " + tiempoMenosUnaHora);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
                 console.log("antes de la consulta !!");
-                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
-                numLine = yield database_1.default.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                searchBox = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
+                numLine = yield database_1.default.query('SELECT COUNT(DISTINCT(id_linea)) AS totalLine FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_validacion_time >= ?', [id_caliper, id_turno, tiempoMenosUnaHora]);
                 console.log("despues de la consulta ");
                 if (searchBox.length > 0) {
                     //console.log("total de cajas encontradas : " + searchBox[0].total);
@@ -231,9 +250,9 @@ class MonitoreoCalibradoresController {
                 //var tiempoMenosUnaHora: number = date.getHours() - 1;
                 console.log("hora actual menos cinco minutos  : " + tiempoMenosCincoMinutos);
                 //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
-                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosCincoMinutos, id_line]);
+                productionLine = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ? AND id_linea = ?', [id_caliper, id_turno, tiempoMenosCincoMinutos, id_line]);
                 // see busca la catidad de cajas selladas en la linea 
-                cajasPorLinea = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ? AND id_linea = ?', [id_caliper, id_turno, dateApertura.getTime(), id_line]);
+                cajasPorLinea = yield database_1.default.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND fecha_sellado_time >= ? AND id_linea = ?', [id_caliper, id_turno, dateApertura.getTime(), id_line]);
                 if (productionLine.length > 0) {
                     if (productionLine[0].total >= 0) {
                         //si la linea no tiene producción 

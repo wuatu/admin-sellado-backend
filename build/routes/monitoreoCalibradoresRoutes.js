@@ -23,6 +23,7 @@ class MonitoreoCalibradoresRoutes {
         this.router.get('/monitoreo_calibrador_last_turno/', monitoreoCalibradoresController_1.monitoreoCalibradoresController.getLastTurno);
         this.router.get('/monitoreo_calibrador_production_line2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:id_line/:name_line', monitoreoCalibradoresController_1.monitoreoCalibradoresController.searchAverageLastMinuteByLine2);
         /****************************************************************************************************************************************************************************************************/
+        this.router.delete('/monitoreo_calibrador_delete/:id', monitoreoCalibradoresController_1.monitoreoCalibradoresController.deleteRegisterAux);
     }
 }
 const monitoreoCalibradoresRoutes = new MonitoreoCalibradoresRoutes();
