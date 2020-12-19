@@ -59,11 +59,11 @@ class MonitoreoCalibradoresController {
                 const { id_calibrador, id_turno } = req.params;
                 let lineasCalibrador;
                 let totalCajasPorLinea = [];
-                lineasCalibrador = yield database_1.default.query('SELECT DISTINCT(id_linea) FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea;', [id_calibrador, id_turno]);
+                lineasCalibrador = yield database_1.default.query('SELECT DISTINCT(id_linea) FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea;', [id_calibrador, id_turno]);
                 if (lineasCalibrador.length > 0) {
                     for (let i = 0; i < lineasCalibrador.length; i++) {
                         let id_linea = lineasCalibrador[i].id_linea;
-                        let aux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE id_calibrador = ? AND id_linea = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea', [id_calibrador, id_linea, id_turno]);
+                        let aux = yield database_1.default.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_linea = ? AND id_apertura_cierre_de_turno = ? AND is_verificado = "1" ORDER by id_linea', [id_calibrador, id_linea, id_turno]);
                         totalCajasPorLinea.push({ total: aux[0].total, id_linea: lineasCalibrador[i].id_linea });
                     }
                 }
