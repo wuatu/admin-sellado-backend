@@ -26,14 +26,19 @@ class MonitoreoSistemaController {
 
     public async getCollaboratorsInLine(req: Request, res: Response) {
         try {
-            const { id_linea, id_calibrador, nombre_linea } = req.params;
+            const { id_linea, id_calibrador, nombre_linea, id_turno} = req.params;
+            console.log("id_linea : "+ id_linea);
+            console.log("id_calibrador: "+ id_calibrador);
+            console.log("nombre_linea : "+ nombre_linea);
+            console.log("id_turno : "+ id_turno);
             let usuariosEnLinea: any;
             
-            if (id_calibrador != "null" && id_linea != "null") {
-                usuariosEnLinea = await pool.query('SELECT  nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ( SELECT MAX(id) FROM apertura_cierre_de_turno )', [id_linea, id_calibrador]);
+            if (id_calibrador != "null" && id_linea != "null" && id_turno != "null") {
+                usuariosEnLinea = await pool.query('SELECT  nombre_usuario, apellido_usuario, nombre_linea, id_linea FROM registro_diario_usuario_en_linea WHERE id_linea = ? AND id_calibrador = ? AND fecha_termino = "" AND hora_termino = "" AND id_apertura_cierre_de_turno = ?', [id_linea, id_calibrador, id_turno]);
+                //( SELECT MAX(id) FROM apertura_cierre_de_turno)
             }
 
-            if (usuariosEnLinea.length > 0) {
+            if (usuariosEnLinea.length > 0) { 
                 return res.status(200).json(usuariosEnLinea);
             } else {
                 return res.status(200).json([{

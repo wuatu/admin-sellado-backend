@@ -8,7 +8,7 @@ class MonitoreoSistemaRoutes{
     }
     config(){
         this.router.get('/monitoreo_sistema_list/:id_linea/:id_calibrador/:nombre_linea', monitoreoSistemaController.list);
-        this.router.get('/monitoreo_sistema_collaborators/:id_linea/:id_calibrador/:nombre_linea', monitoreoSistemaController.getCollaboratorsInLine);
+        this.router.get('/monitoreo_sistema_collaborators/:id_linea/:id_calibrador/:nombre_linea/:id_turno', monitoreoSistemaController.getCollaboratorsInLine);
         this.router.get('/monitoreo_sistema_lector/:id_linea', monitoreoSistemaController.getLectorInLine);
         this.router.get('/monitoreo_sistema_rfid/:id_linea', monitoreoSistemaController.getRfidInLine); 
         this.router.get('/monitoreo_sistema_lector_validador/:id_calibrador', monitoreoSistemaController.getLectorValidatorInCaliper);
