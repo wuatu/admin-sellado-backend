@@ -25,7 +25,7 @@ class MonitoreoCalibradoresController {
                         res.status(200).json({ message: 'registros de cajas selladas eliminados' });
                     }
                     else {
-                        res.status(404).json({ text: 'No se pudo eliminar los registros de cajas selladas' });
+                        res.status(204).json({ text: 'No se pudo eliminar los registros de cajas selladas' });
                     }
                 }
             }
@@ -268,7 +268,7 @@ class MonitoreoCalibradoresController {
                         productionLine[0].total = productionLine[0].total / div;
                         console.log("total de cajas en 5 minutos dividido 5: " + productionLine[0].total);
                     }
-                    return res.status(200).json({ id_linea: productionLine[0].id_linea, nombre_linea: productionLine[0].nombre_linea, total: productionLine[0].total, total_turno: cajasPorLinea[0].total });
+                    return res.status(200).json({ id_linea: productionLine[0].id_linea, nombre_linea: productionLine[0].nombre_linea, total: productionLine[0].total.toFixed(1), total_turno: cajasPorLinea[0].total });
                 }
                 else {
                     res.status(404).json({ text: 'Sin registros para esta búsqueda' });
