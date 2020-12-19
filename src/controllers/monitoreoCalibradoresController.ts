@@ -333,8 +333,8 @@ class MonitoreoCalibradoresController {
                 if (hora == '00' && minuto == '00') {
                     console.log("if de 00");
                     let hourSearch = "11" + ":" + "59" + ":" + segundo;
-                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [date, hourSearch, '23:59:59', id_caliper, id_line]);
-                    productionLineAux = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, '00:00:00', horaActual, id_caliper, id_line]);
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [date, hourSearch, '23:59:59', id_caliper, id_line]);
+                    productionLineAux = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, '00:00:00', horaActual, id_caliper, id_line]);
                     productionLine[0].total = productionLine[0].total + productionLineAux[0].total;
                     // sino, sinifica que son mas de las 00 horas y se realiza la resta normal de una hora a la hora actual del dia actual del turno. 
                 } else if (hora != '00' && minuto == '00') {
@@ -350,7 +350,7 @@ class MonitoreoCalibradoresController {
                         horaBusqueda = t1.getHours() + ":";
                     }
                     let hourSearch = horaBusqueda + "59" + ":" + segundo;
-                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch, horaActual, id_caliper, id_line]);
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch, horaActual, id_caliper, id_line]);
                 } else if (hora != '00' && minuto != '00') {
                     //En esta sección se resta  una hora a la hora actual para realizar la consulta.
                     var t1 = new Date();
@@ -364,7 +364,7 @@ class MonitoreoCalibradoresController {
                         minutoBusqueda = t1.getMinutes() + ":";
                     }
                     let hourSearch = hora + ":" + minutoBusqueda + segundo;
-                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch, horaActual, id_caliper, id_line]);
+                    productionLine = await pool.query('SELECT id_linea, nombre_linea,COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE fecha_sellado = ? AND hora_sellado >= ? AND hora_sellado <= ? AND id_calibrador = ? AND id_linea = ? AND is_verificado = 1', [fecha_actual, hourSearch, horaActual, id_caliper, id_line]);
                 }
             } else {
                 res.status(404).json({ text: 'error en datos de búsqueda de cajas' });
