@@ -11,6 +11,7 @@ class MonitoreoCalibradoresRoutes{
         /****************************************************************************************************************************************************************************************************/
         //this.router.get('/monitoreo_calibrador_produccion_turno/:date/:time/:id_caliper/:option/:fecha_actual/', monitoreoCalibradoresController.countBoxBycaliper);
         this.router.get('/monitoreo_calibrador_produccion_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoCalibradoresController.countBoxBycaliper2);
+        this.router.get('/monitoreo_calibrador_produccion_total_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoCalibradoresController.countTotalBoxBycaliper2);
         /****************************************************************************************************************************************************************************************************/   
         //this.router.get('/monitoreo_calibrador_cajas_por_linea/:id_calibrador/:id_turno', monitoreoCalibradoresController.getCajasPorLinea);
         /****************************************************************************************************************************************************************************************************/

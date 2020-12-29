@@ -60,6 +60,43 @@ class MonitoreoController{
 
     }
 
+    public async countTotalBoxBycaliper2(req: Request, res: Response) {
+        try {
+            console.log("countTotalBoxByCaliper2");
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+            console.log(id_caliper);
+            console.log(id_turno);
+            console.log(fecha_apertura);
+            console.log(hora_apertura);
+
+            console.log("countBoxBycaliper2()");
+        
+            let searchBox: any;
+
+            //crear variable dateApertura desde la fecha y la hora de apertura del turno para ello se pasa la fecha y la hora en formato ISO UTC
+            var dateApertura = new Date(fecha_apertura + "T" + hora_apertura + "Z");
+            console.log("date apertura: "+dateApertura);
+            dateApertura = new Date(fecha_apertura+ "T"+ hora_apertura);
+            console.log("date apertura: "+dateApertura);
+
+            //se buscan todos los registros (borré validado=1) para que llegue todo al fronted despues se fultra en el front. fecha_sellado_time es la clave para buscar cuando se pasa de un dia a otro.
+            searchBox = await pool.query('SELECT COUNT(DISTINCT(codigo_de_barra)) AS total FROM registro_diario_caja_sellada_aux WHERE id_calibrador = ? AND id_apertura_cierre_de_turno = ?', [id_caliper, id_turno]);
+
+            if (searchBox.length > 0) {
+                console.log("produccion turno : "+searchBox[0].total);
+                return res.status(200).json(searchBox);
+
+            } else {
+                res.status(404).json({ text: 'Sin registros para esta búsqueda' });
+            }
+
+        } catch {
+            res.status(404).json({ text: 'No se pudo obtener cajas' });
+        }
+        
+
+    }
+
    //promedio de cajas por minuto en turno, se consulta solo por las cajas en un calibrador y turno x, ya que se necesitan las cajas de todo el turno
     //al tener el id no es necesario saber si el turno esta en un dia u otro.
     public async searchAverageforMinute2(req: Request, res: Response) {

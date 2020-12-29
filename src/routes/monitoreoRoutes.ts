@@ -12,7 +12,7 @@ class MonitoreoRoutes{
 
         this.router.get('/monitoreo_produccion_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.countBoxBycaliper2);
         /****************************************************************************************************************************************************************************************************/
-                
+        this.router.get('/monitoreo_produccion_total_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController.countTotalBoxBycaliper2);    
         /****************************************************************************************************************************************************************************************************/
 
         this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoController.searchAverageforMinute2);
