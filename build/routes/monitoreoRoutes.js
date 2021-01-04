@@ -13,12 +13,13 @@ class MonitoreoRoutes {
         /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_produccion_total_turno2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoController_1.monitoreoController.countTotalBoxBycaliper2);
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoController_1.monitoreoController.searchAverageforMinute2);
+        this.router.get('/monitoreo_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoController_1.monitoreoController.searchAverageforMinute2);
         /****************************************************************************************************************************************************************************************************/
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoController_1.monitoreoController.searchAverageLastHourforMinute2);
+        this.router.get('/monitoreo_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoController_1.monitoreoController.searchAverageLastHourforMinute2);
         /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_last_turno/:fk_calibrador', monitoreoController_1.monitoreoController.getLastTurno);
+        this.router.get('/monitoreo_Actual_turno_calibradores/', monitoreoController_1.monitoreoController.getActualTurnosCalibradores);
     }
 }
 const monitoreoRoutes = new MonitoreoRoutes();

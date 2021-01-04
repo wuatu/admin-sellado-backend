@@ -22,6 +22,45 @@ class MonitoreoController{
         }
         
     }
+    /**************************************************************************************/
+    //Este método obtiene los turnos actuales activos de de cada calibrador
+    public async getActualTurnosCalibradores(req: Request, res: Response){
+        try{
+            //const {calibradores} = req.params;
+            let calibradores:any;
+            calibradores = await pool.query('SELECT id FROM calibrador');
+            console.log("calibradores encontrados con SELECT id FROM calibrador");
+            console.log(calibradores);
+            let lastTurno: any;
+            let turnos: any = [];
+            for(let i = 0; i < calibradores.length; i++){
+                let calibrador = calibradores[i];
+                lastTurno = await pool.query('SELECT * FROM apertura_cierre_de_turno WHERE fecha_cierre = "" AND hora_cierre = "" AND fk_calibrador = ? ORDER by ID DESC LIMIT 1', [calibrador.id]);
+                if(lastTurno.length > 0){
+                    turnos.push(lastTurno[0]);
+                    //return res.status(200).json(lastTurno);
+                }else{
+                    turnos.push({id: "undefine",fk_calibrador: calibrador.id});
+                }
+            }
+            console.log("Turnos despues del for!!!");
+            console.log(turnos);
+
+            if(turnos.length > 0){
+                console.log("se entro al if");
+                return res.status(200).json(turnos);
+            }else{
+                console.log("se entro al else");
+                return res.status(204).json({ text: 'No existen turnos activos' });
+            }
+            
+        }catch{
+            console.log("entre al catch");
+            res.status(404).json({ text: 'No se pudo realizar la búsqueda' });
+        }
+        
+    }
+    /**************************************************************************************/
 
     public async countBoxBycaliper2(req: Request, res: Response) {
         try {
@@ -101,14 +140,14 @@ class MonitoreoController{
     //al tener el id no es necesario saber si el turno esta en un dia u otro.
     public async searchAverageforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-            let totalLineas = Number(lineas_length);
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura} = req.params;
+           
             //console.log(id_caliper);
             //console.log(id_turno);
             //console.log(fecha_apertura);
             //console.log(hora_apertura);
             console.log("searchAverageForMinute2");
-            console.log("aaaaaaaaaasssss"+lineas_length);
+       
 
             //console.log("getAverageforMinute2()");
 
@@ -149,8 +188,8 @@ class MonitoreoController{
 
     public async searchAverageLastHourforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-            let totalLineas = Number(lineas_length);
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura} = req.params;
+      
             /*
             console.log(id_caliper);
             console.log(id_turno);
