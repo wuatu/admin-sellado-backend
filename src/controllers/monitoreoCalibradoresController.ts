@@ -140,8 +140,8 @@ class MonitoreoCalibradoresController {
     //al tener el id no es necesario saber si el turno esta en un dia u otro.
     public async searchAverageforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-            let totalLineas = Number(lineas_length);
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
+           
             //console.log(id_caliper);
             //console.log(id_turno);
             //console.log(fecha_apertura);
@@ -186,13 +186,13 @@ class MonitoreoCalibradoresController {
 
     public async searchAverageLastHourforMinute2(req: Request, res: Response) {
         try {
-            const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-            let totalLineas = Number(lineas_length);
+            const { id_caliper, id_turno, fecha_apertura, hora_apertura} = req.params;
+       
             console.log(id_caliper);
             console.log(id_turno);
             console.log(fecha_apertura);
             console.log(hora_apertura);
-            console.log(lineas_length);
+
 
             let searchBox: any;
             let numLine: any;

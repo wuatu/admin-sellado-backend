@@ -15,10 +15,10 @@ class MonitoreoCalibradoresRoutes {
         /****************************************************************************************************************************************************************************************************/
         //this.router.get('/monitoreo_calibrador_cajas_por_linea/:id_calibrador/:id_turno', monitoreoCalibradoresController.getCajasPorLinea);
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_calibrador_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length/', monitoreoCalibradoresController_1.monitoreoCalibradoresController.searchAverageforMinute2);
+        this.router.get('/monitoreo_calibrador_produccion_minuto2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/', monitoreoCalibradoresController_1.monitoreoCalibradoresController.searchAverageforMinute2);
         /****************************************************************************************************************************************************************************************************/
         /****************************************************************************************************************************************************************************************************/
-        this.router.get('/monitoreo_calibrador_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura/:lineas_length', monitoreoCalibradoresController_1.monitoreoCalibradoresController.searchAverageLastHourforMinute2);
+        this.router.get('/monitoreo_calibrador_produccion_minuto_ultima_hora2/:id_caliper/:id_turno/:fecha_apertura/:hora_apertura', monitoreoCalibradoresController_1.monitoreoCalibradoresController.searchAverageLastHourforMinute2);
         /****************************************************************************************************************************************************************************************************/
         /****************************************************************************************************************************************************************************************************/
         this.router.get('/monitoreo_calibrador_last_turno/', monitoreoCalibradoresController_1.monitoreoCalibradoresController.getLastTurno);

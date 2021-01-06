@@ -144,8 +144,7 @@ class MonitoreoCalibradoresController {
     searchAverageforMinute2(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-                let totalLineas = Number(lineas_length);
+                const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
                 //console.log(id_caliper);
                 //console.log(id_turno);
                 //console.log(fecha_apertura);
@@ -183,13 +182,11 @@ class MonitoreoCalibradoresController {
     searchAverageLastHourforMinute2(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const { id_caliper, id_turno, fecha_apertura, hora_apertura, lineas_length } = req.params;
-                let totalLineas = Number(lineas_length);
+                const { id_caliper, id_turno, fecha_apertura, hora_apertura } = req.params;
                 console.log(id_caliper);
                 console.log(id_turno);
                 console.log(fecha_apertura);
                 console.log(hora_apertura);
-                console.log(lineas_length);
                 let searchBox;
                 let numLine;
                 let MinutosDiv = 60;
